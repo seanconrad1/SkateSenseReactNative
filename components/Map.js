@@ -161,7 +161,7 @@ class Map extends Component {
               </View>
 
             <View>
-              <NewMarkerInfoBoxForm/>
+              <NewMarkerInfoBoxForm location={this.state.newMarkerLocation}/>
             </View>
 
           </Overlay>
