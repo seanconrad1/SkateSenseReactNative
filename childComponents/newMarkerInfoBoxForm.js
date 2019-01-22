@@ -4,7 +4,7 @@ import { Header } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input, Button, ThemeProvider } from 'react-native-elements';
 import { withNavigation } from 'react-navigation'
-// import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-picker';
 
 const styles = StyleSheet.create({
   container: {
@@ -37,12 +37,13 @@ class SignUp extends Component {
     username: '',
     description: '',
     kickout: '',
-    photos: ''
+    photos: '',
+    avatarSource: null
   }
 
   getPhotoFromCameraRoll = () =>{
     const options = {
-      title: 'Select Avatar',
+      title: 'Select Skatespot Photo',
       customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
       storageOptions: {
         skipBackup: true,
@@ -126,7 +127,7 @@ class SignUp extends Component {
 
           <Button
             title='Photo'
-            onPress={() => console.log('yo1231324')}
+            onPress={this.getPhotoFromCameraRoll}
             />
 
           <Button
