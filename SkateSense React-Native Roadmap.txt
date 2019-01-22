@@ -1,0 +1,61 @@
+SkateSense React-Native Roadmap
+
+
+- place a marker
+	- move screen to marker
+	-
+- Marker info-box window
+- Search Bar functionality
+	- search for markers in area
+		- grab current location, search by title or description, sort by distance from
+		  current location
+
+- Authentication
+- Comments
+- MySpots
+- Settings
+X Hamburger Menu
+X Upon opening the app, get location and move map to that location
+X Bookmark page
+X Bookmark page search functionality
+
+
+-- How to get reverse geo location
+https://developer.mapquest.com/documentation/geocoding-api/reverse/get/
+
+-- API Call
+http://www.mapquestapi.com/geocoding/v1/reverse?key=KEY&location=30.333472,-81.470448&includeRoadMetadata=true&includeNearestIntersection=true
+
+-- Or this
+
+https://developers.google.com/maps/documentation/javascript/examples/geocoding-reverse
+
+
+react-native init SkateSenseReactNative
+npm install
+npm i react-native-maps --save
+npm i  react-native-elements@beta --save
+npm i react-native-action-button --save
+npm i react-native-maps --save
+npm i react-native-vector-icons --save
+npm i react-navigation --save
+npm i react-native-gesture-handler --save
+
+place this in package.json:
+
+  "rnpm": {
+    "assets": [
+      "./assets/fonts/"
+    ]
+  },
+
+react-native link
+react-native link react-native-gesture-handler
+
+
+
+
+
+
+
+
