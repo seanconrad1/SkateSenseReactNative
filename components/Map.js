@@ -69,6 +69,12 @@ geoLocationButtonMoved:{
 compass:{
   color: "white",
   fontSize: 25,
+},
+returnedSearch:{
+  backgroundColor: 'grey',
+  marginLeft:'15%',
+  marginRight:'25%',
+  height:'25%',
 }
 
 });
@@ -81,6 +87,7 @@ class Map extends Component {
       geoLocationSwitch: false,
       newMarkerLocation: {},
       newMarkerFormBox: false,
+      searchTerm: null,
     }
   }
 
@@ -97,6 +104,20 @@ class Map extends Component {
         geoLocationSwitch: true
       })
     })
+  }
+
+  getSearchResults = () =>{
+    console.log('GGOT HEREE');
+    return(
+      <View><Text>YOOO</Text></View>
+    )
+    // let filteredArray = bookmarks.filter(bookmark => (
+    //   bookmark.name.toLowerCase().includes(this.state.searchTerm.toLowerCase()) || bookmark.description.toLowerCase().includes(this.state.searchTerm.toLowerCase()))
+    // )
+    // console.log(filteredArray);
+    // return filteredArray.map(bookmark => (
+    //     {bookmark.name}
+    // ))
   }
 
 
@@ -120,7 +141,7 @@ class Map extends Component {
   }
 
   render(){
-    console.log(this.state);
+    console.log(this.state.searchTerm);
     return(
      <View style={styles.container}>
 
@@ -155,17 +176,22 @@ class Map extends Component {
         <Overlay>
             <View style={styles.calloutView}>
             <TextInput style={styles.calloutSearch}
-                   placeholder={"Search"}/>
-              </View>
-
-            <View>
-            {this.state.newMarkerFormBox
-              ? <NewMarkerInfoBoxForm location={this.state.newMarkerLocation}/>
-            :null}
-
+                   placeholder={"Search"} onChangeText={(searchTerm) => this.setState({searchTerm})}/>
             </View>
 
+            {this.state.searchTerm
+            ? <View style={styles.returnedSearch}>
+                  {this.getSearchResults}
+              </View>
+            : null}
+
+            <View>
+              {this.state.newMarkerFormBox
+                ? <NewMarkerInfoBoxForm location={this.state.newMarkerLocation}/>
+              :null}
+            </View>
           </Overlay>
+
        </MapView>
 
        <Header

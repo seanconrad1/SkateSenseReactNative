@@ -26,7 +26,24 @@ const styles = StyleSheet.create({
     width: 200,
     height: 58
   },
-
+  directionsButton:{
+    backgroundColor:"grey",
+    borderRadius: 20,
+    width: '100%',
+    marginLeft: 0,
+    marginRight: 0,
+    marginBottom: 5,
+    paddingRight: 0
+  },
+  unBookmarkButton:{
+    backgroundColor:"#f40257",
+    borderRadius: 20,
+    width: '100%',
+    marginLeft: 0,
+    marginRight: 0,
+    marginBottom: 0,
+    padding: 0
+  }
 })
 
 class BookmarksContainer extends Component {
@@ -37,7 +54,6 @@ class BookmarksContainer extends Component {
       term: ''
     }
   }
-
 
   componentDidMount(){
     fetch(`http://${environment['BASE_URL']}/api/v1/users/2`,{
@@ -58,7 +74,6 @@ class BookmarksContainer extends Component {
   renderBookmarks = () => {
     let bookmarks = this.state.bookmarks
     if (this.state.term === '' || this.state.term === undefined && bookmarks !== undefined) {
-      console.log('SEARCH IS NOT WORKING');
       return bookmarks.map(bookmark => (
 
         <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
@@ -75,29 +90,13 @@ class BookmarksContainer extends Component {
 
             <Button
             raised
-            buttonStyle={{
-              backgroundColor:"grey",
-              borderRadius: 20,
-              width: '100%',
-              marginLeft: 0,
-              marginRight: 0,
-              marginBottom: 5,
-              paddingRight: 0
-            }}
+            buttonStyle={styles.directionsButton}
             onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${bookmark.latitude},${bookmark.longitude}`)}
             title='Directions' />
 
             <Button
               raised
-              buttonStyle={{
-                backgroundColor:"#f40257",
-                borderRadius: 20,
-                width: '100%',
-                marginLeft: 0,
-                marginRight: 0,
-                marginBottom: 0,
-                padding: 0
-                }}
+              buttonStyle={styles.unBookmarkButton}
               title='Unbookmark' />
 
           </Card>
@@ -113,39 +112,25 @@ class BookmarksContainer extends Component {
             })}}>
             <Card
               title={bookmark.name}
-              image={{uri:`http://${environment['BASE_URL']}${bookmark.skatephoto.url}`}}>
+              image={{uri:`http://${environment['BASE_URL']}${bookmark.skatephoto.url}`}}
+              containerStyle={{borderRadius: 20}}>
 
               <Text style={{marginBottom: 10}}>
                 {bookmark.description}
               </Text>
 
-
               <Button
-              raised
-              buttonStyle={{
-                backgroundColor:"grey",
-                borderRadius: 20,
-                width: '100%',
-                marginLeft: 0,
-                marginRight: 0,
-                marginBottom: 5,
-                paddingRight: 0
-              }}
-              onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${bookmark.latitude},${bookmark.longitude}`)}
-              title='Directions' />
+                raised
+                buttonStyle={styles.directionsButton}
+                onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${bookmark.latitude},${bookmark.longitude}`)}
+                title='Directions'
+              />
 
               <Button
                 raised
-                buttonStyle={{
-                  backgroundColor:"#f40257",
-                  borderRadius: 20,
-                  width: '100%',
-                  marginLeft: 0,
-                  marginRight: 0,
-                  marginBottom: 0,
-                  padding: 0
-                  }}
-                title='Unbookmark' />
+                buttonStyle={styles.unBookmarkButton}
+                title='Unbookmark'
+                />
 
             </Card>
 
@@ -154,7 +139,6 @@ class BookmarksContainer extends Component {
     }
 
   }
-
 
   render(){
     return(
@@ -182,11 +166,5 @@ class BookmarksContainer extends Component {
     )
   }
 }
-
-
-// href={`https://www.google.com/maps/dir//${this.props.spot.latitude},${this.props.spot.longitude}`}
-
-
-
 
 export default withNavigation(BookmarksContainer)
