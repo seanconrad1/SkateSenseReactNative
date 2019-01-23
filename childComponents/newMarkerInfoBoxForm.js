@@ -41,44 +41,64 @@ class SignUp extends Component {
     photo: false,
     validation: false
   }
+  // ImagePicker.showImagePicker(options, (response) => {
+    //   // console.log('Response = ', response);
+    //
+    //   if (response.didCancel) {
+      //     console.log('User cancelled image picker');
+      //   } else if (response.error) {
+        //     console.log('ImagePicker Error: ', response.error);
+        //   } else if (response.customButton) {
+          //     console.log('User tapped custom button: ', response.customButton);
+          //   } else {
+            //     let source = {uri: response.uri.replace('file://', ''), isStatic: true};
+            //     // You can also display the image using data:
+            //     // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+            //
+            //     this.setState({
+              //       photo: source,
+              //       validation: true
+              //     })
+              //   }
+              // })
 
-  getPhotoFromCameraRoll = () =>{
-    const options = {
-      title: 'Select Skatespot Photo',
-      customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    }
+  getPhotoFromCameraRoll = () => {
+      const options = {
+        title: 'Select Skatespot Photo',
+        customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+        storageOptions: {
+          skipBackup: true,
+          path: 'images',
+        },
+      }
 
-    ImagePicker.showImagePicker(options, (response) => {
-      console.log('GOT HERE');
-      console.log('Response = ', response);
-
+    ImagePicker.launchImageLibrary(options, (response) => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
+        console.log('User cancelled photo picker');
+      }
+      else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        const source = { uri: response.uri };
+      }
+      else {
+        let source;
+        source = {uri: response.uri.replace('file://', ''), isStatic: true};
 
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
+        let photo = {
+          uri: source.uri,
+          type: 'image/jpeg',
+          name: response.fileName
+        }
 
         this.setState({
-          photo: source,
+          photo: photo,
           validation: true
         })
-      }
-    })
-  }
 
-  onSubmit = () =>{
-      // e.preventDefault()
+        }
+      })
+    }
+
+    onSubmit = () =>{
       let data = new FormData()
       data.append('name', this.state.name)
       data.append('country', 'n/a')
@@ -88,25 +108,25 @@ class SignUp extends Component {
       data.append('longitude', this.props.location.longitude)
       data.append('description', this.state.description)
       data.append('bust_factor', this.state.kickout)
-      data.append('skatephoto', this.state.photo)
+      data.append("skatephoto", {uri: this.state.photo.uri, name: 'image.jpg', type: 'multipart/form-data'})
       data.append('user_id', 2)
 
       fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`, {
         method: 'POST',
         body: data,
         headers: {
+          'Content-Type': 'multipart/form-data',
           "Authorization": `${environment['API_KEY']}`
         }
       })
-      .then(r=>r.json())
-      .then(r=>console.log(r))
-      // .then(data=>this.props.getSkateSpots())
-      // .then(data=>this.props.newMarkerCreation(data))
+      .then(response => {
+        console.log("image uploaded")
+        console.log(response)
+      })
+      .catch(err => {
+        console.log(err)
+      })
     }
-
-
-
-
 
   render(){
     return(

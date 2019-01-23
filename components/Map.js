@@ -80,11 +80,12 @@ class Map extends Component {
       userLocation: null,
       geoLocationSwitch: false,
       newMarkerLocation: {},
-      newMarkerFormBox: false
+      newMarkerFormBox: false,
     }
   }
 
   getUserLocationHandler = () => {
+    console.log('getting user location');
     navigator.geolocation.getCurrentPosition(position => {
       this.setState({
         userLocation:{
@@ -98,15 +99,12 @@ class Map extends Component {
     })
   }
 
-  hamburgerClicked = () => {
-    console.log('maps container hamburger clicked!')
-  }
 
   onLongPress(e) {
     const newMarker = e.nativeEvent.coordinate
     this.setState({
       newMarkerLocation: newMarker,
-      newMarkerFormBox: true
+      newMarkerFormBox: true,
     })
   }
 
@@ -122,7 +120,7 @@ class Map extends Component {
   }
 
   render(){
-    console.log(this.state.newMarkerLocation);
+    console.log(this.state);
     return(
      <View style={styles.container}>
 
@@ -161,7 +159,10 @@ class Map extends Component {
               </View>
 
             <View>
-              <NewMarkerInfoBoxForm location={this.state.newMarkerLocation}/>
+            {this.state.newMarkerFormBox
+              ? <NewMarkerInfoBoxForm location={this.state.newMarkerLocation}/>
+            :null}
+
             </View>
 
           </Overlay>

@@ -66,7 +66,8 @@ class BookmarksContainer extends Component {
             })}}>
           <Card
             title={bookmark.name}
-            image={{uri:`http://${environment['BASE_URL']}${bookmark.skatephoto.url}`}}>
+            image={{uri:`http://${environment['BASE_URL']}${bookmark.skatephoto.url}`}}
+            containerStyle={{borderRadius: 20}}>
 
             <Text style={{marginBottom: 10}}>
               {bookmark.description}
