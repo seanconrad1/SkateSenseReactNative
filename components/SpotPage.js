@@ -48,7 +48,7 @@ class SpotPage extends Component {
          }}/>
 
       <Card
-        containerStyle={{marginTop:'10%'}}
+        containerStyle={{marginTop:'10%', borderRadius: 20}}
         image={{uri:`http://${environment['BASE_URL']}${this.state.imageURL}`}}
         >
         <Text style={{marginBottom: 10}}>

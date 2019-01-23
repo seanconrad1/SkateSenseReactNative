@@ -90,6 +90,7 @@ class BookmarksContainer extends Component {
 
             <Button
             raised
+            icon={<Icon name="directions"/>}
             buttonStyle={styles.directionsButton}
             onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${bookmark.latitude},${bookmark.longitude}`)}
             title='Directions' />
@@ -121,6 +122,7 @@ class BookmarksContainer extends Component {
 
               <Button
                 raised
+                icon={<Icon name="directions"/>}
                 buttonStyle={styles.directionsButton}
                 onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${bookmark.latitude},${bookmark.longitude}`)}
                 title='Directions'

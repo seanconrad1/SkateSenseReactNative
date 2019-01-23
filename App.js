@@ -32,7 +32,7 @@ const RootStack = createStackNavigator(
 const DrawerStack = createDrawerNavigator(
     {
       Map: {screen: Map},
-      MySpots: {screen: MySpots},
+      'My Submitted Spots': {screen: MySpots},
       Settings: {screen: Settings},
       Logout: {screen: Login}
     },
