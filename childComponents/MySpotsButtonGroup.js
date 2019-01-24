@@ -7,13 +7,12 @@ import environment from '../environment.js'
 
 const styles = StyleSheet.create({
   buttonGroupContainer: {
-    height: '3%',
+    height: 30,
   },
   selectedButtonStyle:{
     backgroundColor: "rgb(244, 2, 87)"
   }
 })
-
 
 export default class MySpotsButtonGroup extends Component {
   constructor () {

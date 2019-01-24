@@ -8,6 +8,9 @@ import SpotPage from './components/SpotPage'
 import MySpots from './components/MySpots'
 import Settings from './components/Settings'
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation'; // Version can be specified in package.json
+import { Provider } from 'react-redux';
+import store from './store'
+
 
 console.disableYellowBox = true;
 
@@ -55,8 +58,15 @@ const PrimaryNav = createStackNavigator(
 
 const AppContainer = createAppContainer(PrimaryNav)
 
-export default class App extends Component {
+class App extends Component {
   render(){
-    return <AppContainer/>
+    return (
+      <Provider store={ store }>
+        <AppContainer/>
+      </Provider>
+     )
   }
 }
+
+
+export default App

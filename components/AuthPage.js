@@ -4,6 +4,10 @@ import { Input, Button, ThemeProvider } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { withNavigation } from 'react-navigation'
 import environment from '../environment.js'
+import { loginUser } from '../action.js'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+
 
 const styles = StyleSheet.create({
   container: {
@@ -45,17 +49,17 @@ class Login extends Component {
     password: ''
   }
 
-  onSubmit= () =>{
-      console.log('got here!')
-  }
-
-  onSignUp= () =>{
-    console.log('clicked Signup');
+  onSubmit = (e) => {
+    this.props.loginUser(this.state.username, this.state.password)
   }
 
   render(){
+    console.log('PROPS', this.props);
+
     return(
-      <View style={styles.container}>
+      this.props.loggedIn
+      ? this.props.navigation.navigate('Map')
+      : <View style={styles.container}>
         <Text style={styles.header}>SkateSense</Text>
 
         <Input
@@ -101,7 +105,7 @@ class Login extends Component {
           }
           title='Submit'
           buttonStyle={styles.submitButton}
-          onPress={() => this.props.navigation.navigate('Map')}
+          onPress={this.onSubmit}
         />
 
         <Button
@@ -120,4 +124,20 @@ class Login extends Component {
     )
   }
 }
-export default withNavigation(Login)
+
+
+const mapStateToProps = ({ user: { authenticatingUser, failedLogin, error, loggedIn } }) => ({
+  authenticatingUser,
+  failedLogin,
+  error,
+  loggedIn
+})
+
+
+
+
+
+
+const connectMap = connect(mapStateToProps, { loginUser })
+
+export default withNavigation(compose(connectMap)(Login))

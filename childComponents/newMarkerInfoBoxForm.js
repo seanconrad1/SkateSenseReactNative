@@ -41,6 +41,12 @@ class SignUp extends Component {
     photo: false,
     validation: false
   }
+
+  // THIS IS A NIGHTMARE
+  // - WHEN BEING SUBMITTED TO THE BACKEND,
+  // - THE BACKENED IS NOT ACCEPTING THE FORM
+  // - HOWEVER IT'S WORKING FINE ON THE NORMAL REACT APP
+  
   // ImagePicker.showImagePicker(options, (response) => {
     //   // console.log('Response = ', response);
     //
