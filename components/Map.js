@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Dimensions, Image, TextInput } from 'react-native'
 import MapView, { Callout, Overlay, Animated, MapCallout } from 'react-native-maps'
 import { withNavigation, DrawerActions } from 'react-navigation'
-import { Header } from 'react-native-elements'
+import { Header, ListItem } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import environment from '../environment.js'
 import ActionButton from 'react-native-action-button';
@@ -71,7 +71,6 @@ compass:{
   fontSize: 25,
 },
 returnedSearch:{
-  backgroundColor: 'grey',
   marginLeft:'15%',
   marginRight:'25%',
   height:'25%',
@@ -87,12 +86,24 @@ class Map extends Component {
       geoLocationSwitch: false,
       newMarkerLocation: {},
       newMarkerFormBox: false,
-      searchTerm: null,
+      term: null,
+      skateSpots: null,
+      counter:0
     }
   }
 
+  async componentDidMount(){
+     this.getUserLocationHandler()
+     let response = await fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`,{
+     headers: {
+           "Authorization": `${environment['API_KEY']}`
+       },
+     })
+     let json = await response.json()
+     this.setState({skateSpots: json})
+   }
+
   getUserLocationHandler = () => {
-    console.log('getting user location');
     navigator.geolocation.getCurrentPosition(position => {
       this.setState({
         userLocation:{
@@ -107,17 +118,7 @@ class Map extends Component {
   }
 
   getSearchResults = () =>{
-    console.log('GGOT HEREE');
-    return(
-      <View><Text>YOOO</Text></View>
-    )
-    // let filteredArray = bookmarks.filter(bookmark => (
-    //   bookmark.name.toLowerCase().includes(this.state.searchTerm.toLowerCase()) || bookmark.description.toLowerCase().includes(this.state.searchTerm.toLowerCase()))
-    // )
-    // console.log(filteredArray);
-    // return filteredArray.map(bookmark => (
-    //     {bookmark.name}
-    // ))
+    let spots = this.state.skateSpots
   }
 
 
@@ -129,19 +130,7 @@ class Map extends Component {
     })
   }
 
-  componentDidMount(){
-    this.getUserLocationHandler()
-    fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`,{
-    headers: {
-          "Authorization": `${environment['API_KEY']}`
-      },
-    }).then(r=>r.json())
-    .then(data=>this.setState({skateSpots: data}
-    ))
-  }
-
   render(){
-    console.log(this.state.searchTerm);
     return(
      <View style={styles.container}>
 
@@ -176,14 +165,10 @@ class Map extends Component {
         <Overlay>
             <View style={styles.calloutView}>
             <TextInput style={styles.calloutSearch}
-                   placeholder={"Search"} onChangeText={(searchTerm) => this.setState({searchTerm})}/>
+                   placeholder={"Search"} onChangeText={(term) => this.setState({term})}/>
             </View>
 
-            {this.state.searchTerm
-            ? <View style={styles.returnedSearch}>
-                  {this.getSearchResults}
-              </View>
-            : null}
+            {this.getSearchResults()}
 
             <View>
               {this.state.newMarkerFormBox

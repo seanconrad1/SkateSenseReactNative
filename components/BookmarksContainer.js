@@ -146,7 +146,7 @@ class BookmarksContainer extends Component {
     return(
       <View>
         <Header
-          leftComponent={{ icon: 'arrow-back' , color: 'black', onPress: () => this.props.navigation.navigate('Map')}}
+          leftComponent={{ icon: 'menu' , color: 'black', onPress: () => this.props.navigation.openDrawer()}}
           centerComponent={{ fontFamily:'Lobster', text: 'Bookmarks', style: { color: 'black', fontSize: 25 } }}
           backgroundColor='white'
           containerStyle={{

@@ -54,7 +54,7 @@ class MySpots extends Component {
     return(
       <View style={styles.container}>
         <Header
-          leftComponent={{ icon: 'arrow-back' , color: 'black', onPress: () => this.props.navigation.navigate('Map')}}
+          leftComponent={{ icon: 'menu' , color: 'black', onPress: () => this.props.navigation.openDrawer()}}
           centerComponent={{ fontFamily:'Lobster', text: `Settings`, style: { color: 'black', fontSize: 25 } }}
           backgroundColor='white'
           containerStyle={{

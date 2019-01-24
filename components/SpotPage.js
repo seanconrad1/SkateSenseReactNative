@@ -5,15 +5,47 @@ import { View,
          Image,
          ScrollView,
          Linking,
-         TouchableWithoutFeedback } from 'react-native'
+         TouchableWithoutFeedback,
+         TextInput } from 'react-native'
 import { Header, Icon, Card, ListItem, Button } from 'react-native-elements'
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
 
+const comments = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
 
 const styles = StyleSheet.create({
-
+  commentButton:{
+    backgroundColor:"grey",
+    borderRadius: 20,
+    width: '100%',
+    marginLeft: 0,
+    marginRight: 0,
+    marginBottom: 5,
+    paddingRight: 0
+  },
+  commentInput:{
+    alignItems: 'center',
+    borderRadius:20,
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingTop: '2%',
+    paddingBottom: '2%',
+    paddingLeft: '2%',
+    paddingRight: '2%',
+    marginRight: '20%',
+  },
+  postButton:{
+    color:'black',
+    borderRadius:20,
+    backgroundColor: "rgb(244, 2, 87)",
+    marginRight: '70%',
+    marginTop: '2%'
+  },
+  cardContainer:{
+    marginTop:'10%',
+    paddingBottom:'50%',
+    borderRadius: 20
+  }
 })
 
 class SpotPage extends Component {
@@ -21,7 +53,8 @@ class SpotPage extends Component {
     super(props)
     this.state={
       skatespot: '',
-      imageURL: ''
+      imageURL: '',
+      extendCommentsAndCommentField: false,
     }
   }
 
@@ -32,46 +65,39 @@ class SpotPage extends Component {
     })
   }
 
-
   render(){
     console.log('GOT HERE', this.state.skatespot);
     return(
       <View>
+        <Header
+          leftComponent={{ icon: 'menu' , color: 'black', onPress: () => this.props.navigation.openDrawer()}}
+          centerComponent={{ fontFamily:'Lobster', text: `${this.state.skatespot.name}`, style: { color: 'black', fontSize: 25 } }}
+          backgroundColor='white'
+          containerStyle={{
+             fontFamily:'Lobster',
+             justifyContent: 'space-around',
+           }}/>
 
-      <Header
-        leftComponent={{ icon: 'arrow-back' , color: 'black', onPress: () => this.props.navigation.navigate('BookmarksContainer')}}
-        centerComponent={{ fontFamily:'Lobster', text: `${this.state.skatespot.name}`, style: { color: 'black', fontSize: 25 } }}
-        backgroundColor='white'
-        containerStyle={{
-           fontFamily:'Lobster',
-           justifyContent: 'space-around',
-         }}/>
+        <Card
+          containerStyle={styles.cardContainer}
+          image={{uri:`http://${environment['BASE_URL']}${this.state.imageURL}`}}
+          >
+          <Text style={{marginBottom: 10}}>
+            {this.state.skatespot.url}
+            {this.state.skatespot.description}
+          </Text>
 
-      <Card
-        containerStyle={{marginTop:'10%', borderRadius: 20}}
-        image={{uri:`http://${environment['BASE_URL']}${this.state.imageURL}`}}
-        >
-        <Text style={{marginBottom: 10}}>
-          {this.state.skatespot.url}
-          {this.state.skatespot.description}
-        </Text>
+          <View style={styles.commentContainer}>
+            <TextInput
+              style={styles.commentInput}
+              placeholder='Comment'
+              />
+            <Button
+            title='Post'
+            buttonStyle={styles.postButton}/>
+          </View>
 
-        <Button
-          raised
-          buttonStyle={{
-            backgroundColor:"grey",
-            borderRadius: 20,
-            width: '100%',
-            marginLeft: 0,
-            marginRight: 0,
-            marginBottom: 5,
-            paddingRight: 0
-          }}
-        onPress={() => console.log('PRessing this button')}
-        title='Comment' />
-
-      </Card>
-
+        </Card>
       </View>
     )
   }

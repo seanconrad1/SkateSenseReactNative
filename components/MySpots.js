@@ -11,6 +11,7 @@ import { Header, Icon,  Card, ListItem, Button } from 'react-native-elements'
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
+import MySpotsButtonGroup from '../childComponents/MySpotsButtonGroup.js'
 
 
 const styles = StyleSheet.create({
@@ -151,7 +152,7 @@ class MySpots extends Component {
     return(
       <View>
         <Header
-          leftComponent={{ icon: 'arrow-back' , color: 'black', onPress: () => this.props.navigation.navigate('Map')}}
+          leftComponent={{ icon: 'menu' , color: 'black', onPress: () => this.props.navigation.openDrawer()}}
           centerComponent={{ fontFamily:'Lobster', text: 'My Submitted Spots', style: { color: 'black', fontSize: 25 } }}
           backgroundColor='white'
           containerStyle={{
@@ -159,10 +160,12 @@ class MySpots extends Component {
              justifyContent: 'space-around',
            }}/>
 
-           <TextInput style={styles.calloutSearch}
-                  placeholder={"Search"}
-                  onChangeText={(value) => this.onSearchChange(value)}
-                  />
+       <TextInput style={styles.calloutSearch}
+              placeholder={"Search"}
+              onChangeText={(value) => this.onSearchChange(value)}
+              />
+
+      <MySpotsButtonGroup/>
 
        <ScrollView>
           {this.renderBookmarks()}

@@ -14,8 +14,6 @@ console.disableYellowBox = true;
 const RootStack = createStackNavigator(
   {
     Login: {screen: Login},
-    BookmarksContainer: { screen: BookmarksContainer },
-    SpotPage: {screen: SpotPage},
     SignUp: {screen: SignUp},
   },
   {
@@ -32,39 +30,26 @@ const RootStack = createStackNavigator(
 const DrawerStack = createDrawerNavigator(
     {
       Map: {screen: Map},
-      'My Submitted Spots': {screen: MySpots},
+      'My Spots': {screen: MySpots},
+      BookmarksContainer: { screen: BookmarksContainer },
       Settings: {screen: Settings},
-      Logout: {screen: Login}
+      Logout: {screen: Login},
     },
     {
       initialRouteName: 'Logout',
     }
 )
 
-
-const drawerNavigation = createStackNavigator(
-    {
-      DrawerStack : {screen: DrawerStack}
-    },
-    {
-      headerMode: 'none',
-      navigationOptions: {
-      headerVisible: false,
-    }
-  }
-)
-
-
 const PrimaryNav = createStackNavigator(
   {
   RootStack: { screen: RootStack },
-  drawerNavigation: { screen: drawerNavigation }
+  DrawerStack: { screen: DrawerStack }
   },
   {
   // Default config for all screens
   headerMode: 'none',
   title: 'Main',
-  initialRouteName: 'drawerNavigation'
+  initialRouteName: 'DrawerStack'
 })
 
 
