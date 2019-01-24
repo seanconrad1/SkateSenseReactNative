@@ -1,7 +1,6 @@
 import { AsyncStorage } from 'react-native';
 
 const deviceStorage = {
-
   async saveItem(key, value) {
     try {
       await AsyncStorage.setItem(key, value)
@@ -20,7 +19,16 @@ const deviceStorage = {
         console.log('There are no tokens for u')
       }
     } catch (error) {
-      console.log('AsyncStorage Error: ' + error.message);
+      console.log('AsyncStorage loadJWT Error: ' + error.message);
+    }
+  },
+
+  async clearJWT(){
+    try{
+      await AsyncStorage.clear()
+      console.log('storage has been cleared!');
+    } catch (error) {
+      console.log('AsyncStorage clearJWT Error: ' + error.message);
     }
   }
 

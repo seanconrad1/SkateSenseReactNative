@@ -62,6 +62,12 @@ class Login extends Component {
       : <View style={styles.container}>
         <Text style={styles.header}>SkateSense</Text>
 
+        <View>
+          <Text style={{color:'red'}}>
+            {this.props.error ? this.props.error : null}
+          </Text>
+        </View>
+
         <Input
           placeholder='Username'
           leftIcon={

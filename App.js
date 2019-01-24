@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View, YellowBox } from 'react-native'
+import { Text,
+         View,
+         YellowBox,
+         SafeAreaView,
+          } from 'react-native'
 import Login from './components/AuthPage'
 import Map from './components/Map'
 import SignUp from './components/SignUp'
@@ -7,9 +11,13 @@ import BookmarksContainer from './components/BookmarksContainer'
 import SpotPage from './components/SpotPage'
 import MySpots from './components/MySpots'
 import Settings from './components/Settings'
-import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation'; // Version can be specified in package.json
+import { createStackNavigator,
+         createAppContainer,
+         createDrawerNavigator,
+         DrawerItems } from 'react-navigation'; // Version can be specified in package.json
 import { Provider } from 'react-redux';
 import store from './store'
+import { Button } from 'react-native-elements'
 
 
 console.disableYellowBox = true;
@@ -36,7 +44,7 @@ const DrawerStack = createDrawerNavigator(
       'My Spots': {screen: MySpots},
       BookmarksContainer: { screen: BookmarksContainer },
       Settings: {screen: Settings},
-      Logout: {screen: Login},
+      Logout: {screen: Login}
     },
     {
       initialRouteName: 'Logout',
@@ -52,7 +60,8 @@ const PrimaryNav = createStackNavigator(
   // Default config for all screens
   headerMode: 'none',
   title: 'Main',
-  initialRouteName: 'DrawerStack'
+  initialRouteName: 'DrawerStack',
+  gesturesEnabled: false
 })
 
 
