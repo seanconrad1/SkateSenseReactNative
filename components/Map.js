@@ -1,13 +1,28 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Dimensions, Image, TextInput } from 'react-native'
-import MapView, { Callout, Overlay, Animated, MapCallout } from 'react-native-maps'
+import {
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+  Image,
+  TextInput,
+  Animated,
+  YellowBox } from 'react-native'
+import MapView, {
+      Callout,
+      Overlay,
+      MapCallout } from 'react-native-maps'
 import { withNavigation, DrawerActions } from 'react-navigation'
 import { Header, ListItem } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import environment from '../environment.js'
 import ActionButton from 'react-native-action-button';
 import NewMarkerInfoBoxForm from '../childComponents/newMarkerInfoBoxForm.js'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { fetchKeyForSkateSpots } from '../action.js'
 
+console.disableYellowBox = true;
 
 let {height, width} = Dimensions.get('window')
 
@@ -74,6 +89,9 @@ returnedSearch:{
   marginLeft:'15%',
   marginRight:'25%',
   height:'25%',
+},
+markerWrap:{
+  height:5
 }
 
 });
@@ -87,20 +105,14 @@ class Map extends Component {
       newMarkerLocation: {},
       newMarkerFormBox: false,
       term: null,
-      skateSpots: null,
+      skateSpots: '',
       counter:0
     }
   }
 
-  async componentDidMount(){
-     this.getUserLocationHandler()
-     let response = await fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`,{
-     headers: {
-           "Authorization": `${environment['API_KEY']}`
-       },
-     })
-     let json = await response.json()
-     this.setState({skateSpots: json})
+  componentDidMount(){
+    this.getUserLocationHandler()
+    this.props.getSkateSpots()
    }
 
   getUserLocationHandler = () => {
@@ -150,39 +162,38 @@ class Map extends Component {
         >
         </MapView.Marker>
 
-      {this.state.skateSpots
-        ? this.state.skateSpots.map(marker => (
-          <MapView.Marker
-          key={marker.id}
-          coordinate={{latitude:marker.latitude, longitude:marker.longitude}}
-          title={marker.title}
-          description={marker.description}>
+        {this.props.user.skate_spots
+          ? this.props.user.skate_spots.map(marker => (
+            <MapView.Marker
+              key={marker.id}
+              coordinate={{latitude:marker.latitude, longitude:marker.longitude}}
+              title={marker.title}
+              description={marker.description}>
 
-          </MapView.Marker>
-        ))
-        : null}
+            </MapView.Marker>
+          ))
+          : null}
 
-        <Overlay>
-            <View style={styles.calloutView}>
-            <TextInput style={styles.calloutSearch}
-                   placeholder={"Search"} onChangeText={(term) => this.setState({term})}/>
-            </View>
+          <Overlay>
+              <View style={styles.calloutView}>
+              <TextInput style={styles.calloutSearch}
+                     placeholder={"Search"} onChangeText={(term) => this.setState({term})}/>
+              </View>
 
-            {this.getSearchResults()}
+              {this.getSearchResults()}
 
-            <View>
-              {this.state.newMarkerFormBox
-                ? <NewMarkerInfoBoxForm location={this.state.newMarkerLocation}/>
-              :null}
-            </View>
-          </Overlay>
+              <View>
+                {this.state.newMarkerFormBox
+                  ? <NewMarkerInfoBoxForm location={this.state.newMarkerLocation}/>
+                :null}
+              </View>
+            </Overlay>
 
        </MapView>
 
        <Header
          leftComponent={{ icon: 'menu', color: 'black', onPress: () => this.props.navigation.openDrawer()}}
          centerComponent={{ fontFamily:'Lobster', text: 'SkateSense', style: { color: 'black', fontSize: 25 } }}
-         rightComponent={{ icon: 'bookmark', color: 'black', onPress: () => this.props.navigation.navigate('BookmarksContainer')}}
          backgroundColor='white'
          containerStyle={{
             fontFamily:'Lobster',
@@ -216,18 +227,33 @@ class Map extends Component {
 }
 
 
+const mapStateToProps = state => {
+  console.log('MY REDUX STATE', state)
+  return {
+    skate_spots: state.skate_spots,
+    user: state.user,
+    loggedIn: state.user.loggedIn
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+      getSkateSpots: () => dispatch(fetchKeyForSkateSpots())
+    }
+}
+
+const connectMap = connect(mapStateToProps, mapDispatchToProps)
+
+export default withNavigation(compose(connectMap)(Map))
+
 // {this.state.newMarkerFormBox
-// ? <NewMarkerInfoBoxForm/>
-// : null}
+  // ? <NewMarkerInfoBoxForm/>
+  // : null}
 
-// this.props.navigation.dispatch(DrawerActions.openDrawer())
-// this.props.navigation.openDrawer()
-// <Text onPress={() => this.props.navigation.navigate('DrawerOpen')
-// <Image source={{uri:`http://${environment['BASE_URL']}${marker.skatephoto.url}`}}
+  // this.props.navigation.dispatch(DrawerActions.openDrawer())
+  // this.props.navigation.openDrawer()
+  // <Text onPress={() => this.props.navigation.navigate('DrawerOpen')
+  // <Image source={{uri:`http://${environment['BASE_URL']}${marker.skatephoto.url}`}}
 
-// grey "rgb(236, 229, 235)"
-// red "rgb(244, 2, 87)"
-
-
-
-export default withNavigation(Map)
+  // grey "rgb(236, 229, 235)"
+  // red "rgb(244, 2, 87)"

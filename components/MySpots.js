@@ -6,13 +6,15 @@ import { View,
          ScrollView,
          Linking,
          TouchableWithoutFeedback,
-        TextInput} from 'react-native'
+         TextInput,
+         YellowBox} from 'react-native'
 import { Header, Icon,  Card, ListItem, Button } from 'react-native-elements'
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
 import MySpotsButtonGroup from '../childComponents/MySpotsButtonGroup.js'
 
+console.disableYellowBox = true;
 
 const styles = StyleSheet.create({
   calloutSearch:{

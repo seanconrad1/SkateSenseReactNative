@@ -18,7 +18,8 @@ import { createStackNavigator,
 import { Provider } from 'react-redux';
 import store from './store'
 import { Button } from 'react-native-elements'
-
+import Map2 from './components/Map2'
+import AdminConsole from './components/AdminConsole'
 
 console.disableYellowBox = true;
 
@@ -38,18 +39,20 @@ const RootStack = createStackNavigator(
   }
 )
 
+
 const DrawerStack = createDrawerNavigator(
     {
       Map: {screen: Map},
       'My Spots': {screen: MySpots},
       BookmarksContainer: { screen: BookmarksContainer },
       Settings: {screen: Settings},
-      Logout: {screen: Login}
+      Logout: {screen: Login},
     },
     {
       initialRouteName: 'Logout',
     }
 )
+
 
 const PrimaryNav = createStackNavigator(
   {
@@ -68,6 +71,7 @@ const PrimaryNav = createStackNavigator(
 const AppContainer = createAppContainer(PrimaryNav)
 
 class App extends Component {
+
   render(){
     return (
       <Provider store={ store }>
@@ -76,6 +80,5 @@ class App extends Component {
      )
   }
 }
-
 
 export default App

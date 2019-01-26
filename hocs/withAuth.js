@@ -1,21 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router'
+// import { Redirect } from 'react-router'
 import * as actions from '../action.js'
+import deviceStorage from '../deviceStorage.js'
 
 const withAuth = (WrappedComponent) => {
   class AuthorizedComponent extends React.Component {
     componentDidMount() {
-      if (localStorage.getItem('jwt') && !this.props.loggedIn) this.props.fetchCurrentUser()
+      if (deviceStorage.loadJWT('jwt') && !this.props.loggedIn) this.props.fetchCurrentUser()
     }
 
     render() {
-      if (localStorage.getItem('jwt') && this.props.loggedIn) {
+      if (deviceStorage.loadJWT('jwt') && this.props.loggedIn) {
         return <WrappedComponent />
-      } else if (localStorage.getItem('jwt') && this.props.authenticatingUser) {
+      } else if (deviceStorage.loadJWT('jwt') && this.props.authenticatingUser) {
         return <h1>Loading</h1>
       } else {
-        return <Redirect to="/login" />
+        return this.props.navigation.navigate('Map')
       }
     }
   }

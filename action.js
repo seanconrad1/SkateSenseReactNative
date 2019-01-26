@@ -66,7 +66,6 @@ export const loginUser = (username, password) => {
       })
       .then(JSONResponse => {
         deviceStorage.saveItem("jwt", JSONResponse.jwt)
-        console.log('JWT', deviceStorage.loadJWT('jwt'));
         dispatch({ type: 'SET_CURRENT_USER', payload: JSONResponse.user })
       })
       .catch( res => {
@@ -79,7 +78,7 @@ export const fetchCurrentUser = () => {
     dispatch(authenticatingUser())
     fetch(`http://${environment['BASE_URL']}/api/v1/profile`, {
       method: 'GET',
-      headers: {Authorization: `Bearer ${deviceStorage.loadItem('jwt')}`}
+      headers: {Authorization: `Bearer ${deviceStorage.loadJWT('jwt')}`}
     })
       .then(response => response.json())
       .then((JSONResponse) => dispatch(setCurrentUser(JSONResponse.user)))
@@ -105,18 +104,46 @@ export function logoutUser(dispatch){
 export const authenticatingUser = () => ({ type: 'AUTHENTICATING_USER' })
 
 
-export function getSkateSpots() {
-    return (dispatch) =>{
-      return fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`,{
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${deviceStorage.loadItem('jwt')}`
-        }
+// export function getSkateSpots() {
+//     function runDispatch(key) {
+//       return (dispatch) =>{
+//         return fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`,{
+//           method: 'GET',
+//           headers: {
+//             Authorization: `Bearer ${key}`
+//           }
+//         })
+//         .then(r=>r.json())
+//         .then(data=>dispatch({type:'GET_SKATE_SPOTS', payload:data}))
+//       }
+//     }
+// }
+
+
+
+export function fetchKeyForSkateSpots() {
+  return function action(dispatch) {
+    dispatch({ type: "GET_SKATE_SPOTS" })
+      deviceStorage.loadJWT("jwt")
+      .then(jwtKey => dispatch(fetchSkateSpots(jwtKey)))
+      .catch((error) => {
+        console.log('Action.js line 131 error: ', error)
       })
-      .then(r=>r.json())
-      .then(data=>dispatch({type:'GET_SKATE_SPOTS', payload:data}))
-    }
+  }
 }
+export function fetchSkateSpots(val){
+      return (dispatch) =>{
+        return fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`,{
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${val}`
+          }
+        })
+        .then(r=>r.json())
+        .then(data=>dispatch({type:'GET_SKATE_SPOTS', payload:data}))
+      }
+    }
+
 
 export function getUserData() {
     return (dispatch) =>{
@@ -124,7 +151,7 @@ export function getUserData() {
       return fetch(`http://${environment['BASE_URL']}/api/v1/users/1`, {
         method:'GET',
         headers:{
-          Authorization: `Bearer ${deviceStorage.loadItem('jwt')}`
+          Authorization: `Bearer ${deviceStorage.loadJWT('jwt')}`
         }
       })
         .then(r=>r.json()).then(data=>{
