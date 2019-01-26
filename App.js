@@ -7,7 +7,6 @@ import { Text,
 import Login from './components/AuthPage'
 import Map from './components/Map'
 import SignUp from './components/SignUp'
-import BookmarksContainer from './components/BookmarksContainer'
 import SpotPage from './components/SpotPage'
 import MySpots from './components/MySpots'
 import Settings from './components/Settings'
@@ -44,9 +43,9 @@ const DrawerStack = createDrawerNavigator(
     {
       Map: {screen: Map},
       'My Spots': {screen: MySpots},
-      BookmarksContainer: { screen: BookmarksContainer },
       Settings: {screen: Settings},
       Logout: {screen: Login},
+      SpotPage: {screen: SpotPage}
     },
     {
       initialRouteName: 'Logout',

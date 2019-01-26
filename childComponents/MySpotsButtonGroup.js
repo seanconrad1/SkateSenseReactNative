@@ -25,10 +25,11 @@ export default class MySpotsButtonGroup extends Component {
 
   updateIndex (selectedIndex) {
     this.setState({selectedIndex})
+    this.props.onChangeTab(selectedIndex)
   }
 
   render () {
-    const buttons = ['All', 'Submitted', 'Bookmarked']
+    const buttons = ['Submitted', 'Bookmarked']
     const { selectedIndex } = this.state
 
     return (

@@ -9,10 +9,12 @@ import { View,
          TextInput,
          YellowBox} from 'react-native'
 import { Header, Icon,  Card, ListItem, Button } from 'react-native-elements'
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
 import MySpotsButtonGroup from '../childComponents/MySpotsButtonGroup.js'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { fetchKeyForSkateSpots } from '../action.js'
 
 console.disableYellowBox = true;
 
@@ -54,20 +56,23 @@ class MySpots extends Component {
   constructor(props){
     super(props)
     this.state={
-      skateSpots: '',
+      submittedSpots: '',
+      bookmarkedSpots: '',
       term: '',
-      userID: 2,
+      whichTab: 0,
+
     }
   }
 
-  async componentDidMount(){
-    await fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`,{
-    headers: {
-          "Authorization": `${environment['API_KEY']}`
-      },
-    }).then(r=>r.json())
-    .then(data=>this.setState({skateSpots: data.filter(spot => spot.user_id === 2)}
-    ))
+  componentDidMount(){
+    this.props.getSkateSpots()
+    if (this.props.user.user.skate_spots){
+      this.setState(
+        {bookmarkedSpots: this.props.user.user.skate_spots,
+         submittedSpots: this.props.user.skate_spots.filter(spot => spot.user_id === this.props.user.user.id)
+        }
+      )
+    }
   }
 
   onSearchChange = (e) => {
@@ -76,46 +81,52 @@ class MySpots extends Component {
     })
   }
 
-  renderBookmarks = () => {
-    let spots = this.state.skateSpots
-    console.log(spots.length)
-    if(spots === ''){
-      return <View><Text>You don't have any spots bookmarked</Text></View>
-    }else if (this.state.term === '' || this.state.term === undefined && spots !== undefined) {
-      return spots.map(spot => (
-              <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
-                    skatespot: spot })}}>
-                  <Card
-                    key={spot.id}
-                    title={spot.name}
-                    image={{uri:`http://${environment['BASE_URL']}${spot.skatephoto.url}`}}
-                    containerStyle={{borderRadius: 20}}>
+  onChangeTab = (e) =>{
+    this.setState({
+      whichTab: e
+    })
+  }
 
-                    <Text style={{marginBottom: 10}}>
-                      {spot.description}
-                    </Text>
+    renderSpots = () => {
+      if (this.state.whichTab === 0) {
+        let spots = this.state.submittedSpots
+        if(spots === ''){
+          return <View><Text>You don't have any spots bookmarked</Text></View>
+        }else if (this.state.term === '' || this.state.term === undefined && spots !== undefined) {
+          return spots.map(spot => (
+            <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
+              skatespot: spot })}}>
+              <Card
+              key={spot.id}
+              title={spot.name}
+              image={{uri:`http://${environment['BASE_URL']}${spot.skatephoto.url}`}}
+              containerStyle={{borderRadius: 20}}>
 
-                    <Button
-                    raised
-                    icon={<Icon name="directions"/>}
-                    buttonStyle={styles.directionsButton}
-                    onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
-                    title='Directions' />
+              <Text style={{marginBottom: 10}}>
+              {spot.description}
+              </Text>
 
-                    <Button
-                      raised
-                      icon={{name: 'trash', type: 'font-awesome'}}
-                      buttonStyle={styles.unBookmarkButton}
-                      title='Delete Spot' />
+              <Button
+              raised
+              icon={<Icon name="directions"/>}
+              buttonStyle={styles.directionsButton}
+              onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
+              title='Directions' />
 
-                  </Card>
-            </TouchableWithoutFeedback>
+              <Button
+              raised
+              icon={{name: 'trash', type: 'font-awesome'}}
+              buttonStyle={styles.unBookmarkButton}
+              title='Delete Spot' />
+
+              </Card>
+              </TouchableWithoutFeedback>
+            )
           )
-        )
-    }else{
-      let filteredArray = spots.filter(spot => spot.name.toLowerCase().includes(this.state.term.toLowerCase()) || spot.description.toLowerCase().includes(this.state.term.toLowerCase()))
-      return filteredArray.map(spot => (
-        <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
+        }else{
+          let filteredArray = spots.filter(spot => spot.name.toLowerCase().includes(this.state.term.toLowerCase()) || spot.description.toLowerCase().includes(this.state.term.toLowerCase()))
+          return filteredArray.map(spot => (
+            <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
               skatespot: spot
             })}}>
               <Card
@@ -141,13 +152,81 @@ class MySpots extends Component {
                   icon={{name: 'trash', type: 'font-awesome'}}
                   buttonStyle={styles.unBookmarkButton}
                   title='Delete Spot'
-                  />
-              </Card>
-        </TouchableWithoutFeedback>
-
+              />
+            </Card>
+            </TouchableWithoutFeedback>
+          )
         )
-      )
-    }
+      }
+    }else if (this.state.whichTab === 1) {
+        let bookmarks = this.state.bookmarkedSpots
+        if (this.state.term === '' || this.state.term === undefined && bookmarks !== undefined) {
+          return bookmarks.map(bookmark => (
+
+            <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
+                  skatespot: bookmark
+                })}}>
+              <Card
+                title={bookmark.name}
+                image={{uri:`http://${environment['BASE_URL']}${bookmark.skatephoto.url}`}}
+                containerStyle={{borderRadius: 20}}>
+
+                <Text style={{marginBottom: 10}}>
+                  {bookmark.description}
+                </Text>
+
+                <Button
+                raised
+                icon={<Icon name="directions"/>}
+                buttonStyle={styles.directionsButton}
+                onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${bookmark.latitude},${bookmark.longitude}`)}
+                title='Directions' />
+
+                <Button
+                  raised
+                  buttonStyle={styles.unBookmarkButton}
+                  title='Unbookmark' />
+
+              </Card>
+
+            </TouchableWithoutFeedback>
+          )
+        )}else{
+          let filteredArray = bookmarks.filter(bookmark => bookmark.name.toLowerCase().includes(this.state.term.toLowerCase()) || bookmark.description.toLowerCase().includes(this.state.term.toLowerCase()))
+          return filteredArray.map(bookmark => (
+
+            <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
+                  skatespot: bookmark
+                })}}>
+                <Card
+                  title={bookmark.name}
+                  image={{uri:`http://${environment['BASE_URL']}${bookmark.skatephoto.url}`}}
+                  containerStyle={{borderRadius: 20}}>
+
+                  <Text style={{marginBottom: 10}}>
+                    {bookmark.description}
+                  </Text>
+
+                  <Button
+                    raised
+                    icon={<Icon name="directions"/>}
+                    buttonStyle={styles.directionsButton}
+                    onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${bookmark.latitude},${bookmark.longitude}`)}
+                    title='Directions'
+                  />
+
+                  <Button
+                    raised
+                    buttonStyle={styles.unBookmarkButton}
+                    title='Unbookmark'
+                    />
+
+                </Card>
+
+            </TouchableWithoutFeedback>
+          ))
+        }
+      }
   }
 
   render(){
@@ -155,7 +234,7 @@ class MySpots extends Component {
       <View>
         <Header
           leftComponent={{ icon: 'menu' , color: 'black', onPress: () => this.props.navigation.openDrawer()}}
-          centerComponent={{ fontFamily:'Lobster', text: 'My Submitted Spots', style: { color: 'black', fontSize: 25 } }}
+          centerComponent={{ fontFamily:'Lobster', text: 'My Spots', style: { color: 'black', fontSize: 25 } }}
           backgroundColor='white'
           containerStyle={{
              fontFamily:'Lobster',
@@ -167,108 +246,30 @@ class MySpots extends Component {
               onChangeText={(value) => this.onSearchChange(value)}
               />
 
-      <MySpotsButtonGroup/>
+      <MySpotsButtonGroup onChangeTab={this.onChangeTab}/>
 
        <ScrollView>
-          {this.renderBookmarks()}
+          {this.renderSpots()}
         </ScrollView>
 
       </View>
-
     )
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    skate_spots: state.skate_spots,
+    user: state.user,
+  }
+}
 
+function mapDispatchToProps(dispatch) {
+    return {
+      getSkateSpots: () => dispatch(fetchKeyForSkateSpots())
+    }
+}
 
-// let spots = this.state.skateSpots
-// if (this.state.term === '' || this.state.term === undefined && spots !== undefined) {
-//   console.log('SEARCH IS NOT WORKING');
-//   return spots.map(spot => (
+const connectMap = connect(mapStateToProps, mapDispatchToProps)
 
-    // <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
-    //       skatespot: spot
-    //     })}}>
-      // <Card
-      //   title={spot.name}
-      //   image={{uri:`http://${environment['BASE_URL']}${spot.skatephoto.url}`}}
-      //   containerStyle={{borderRadius: 20}}>
-      //
-      //   <Text style={{marginBottom: 10}}>
-      //     {spot.description}
-      //   </Text>
-      //
-      //   <Button
-      //   raised
-      //   buttonStyle={styles.directionsButton}
-      //   onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
-      //   title='Directions' />
-      //
-      //   <Button
-      //     raised
-      //     buttonStyle={styles.unBookmarkButton}
-      //     title='Unspot' />
-      //
-      // </Card>
-    //
-    // </TouchableWithoutFeedback>
-//   )
-// )}else{
-  // let filteredArray = spots.filter(spot => spot.name.toLowerCase().includes(this.state.term.toLowerCase()) || spot.description.toLowerCase().includes(this.state.term.toLowerCase()))
-  // return filteredArray.map(spot => (
-//
-    // <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
-    //       skatespot: spot
-    //     })}}>
-        // <Card
-        //   title={spot.name}
-        //   image={{uri:`http://${environment['BASE_URL']}${spot.skatephoto.url}`}}
-        //   containerStyle={{borderRadius: 20}}>
-        //
-        //   <Text style={{marginBottom: 10}}>
-        //     {spot.description}
-        //   </Text>
-        //
-        //   <Button
-        //     raised
-        //     buttonStyle={styles.directionsButton}
-        //     onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
-        //     title='Directions'
-        //   />
-        //
-        //   <Button
-        //     raised
-        //     buttonStyle={styles.unBookmarkButton}
-        //     title='Unspot'
-        //     />
-        //
-        // </Card>
-//
-//     </TouchableWithoutFeedback>
-//   ))
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export default withNavigation(MySpots)
+export default withNavigation(compose(connectMap)(MySpots))
