@@ -117,22 +117,43 @@ class SignUp extends Component {
       data.append("skatephoto", {uri: this.state.photo.uri, name: 'image.jpg', type: 'multipart/form-data'})
       data.append('user_id', 2)
 
-      fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`, {
-        method: 'POST',
-        body: data,
-        headers: {
-          'Content-Type': 'undefined',
-          "Authorization": `${environment['API_KEY']}`
-        }
-      })
-      .then(response => {
-        console.log("image uploaded")
-        console.log(response)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    }
+      // fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`, {
+      //   method: 'POST',
+      //   body: data,
+      //   headers: {
+      //     'Content-Type': 'undefined',
+      //     "Authorization": `${environment['API_KEY']}`
+      //   }
+      //   })
+      //   .then(response => {
+      //     console.log("image uploaded")
+      //     console.log(response)
+      //   })
+      //   .catch(err => {
+      //     console.log(err)
+      //   })
+      //
+      //   let headers = {
+      //      'Content-Type': 'application/json',
+      //      'Authorization': `${environment['API_KEY']}`
+      //    }
+
+        axios({
+            method: 'post',
+            url: `http://${environment['BASE_URL']}/api/v1/skate_spots`,
+            data: {
+              data
+            },
+            headers: headers
+            })
+            .then((response) => {
+                console.log('RESPONSE FROM SERVER', response)
+            })
+            .catch((error) => {
+                console.log('Error creating new marker: ', error)
+            })
+
+      }
 
   render(){
     return(
