@@ -1,6 +1,6 @@
 var _Environments = {
-    development: {BASE_URL: '142.93.6.224', API_KEY: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.TIADUXTXQwKAAgk1QpPx7k5Y8LHmAQnJo6GDRvug6AI'},
-    // development: {BASE_URL: 'localhost:3000', API_KEY: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxOH0.gUj3BajAwyJjhTWGGGdnSjC9C-lZQp2Atg9HbPj-hGQ'},
+    // development: {BASE_URL: '142.93.6.224', API_KEY: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.TIADUXTXQwKAAgk1QpPx7k5Y8LHmAQnJo6GDRvug6AI'},
+    development: {BASE_URL: 'localhost:3000', API_KEY: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxOH0.gUj3BajAwyJjhTWGGGdnSjC9C-lZQp2Atg9HbPj-hGQ'},
 
 }
 

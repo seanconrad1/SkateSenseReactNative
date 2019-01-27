@@ -46,7 +46,7 @@ class SignUp extends Component {
   // - WHEN BEING SUBMITTED TO THE BACKEND,
   // - THE BACKENED IS NOT ACCEPTING THE FORM
   // - HOWEVER IT'S WORKING FINE ON THE NORMAL REACT APP
-  
+
   // ImagePicker.showImagePicker(options, (response) => {
     //   // console.log('Response = ', response);
     //
@@ -121,7 +121,7 @@ class SignUp extends Component {
         method: 'POST',
         body: data,
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'undefined',
           "Authorization": `${environment['API_KEY']}`
         }
       })
