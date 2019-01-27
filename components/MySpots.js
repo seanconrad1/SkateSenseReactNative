@@ -15,6 +15,7 @@ import MySpotsButtonGroup from '../childComponents/MySpotsButtonGroup.js'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { fetchKeyForSkateSpots } from '../action.js'
+import deviceStorage from '../deviceStorage.js'
 
 console.disableYellowBox = true;
 
@@ -60,6 +61,7 @@ class MySpots extends Component {
       bookmarkedSpots: '',
       term: '',
       whichTab: 0,
+      deleteThisSpotID: ''
 
     }
   }
@@ -85,6 +87,29 @@ class MySpots extends Component {
     this.setState({
       whichTab: e
     })
+  }
+
+  deleteSpot = (id) =>{
+    deviceStorage.loadJWT('jwt')
+    .then(val => fetchToDeleteSpot(val))
+
+    function fetchToDeleteSpot(key){
+      fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+         Accept: 'application/json',
+         Authorization: `Bearer ${key}`
+      }})
+      .then(response=>response.json())
+      .then(r=>console.log(r))
+    }
+
+    this.setState({submittedSpots: this.state.submittedSpots.filter(spot => {
+      return spot.id !== id
+    })})
+
+    console.log(this.state.submittedSpots)
   }
 
     renderSpots = () => {
@@ -117,6 +142,7 @@ class MySpots extends Component {
               raised
               icon={{name: 'trash', type: 'font-awesome'}}
               buttonStyle={styles.unBookmarkButton}
+              onPress={() => this.deleteSpot(spot.id)}
               title='Delete Spot' />
 
               </Card>
@@ -152,6 +178,7 @@ class MySpots extends Component {
                   icon={{name: 'trash', type: 'font-awesome'}}
                   buttonStyle={styles.unBookmarkButton}
                   title='Delete Spot'
+                  onPress={() => this.deleteSpot(spot.id)}
               />
             </Card>
             </TouchableWithoutFeedback>
@@ -230,6 +257,7 @@ class MySpots extends Component {
   }
 
   render(){
+    console.log(this.state)
     return(
       <View>
         <Header
