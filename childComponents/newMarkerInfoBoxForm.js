@@ -9,6 +9,7 @@ import environment from '../environment.js'
 import RNFetchBlob from 'rn-fetch-blob'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import { fetchKeyForSkateSpots } from '../action.js'
 
 const styles = StyleSheet.create({
   container: {
@@ -44,32 +45,6 @@ class NewMarkerInfoBoxForm extends Component {
     photo: false,
     validation: false
   }
-
-  // THIS IS A NIGHTMARE
-  // - WHEN BEING SUBMITTED TO THE BACKEND,
-  // - THE BACKENED IS NOT ACCEPTING THE FORM
-  // - HOWEVER IT'S WORKING FINE ON THE NORMAL REACT APP
-
-  // ImagePicker.showImagePicker(options, (response) => {
-    //   // console.log('Response = ', response);
-    //
-    //   if (response.didCancel) {
-      //     console.log('User cancelled image picker');
-      //   } else if (response.error) {
-        //     console.log('ImagePicker Error: ', response.error);
-        //   } else if (response.customButton) {
-          //     console.log('User tapped custom button: ', response.customButton);
-          //   } else {
-            //     let source = {uri: response.uri.replace('file://', ''), isStatic: true};
-            //     // You can also display the image using data:
-            //     // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-            //
-            //     this.setState({
-              //       photo: source,
-              //       validation: true
-              //     })
-              //   }
-              // })
 
   getPhotoFromCameraRoll = () => {
       const options = {
@@ -108,10 +83,7 @@ class NewMarkerInfoBoxForm extends Component {
     }
 
     onSubmit = () =>{
-
       let test = RNFetchBlob.wrap(this.state.photo.uri)
-      // debugger
-
       RNFetchBlob.fetch('POST', `http://${environment['BASE_URL']}/api/v1/skate_spots`, {
           Authorization : `${environment['API_KEY']}`,
           'Content-Type' : undefined,
@@ -132,6 +104,7 @@ class NewMarkerInfoBoxForm extends Component {
           { name : 'user_id', data: this.props.user.user.id},
         ]).then((resp) => {
           console.log('RESPONSE FROM SERVER', resp)
+          this.props.getSkateSpots()
         }).catch((err) => {
           console.log('Error creating new marker: ', error)
         })
@@ -226,12 +199,18 @@ class NewMarkerInfoBoxForm extends Component {
   }
 }
 
+function mapDispatchToProps(dispatch) {
+    return {
+      getSkateSpots: () => dispatch(fetchKeyForSkateSpots())
+    }
+}
+
 const mapStateToProps = state => {
   return {
     user: state.user,
   }
 }
 
-const connectMap = connect(mapStateToProps)
+const connectMap = connect(mapStateToProps, mapDispatchToProps)
 
 export default withNavigation(compose(connectMap)(NewMarkerInfoBoxForm))
