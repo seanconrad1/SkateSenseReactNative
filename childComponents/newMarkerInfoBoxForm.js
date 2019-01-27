@@ -6,6 +6,9 @@ import { Input, Button, ThemeProvider } from 'react-native-elements';
 import { withNavigation } from 'react-navigation'
 import ImagePicker from 'react-native-image-picker';
 import environment from '../environment.js'
+import RNFetchBlob from 'rn-fetch-blob'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
 
 const styles = StyleSheet.create({
   container: {
@@ -33,7 +36,7 @@ const styles = StyleSheet.create({
 })
 
 
-class SignUp extends Component {
+class NewMarkerInfoBoxForm extends Component {
   state = {
     name: '',
     description: '',
@@ -105,57 +108,37 @@ class SignUp extends Component {
     }
 
     onSubmit = () =>{
-      let data = new FormData()
-      data.append('name', this.state.name)
-      data.append('country', 'n/a')
-      data.append('city', 'n/a')
-      data.append('state', 'n/a')
-      data.append('latitude', this.props.location.latitude)
-      data.append('longitude', this.props.location.longitude)
-      data.append('description', this.state.description)
-      data.append('bust_factor', this.state.kickout)
-      data.append("skatephoto", {uri: this.state.photo.uri, name: 'image.jpg', type: 'multipart/form-data'})
-      data.append('user_id', 2)
 
-      // fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`, {
-      //   method: 'POST',
-      //   body: data,
-      //   headers: {
-      //     'Content-Type': 'undefined',
-      //     "Authorization": `${environment['API_KEY']}`
-      //   }
-      //   })
-      //   .then(response => {
-      //     console.log("image uploaded")
-      //     console.log(response)
-      //   })
-      //   .catch(err => {
-      //     console.log(err)
-      //   })
-      //
-      //   let headers = {
-      //      'Content-Type': 'application/json',
-      //      'Authorization': `${environment['API_KEY']}`
-      //    }
+      let test = RNFetchBlob.wrap(this.state.photo.uri)
+      // debugger
 
-        axios({
-            method: 'post',
-            url: `http://${environment['BASE_URL']}/api/v1/skate_spots`,
-            data: {
-              data
-            },
-            headers: headers
-            })
-            .then((response) => {
-                console.log('RESPONSE FROM SERVER', response)
-            })
-            .catch((error) => {
-                console.log('Error creating new marker: ', error)
-            })
-
+      RNFetchBlob.fetch('POST', `http://${environment['BASE_URL']}/api/v1/skate_spots`, {
+          Authorization : `${environment['API_KEY']}`,
+          'Content-Type' : undefined,
+        },[{
+            name : 'skatephoto',
+            filename : 'image.png',
+            type:'image/jpg',
+            data: RNFetchBlob.wrap(this.state.photo.uri)
+          },
+          { name : 'name', data : this.state.name},
+          { name : 'country', data: 'n/a'},
+          { name : 'city', data: 'n/a'},
+          { name : 'state', data: 'n/a'},
+          { name : 'latitude', data: this.props.location.latitude},
+          { name : 'longitude', data: this.props.location.longitude},
+          { name : 'description', data: this.state.description},
+          { name : 'bust_factor', data: this.state.kickout},
+          { name : 'user_id', data: this.props.user.user.id},
+        ]).then((resp) => {
+          console.log('RESPONSE FROM SERVER', resp)
+        }).catch((err) => {
+          console.log('Error creating new marker: ', error)
+        })
       }
 
   render(){
+    console.log('NEW MARKERINFOBOX', this.props)
     return(
       <View style={styles.container}>
           <Text style={styles.header}>Create New Spot</Text>
@@ -243,6 +226,12 @@ class SignUp extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+  }
+}
 
+const connectMap = connect(mapStateToProps)
 
-export default withNavigation(SignUp)
+export default withNavigation(compose(connectMap)(NewMarkerInfoBoxForm))
