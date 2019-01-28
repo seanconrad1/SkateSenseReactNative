@@ -109,8 +109,6 @@ class MySpots extends Component {
     this.setState({submittedSpots: this.state.submittedSpots.filter(spot => {
       return spot.id !== id
     })})
-
-    console.log(this.state.submittedSpots)
   }
 
   deleteAlertMsg = (id) =>{
@@ -156,6 +154,7 @@ class MySpots extends Component {
         return <View><Text>You don't have any spots bookmarked</Text></View>
       }else if (this.state.term === '' || this.state.term === undefined && spots !== undefined) {
         return spots.map(spot => (
+
           <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
             skatespot: spot })}}>
               <Card
@@ -179,15 +178,17 @@ class MySpots extends Component {
                 raised
                 icon={{name: 'trash', type: 'font-awesome'}}
                 buttonStyle={styles.unBookmarkButton}
-                onPress={() => this.props.deleteAlertMsg(spot.id)}
+                onPress={() => this.deleteAlertMsg(spot.id)}
                 title='Delete Spot' />
               </Card>
             </TouchableWithoutFeedback>
+
           )
         )
       }else{
         let filteredArray = spots.filter(spot => spot.name.toLowerCase().includes(this.state.term.toLowerCase()) || spot.description.toLowerCase().includes(this.state.term.toLowerCase()))
         return filteredArray.map(spot => (
+
           <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
             skatespot: spot
           })}}>
@@ -218,6 +219,7 @@ class MySpots extends Component {
             />
           </Card>
           </TouchableWithoutFeedback>
+
         )
       )
     }
@@ -253,8 +255,8 @@ class MySpots extends Component {
                 />
 
             </Card>
-
           </TouchableWithoutFeedback>
+
         )
       )}else{
         let filteredArray = bookmarks.filter(bookmark => bookmark.name.toLowerCase().includes(this.state.term.toLowerCase()) || bookmark.description.toLowerCase().includes(this.state.term.toLowerCase()))
@@ -288,8 +290,8 @@ class MySpots extends Component {
                   />
 
               </Card>
-
           </TouchableWithoutFeedback>
+
         ))
       }
     }

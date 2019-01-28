@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
  },
  map: {
    ...StyleSheet.absoluteFillObject,
+   zIndex: -1
  },
 
  calloutView: {
@@ -103,7 +104,7 @@ class Map extends Component {
       userLocation: null,
       geoLocationSwitch: false,
       newMarkerLocation: {},
-      newMarkerFormBox: true,
+      newMarkerFormBox: false,
       term: null,
       skateSpots: '',
       counter:0
@@ -143,16 +144,17 @@ class Map extends Component {
   }
 
   render(){
-    // onPress={()=>this.setState({newMarkerFormBox: false})}
+    // region={ this.state.userLocation }
 
     return(
      <View style={styles.container}>
 
      <MapView
        style={styles.map}
-       region={ this.state.userLocation }
+       initialRegion ={this.state.userLocation}
        showsUserLocation
        onLongPress={(e)=>this.onLongPress(e)}
+       onPress={()=>this.setState({newMarkerFormBox: false})}
        >
 
        <MapView.Marker

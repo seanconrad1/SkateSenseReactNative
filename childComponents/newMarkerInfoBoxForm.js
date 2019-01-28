@@ -14,6 +14,8 @@ import { fetchKeyForSkateSpots } from '../action.js'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    zIndex: 1,
+    position: 'absolute',
     marginTop:'90%',
     alignItems:'center',
     backgroundColor: 'white',
