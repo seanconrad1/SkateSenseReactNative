@@ -127,7 +127,26 @@ class MySpots extends Component {
       ],
       {cancelable: false},
     );
+  }
 
+  unBookmark = (id) =>{
+
+  }
+
+  unBookmarkAlertMsg = (id) =>{
+    Alert.alert(
+      'Unbookmarking spot',
+      "Are you sure you want to unbookmark this spot?",
+      [
+        {text: 'Yes', onPress: () => this.unBookmark(id)},
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+      ],
+      {cancelable: false},
+    );
   }
 
   renderSpots = () => {
@@ -139,31 +158,30 @@ class MySpots extends Component {
         return spots.map(spot => (
           <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
             skatespot: spot })}}>
-            <Card
-            key={spot.id}
-            title={spot.name}
-            image={{uri:`http://${environment['BASE_URL']}${spot.skatephoto.url}`}}
-            containerStyle={{borderRadius: 20}}>
+              <Card
+                key={spot.id}
+                title={spot.name}
+                image={{uri:`http://${environment['BASE_URL']}${spot.skatephoto.url}`}}
+                containerStyle={{borderRadius: 20}}>
 
-            <Text style={{marginBottom: 10}}>
-            {spot.description}
-            </Text>
+              <Text style={{marginBottom: 10}}>
+              { spot.description}
+              </Text>
 
-            <Button
-            raised
-            icon={<Icon name="directions"/>}
-            buttonStyle={styles.directionsButton}
-            onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
-            title='Directions' />
+              <Button
+                raised
+                icon={<Icon name="directions"/>}
+                buttonStyle={styles.directionsButton}
+                onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
+                title='Directions' />
 
-            <Button
-            raised
-            icon={{name: 'trash', type: 'font-awesome'}}
-            buttonStyle={styles.unBookmarkButton}
-            onPress={() => this.deleteAlertMsg(spot.id)}
-            title='Delete Spot' />
-
-            </Card>
+              <Button
+                raised
+                icon={{name: 'trash', type: 'font-awesome'}}
+                buttonStyle={styles.unBookmarkButton}
+                onPress={() => this.props.deleteAlertMsg(spot.id)}
+                title='Delete Spot' />
+              </Card>
             </TouchableWithoutFeedback>
           )
         )
@@ -230,7 +248,9 @@ class MySpots extends Component {
               <Button
                 raised
                 buttonStyle={styles.unBookmarkButton}
-                title='Unbookmark' />
+                title='Unbookmark'
+                onPress={() => this.unBookmarkAlertMsg(bookmark.id)}
+                />
 
             </Card>
 
@@ -264,6 +284,7 @@ class MySpots extends Component {
                   raised
                   buttonStyle={styles.unBookmarkButton}
                   title='Unbookmark'
+                  onPress={() => this.unBookmarkAlertMsg(bookmark.id)}/>
                   />
 
               </Card>
