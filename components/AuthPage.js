@@ -56,7 +56,7 @@ class Login extends Component {
   render(){
     return(
       this.props.loggedIn
-      ? this.props.navigation.navigate('Map')
+      ? this.props.navigation.navigate('Map2')
       : <View style={styles.container}>
         <Text style={styles.header}>SkateSense</Text>
 

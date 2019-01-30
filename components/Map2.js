@@ -9,106 +9,103 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  TextInput
 } from "react-native";
-
-import MapView from "react-native-maps";
-
-const Images = [
-  { uri: "https://i.imgur.com/sNam9iJ.jpg" },
-  { uri: "https://i.imgur.com/N7rlQYt.jpg" },
-  { uri: "https://i.imgur.com/UDrH0wm.jpg" },
-  { uri: "https://i.imgur.com/Ka8kNST.jpg" }
-]
+import MapView, {
+      Callout,
+      Overlay,
+      MapCallout } from 'react-native-maps'
+import { Header, ListItem, Avatar, Icon } from 'react-native-elements'
+// import Icon from 'react-native-vector-icons/FontAwesome';
+import ActionButton from 'react-native-action-button';
+import NewMarkerInfoBoxForm from '../childComponents/newMarkerInfoBoxForm.js'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { fetchKeyForSkateSpots } from '../action.js'
+import { withNavigation, DrawerActions } from 'react-navigation'
+import environment from '../environment.js'
 
 const { width, height } = Dimensions.get("window");
 
 const CARD_HEIGHT = height / 4;
-const CARD_WIDTH = CARD_HEIGHT - 50;
+const CARD_WIDTH = CARD_HEIGHT + 90;
 
-export default class screens extends Component {
+class screens extends Component {
   state = {
-    markers: [
-      {
-        coordinate: {
-          latitude: 45.524548,
-          longitude: -122.6749817,
-        },
-        title: "Best Place",
-        description: "This is the best place in Portland",
-        image: Images[0],
-      },
-      {
-        coordinate: {
-          latitude: 45.524698,
-          longitude: -122.6655507,
-        },
-        title: "Second Best Place",
-        description: "This is the second best place in Portland",
-        image: Images[1],
-      },
-      {
-        coordinate: {
-          latitude: 45.5230786,
-          longitude: -122.6701034,
-        },
-        title: "Third Best Place",
-        description: "This is the third best place in Portland",
-        image: Images[2],
-      },
-      {
-        coordinate: {
-          latitude: 45.521016,
-          longitude: -122.6561917,
-        },
-        title: "Fourth Best Place",
-        description: "This is the fourth best place in Portland",
-        image: Images[3],
-      },
-    ],
     region: {
-      latitude: 45.52220671242907,
-      longitude: -122.6653281029795,
       latitudeDelta: 0.04864195044303443,
       longitudeDelta: 0.040142817690068,
-    },
-  };
+    }
+  }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.index = 0;
     this.animation = new Animated.Value(0);
   }
   componentDidMount() {
+    this.getUserLocationHandler()
+    this.props.getSkateSpots()
     // We should detect when scrolling has stopped then animate
     // We should just debounce the event listener here
+    if (this.props.user.skate_spots){
     this.animation.addListener(({ value }) => {
+      console.log('VALUE', value);
       let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
-      if (index >= this.state.markers.length) {
-        index = this.state.markers.length - 1;
+      if (index >= this.props.user.skate_spots.length) {
+        index = this.props.user.skate_spots.length - 1;
       }
       if (index <= 0) {
         index = 0;
       }
 
       clearTimeout(this.regionTimeout);
-      this.regionTimeout = setTimeout(() => {
-        if (this.index !== index) {
-          this.index = index;
-          const { coordinate } = this.state.markers[index];
-          this.map.animateToRegion(
-            {
-              ...coordinate,
-              latitudeDelta: this.state.region.latitudeDelta,
-              longitudeDelta: this.state.region.longitudeDelta,
-            },
-            350
-          );
-        }
-      }, 10);
-    });
+        this.regionTimeout = setTimeout(() => {
+          if (this.index !== index) {
+            this.index = index;
+            const latitude = this.props.user.skate_spots[index].latitude
+            const longitude = this.props.user.skate_spots[index].longitude
+            console.log('MY LATITUDE', latitude);
+            console.log('MY longitude', longitude);
+            this.map.animateToRegion(
+              {
+                latitude: latitude,
+                longitude: longitude,
+                latitudeDelta: this.state.region.latitudeDelta,
+                longitudeDelta: this.state.region.longitudeDelta,
+              },
+              350
+            );
+          }
+        }, 10);
+      });
+    }else {
+      console.log('spots havent loaded yet');
+    }
+  }
+
+  getUserLocationHandler = () => {
+    navigator.geolocation.getCurrentPosition(position => {
+      this.setState({
+        userLocation:{
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: 0.115,
+          longitudeDelta: 0.1121,
+        },
+        geoLocationSwitch: true
+      })
+    })
+  }
+
+  getSearchResults = () =>{
+    let spots = this.state.skateSpots
   }
 
   render() {
-    const interpolations = this.state.markers.map((marker, index) => {
+    console.log("MAP2 state", this.props);
+    const interpolations =
+    this.props.user.skate_spots
+    ?( this.props.user.skate_spots.map((marker, index) => {
       const inputRange = [
         (index - 1) * CARD_WIDTH,
         index * CARD_WIDTH,
@@ -125,16 +122,20 @@ export default class screens extends Component {
         extrapolate: "clamp",
       });
       return { scale, opacity };
-    });
+    }))
+    : null
 
     return (
       <View style={styles.container}>
         <MapView
+          showsUserLocation
           ref={map => this.map = map}
-          initialRegion={this.state.region}
+          initialRegion ={this.state.userLocation}
           style={styles.container}
         >
-          {this.state.markers.map((marker, index) => {
+
+        {this.props.user.skate_spots
+          ? this.props.user.skate_spots.map((marker, index) => {
             const scaleStyle = {
               transform: [
                 {
@@ -144,17 +145,84 @@ export default class screens extends Component {
             };
             const opacityStyle = {
               opacity: interpolations[index].opacity,
-            };
-            return (
-              <MapView.Marker key={index} coordinate={marker.coordinate}>
-                <Animated.View style={[styles.markerWrap, opacityStyle]}>
-                  <Animated.View style={[styles.ring, scaleStyle]} />
-                  <View style={styles.marker} />
-                </Animated.View>
-              </MapView.Marker>
-            );
-          })}
+            }
+            return(
+            <MapView.Marker
+              key={index}
+              coordinate={{latitude:marker.latitude, longitude:marker.longitude}}
+              title={marker.name}
+              description={marker.description}>
+              <Animated.View style={[styles.markerWrap, opacityStyle]}>
+                <Animated.View style={[styles.ring, scaleStyle]} />
+                <View style={styles.marker} />
+              </Animated.View>
+
+            </MapView.Marker>
+          )})
+          : null}
+
         </MapView>
+
+        <Overlay>
+            <View>
+              <Icon
+              raised
+              name='bars'
+              type='font-awesome'
+              onPress= {() => this.props.navigation.openDrawer()}
+              containerStyle={{
+                marginTop: 20,
+                marginLeft: 0,
+              }}
+              color="rgb(244, 2, 87)"
+              />
+
+              <Icon
+              raised
+              name='plus'
+              type='font-awesome'
+              onPress= {() => this.props.navigation.openDrawer()}
+              containerStyle={{
+                marginTop: 330,
+                marginLeft: 0,
+              }}
+              color="rgb(244, 2, 87)"
+
+              />
+
+              <Icon
+              raised
+              name='redo'
+              type='font-awesome'
+              onPress= {() => this.props.navigation.openDrawer()}
+              containerStyle={{
+                marginBottom: 5,
+                marginLeft: 310,
+                marginTop: -140,
+              }}
+              color="rgb(244, 2, 87)"
+
+              />
+
+              <Icon
+              raised
+              name='location-arrow'
+              type='font-awesome'
+              onPress= {() => this.props.navigation.openDrawer()}
+              containerStyle={{
+                marginRight:0,
+                marginBottom: 0,
+                marginLeft: 310,
+              }}
+              color="rgb(244, 2, 87)"
+              
+              />
+            </View>
+        </Overlay>
+
+
+
+
         <Animated.ScrollView
           horizontal
           scrollEventThrottle={1}
@@ -175,21 +243,23 @@ export default class screens extends Component {
           style={styles.scrollView}
           contentContainerStyle={styles.endPadding}
         >
-          {this.state.markers.map((marker, index) => (
+          {this.props.user.skate_spots
+           ? this.props.user.skate_spots.map((marker, index) => (
             <View style={styles.card} key={index}>
               <Image
-                source={marker.image}
+                source={{uri:`http://${environment['BASE_URL']}${marker.skatephoto.url}`}}
                 style={styles.cardImage}
                 resizeMode="cover"
               />
               <View style={styles.textContent}>
-                <Text numberOfLines={1} style={styles.cardtitle}>{marker.title}</Text>
+                <Text numberOfLines={1} style={styles.cardtitle}>{marker.name}</Text>
                 <Text numberOfLines={1} style={styles.cardDescription}>
                   {marker.description}
                 </Text>
               </View>
             </View>
-          ))}
+          ))
+          : null}
         </Animated.ScrollView>
       </View>
     );
@@ -200,9 +270,52 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  calloutView: {
+   flexDirection: "row",
+   backgroundColor: "rgba(255, 255, 255, 0.9)",
+   borderRadius: 20,
+   borderStyle:'solid',
+   borderColor:'rgb(236, 229, 235)',
+   borderWidth: 1,
+   width: "70%",
+   marginLeft: "11%",
+   marginRight: "30%",
+   marginTop: '25%',
+   shadowColor: '#000',
+   shadowOffset: { width: 0, height: 5 },
+   shadowOpacity: 0.3,
+   shadowRadius: 3,
+  },
+  calloutSearch: {
+   borderColor: "transparent",
+   marginLeft: 10,
+   width: "90%",
+   marginRight: 10,
+   height: 40,
+   borderWidth: 0.0
+  },
+  geoLocationButton:{
+    flexDirection: "row",
+    marginLeft: "80%",
+    marginRight: "30%",
+    marginTop: "95%",
+  },
+  menuButtonContainerStyle:{
+    backgroundColor: "rgb(244, 2, 87)",
+    height: 60,
+    width: 60,
+    borderRadius: 50,
+    marginLeft: "0%",
+    marginRight: "75%",
+    marginTop: "50%",
+  },
+  compass:{
+    color: "white",
+    fontSize: 25,
+  },
   scrollView: {
     position: "absolute",
-    bottom: 30,
+    bottom: -5,
     left: 0,
     right: 0,
     paddingVertical: 10,
@@ -262,4 +375,19 @@ const styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent("mapfocus", () => screens);
+const mapStateToProps = state => {
+  return {
+    skate_spots: state.skate_spots,
+    user: state.user,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+      getSkateSpots: () => dispatch(fetchKeyForSkateSpots())
+    }
+}
+
+const connectMap = connect(mapStateToProps, mapDispatchToProps)
+
+export default withNavigation(compose(connectMap)(screens))

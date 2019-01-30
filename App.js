@@ -18,6 +18,8 @@ import { Provider } from 'react-redux';
 import store from './store'
 import { Button } from 'react-native-elements'
 import Map2 from './components/Map2'
+import Map3 from './components/Map3'
+
 import AdminConsole from './components/AdminConsole'
 
 console.disableYellowBox = true;
@@ -41,11 +43,12 @@ const RootStack = createStackNavigator(
 
 const DrawerStack = createDrawerNavigator(
     {
+      Map2: {screen: Map2},
       Map: {screen: Map},
       'My Spots': {screen: MySpots},
       Settings: {screen: Settings},
       Logout: {screen: Login},
-      SpotPage: {screen: SpotPage}
+      SpotPage: {screen: SpotPage},
     },
     {
       initialRouteName: 'Logout',
