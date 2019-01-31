@@ -1,7 +1,37 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, Image, TouchableHighlight, ScrollView, PropTypes} from 'react-native'
 import { NavigationActions, withNavigation  } from 'react-navigation'
-import { Icon } from 'react-native-elements'
+import { Icon, Button, Divider, ListItem } from 'react-native-elements'
+
+const list = [
+  {
+    name: 'Map',
+    icon: 'globe',
+    type: 'font-awesome',
+  },
+  {
+    name: 'Map2',
+    type: 'font-awesome',
+    icon: 'globe',
+  },
+  {
+    name: 'My Spots',
+    type: 'font-awesome',
+    icon: 'bookmark',
+  },
+  {
+    name: 'Settings',
+    type: 'font-awesome',
+    icon: 'wrench',
+  },
+  {
+    name: 'Logout',
+    type: 'font-awesome',
+    icon: 'sign-out',
+
+  },
+]
+
 
 class SideMenu extends Component {
    /**
@@ -32,73 +62,17 @@ class SideMenu extends Component {
            <View style = { styles.container } >
                <ScrollView>
                    <View>
-                       <Text>{ 'TESTING' }</Text>
-                       <View >
-                           <TouchableHighlight onPress={ this.navigateToScreen('Map') }>
-                               <View style={styles.uglyDrawerItem}>
-                                   <Icon
-                                       name="globe"
-                                       type="font-awesome"
-                                       backgroundColor="transparent"
-                                       color= 'blue'
-                                       size={ 30 }
-                                   />
-                                   <Text>Map</Text>
-                               </View>
-                           </TouchableHighlight>
-
-                           <TouchableHighlight onPress={ this.navigateToScreen('Map2') }>
-                               <View style={styles.uglyDrawerItem}>
-                                   <Icon
-                                       name="globe"
-                                       type="font-awesome"
-                                       backgroundColor="transparent"
-                                       color= 'grey'
-                                       size={ 30 }
-                                   />
-                                   <Text>Map2</Text>
-                               </View>
-                           </TouchableHighlight>
-
-                           <TouchableHighlight onPress={ this.navigateToScreen('My Spots') }>
-                               <View style={styles.uglyDrawerItem}>
-                                   <Icon
-                                       name="bookmark"
-                                       type="font-awesome"
-                                       backgroundColor="transparent"
-                                       color= 'red'
-                                       size={ 30 }
-                                   />
-                                   <Text>My Spots</Text>
-                               </View>
-                           </TouchableHighlight>
-
-                           <TouchableHighlight onPress={ this.navigateToScreen('Settings') }>
-                               <View style={styles.uglyDrawerItem}>
-                                   <Icon
-                                       name="wrench"
-                                       type="font-awesome"
-                                       backgroundColor="transparent"
-                                       color= 'black'
-                                       size={ 30 }
-                                   />
-                                   <Text>Settings</Text>
-                               </View>
-                           </TouchableHighlight>
-
-                           <TouchableHighlight onPress={ this.onPressLogout }>
-                               <View style={styles.uglyDrawerItem}>
-                                   <Icon
-                                       name="door"
-                                       type="font-awesome"
-                                       backgroundColor="transparent"
-                                       color='orange'
-                                       size={ 30 }
-                                   />
-                                   <Text>Logout</Text>
-                               </View>
-                           </TouchableHighlight>
-                       </View>
+                       <Text>{ 'SkateSense' }</Text>
+                       {
+                          list.map((item, i) => (
+                            <ListItem
+                              key={i}
+                              leftIcon={{ name: item.icon, type: item.type}}
+                              title={item.name}
+                              onPress={this.navigateToScreen(item.name)}
+                            />
+                          ))
+                        }
                    </View>
                </ScrollView>
            </View>
@@ -106,9 +80,7 @@ class SideMenu extends Component {
    }
  }
 
-// SideMenu.propTypes = {
-//      navigation: PropTypes.object,
-// }
+
 
 
 const styles = StyleSheet.create({
@@ -119,19 +91,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   },
   uglyDrawerItem: {
+    marginTop: 20,
     fontSize: 18,
     fontWeight: 'bold',
     color: '#E73536',
-    padding: 15,
-    margin: 5,
-    borderRadius: 2,
+    width: '100%',
     borderColor: '#E73536',
-    borderWidth: 1,
     textAlign: 'center'
   },
-  navSectionStyle: {
-
-  }
 })
 
 export default withNavigation(SideMenu)

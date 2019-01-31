@@ -10,7 +10,8 @@ import {
   Dimensions,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  TextInput
+  TextInput,
+  TouchableHighlight
 } from "react-native";
 import MapView, {
       Callout,
@@ -170,59 +171,65 @@ class screens extends Component {
         </MapView>
 
         <Overlay>
-            <View>
-              <Icon
-              raised
-              name='bars'
-              type='font-awesome'
-              onPress= {() => this.props.navigation.openDrawer()}
-              containerStyle={{
-                marginTop: 20,
-                marginLeft: 0,
-              }}
-              color="rgb(244, 2, 87)"
-              />
+          <View>
+            <TouchableOpacity onPress= {() => this.props.navigation.openDrawer()} >
+                  <Icon
+                    raised
+                    name='bars'
+                    size={15}
+                    type='font-awesome'
 
-              <Icon
-              raised
-              name='plus'
-              type='font-awesome'
-              onPress= {() => this.props.navigation.openDrawer()}
-              containerStyle={{
-                marginTop: 330,
-                marginLeft: 0,
-              }}
-              color="rgb(244, 2, 87)"
+                    containerStyle={{
+                      marginTop: 60,
+                      marginLeft: 0,
+                    }}
+                    color="rgb(244, 2, 87)"
+                  />
+              </TouchableOpacity>
 
-              />
+            <TouchableOpacity onPress= {() => console.log('PLUS BUTTON CLICKED')} >
+                <Icon
+                  raised
+                  name='plus'
+                  size={15}
+                  type='font-awesome'
+                  containerStyle={{
+                    marginTop: 0,
+                    marginLeft: 0,
+                  }}
+                  color="rgb(244, 2, 87)"
+                />
+            </TouchableOpacity>
 
-              <Icon
-              raised
-              name='redo'
-              type='font-awesome'
-              onPress= {() => this.props.navigation.openDrawer()}
-              containerStyle={{
-                marginBottom: 5,
-                marginLeft: 310,
-                marginTop: -140,
-              }}
-              color="rgb(244, 2, 87)"
+            <TouchableOpacity onPress= {() => console.log('redo BUTTON CLICKED')} >
+                <Icon
+                  raised
+                  name='globe'
+                  size={15}
+                  type='font-awesome'
+                  containerStyle={{
+                    marginTop: 0,
+                    marginLeft: 0,
+                  }}
+                  color="rgb(244, 2, 87)"
+                />
+            </TouchableOpacity>
 
-              />
+              <TouchableOpacity onPress= {() => console.log('LOGOUT BUTTON CLICKED')}>
+                <Icon
+                  raised
+                  size={15}
+                  name='location-arrow'
+                  type='font-awesome'
+                  containerStyle={{
+                    marginRight:0,
+                    marginBottom: 0,
+                    marginLeft: 0,
+                  }}
+                  color="rgb(244, 2, 87)"
+                />
+              </TouchableOpacity>
 
-              <Icon
-              raised
-              name='location-arrow'
-              type='font-awesome'
-              onPress= {() => this.props.navigation.openDrawer()}
-              containerStyle={{
-                marginRight:0,
-                marginBottom: 0,
-                marginLeft: 310,
-              }}
-              color="rgb(244, 2, 87)"
-
-              />
             </View>
         </Overlay>
 
