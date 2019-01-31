@@ -30,10 +30,10 @@ const styles = StyleSheet.create({
     height: 45,
     borderColor: "transparent",
     borderWidth: 0,
-    borderRadius: 20
+    borderRadius: 20,
+    marginBottom: 20,
   },
   signupButton:{
-    marginTop: 20,
     backgroundColor: "grey",
     width: 300,
     height: 45,

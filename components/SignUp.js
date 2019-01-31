@@ -4,11 +4,37 @@ import { Header } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input, Button, ThemeProvider } from 'react-native-elements';
 import { withNavigation } from 'react-navigation'
+import { createUser } from '../action.js'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
 
 class SignUp extends Component {
   state = {
     username: '',
-    password: ''
+    password: '',
+    validatePassword: '',
+    email: '',
+    firstName: 'n/a',
+    lastName: 'n/a',
+    photo: 'n/a',
+    passwordMustMatch: false
+  }
+
+
+  onSubmit = () =>{
+    // console.log('got here')
+    if (this.state.password === this.state.validatePassword){
+      this.props.createUser(this.state.username,
+        this.state.password,
+        this.state.firstName,
+        this.state.lastName,
+        this.state.email,
+        this.state.photo
+      )
+      // this.props.navigation.navigate('Map')
+    }else {
+      this.setState({passwordMustMatch: true})
+    }
   }
 
   render(){
@@ -32,6 +58,13 @@ class SignUp extends Component {
       <View style={styles.container}>
         <ThemeProvider>
           <Text style={styles.header}>Signup</Text>
+
+
+          <View>
+            <Text style={{color:'red'}}>
+              {this.state.passwordMustMatch ? 'Passwords Must Match' : null}
+            </Text>
+          </View>
 
           <Input
             placeholder='Username'
@@ -79,7 +112,7 @@ class SignUp extends Component {
                   color='black'
                 />
               }
-              onChangeText={(password) => this.setState({password})}
+              onChangeText={(validatePassword) => this.setState({validatePassword})}
             />
 
               <Input
@@ -117,7 +150,7 @@ class SignUp extends Component {
                     borderWidth: 0,
                     borderRadius: 20
                   }}
-                  onPress={() => this.props.navigation.navigate('Map')}
+                  onPress={this.onSubmit}
                 />
 
 
@@ -127,4 +160,15 @@ class SignUp extends Component {
   }
 }
 
-export default withNavigation(SignUp)
+
+const mapStateToProps = ({ user: { authenticatingUser, failedLogin, error, loggedIn } }) => ({
+  authenticatingUser,
+  failedLogin,
+  error,
+  loggedIn
+})
+
+
+const connectMap = connect(mapStateToProps, { createUser })
+
+export default withNavigation(compose(connectMap)(SignUp))

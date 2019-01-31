@@ -100,23 +100,6 @@ export const logoutUser = () => ({type: 'LOGOUT_USER' })
 export const authenticatingUser = () => ({ type: 'AUTHENTICATING_USER' })
 
 
-// export function getSkateSpots() {
-//     function runDispatch(key) {
-//       return (dispatch) =>{
-//         return fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`,{
-//           method: 'GET',
-//           headers: {
-//             Authorization: `Bearer ${key}`
-//           }
-//         })
-//         .then(r=>r.json())
-//         .then(data=>dispatch({type:'GET_SKATE_SPOTS', payload:data}))
-//       }
-//     }
-// }
-
-
-
 export function fetchKeyForSkateSpots() {
   return function action(dispatch) {
     dispatch({ type: "GET_SKATE_SPOTS" })
