@@ -23,9 +23,9 @@ const deviceStorage = {
     }
   },
 
-  async clearJWT(){
+  async removeJWT(key){
     try{
-      await AsyncStorage.clear()
+      await AsyncStorage.removeItem(key)
       console.log('storage has been cleared!');
     } catch (error) {
       console.log('AsyncStorage clearJWT Error: ' + error.message);

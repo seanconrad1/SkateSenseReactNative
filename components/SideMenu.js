@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { StyleSheet, Text, View, Image, TouchableHighlight, ScrollView, PropTypes} from 'react-native'
 import { NavigationActions, withNavigation  } from 'react-navigation'
 import { Icon, Button, Divider, ListItem } from 'react-native-elements'
+import deviceStorage from '../deviceStorage.js'
+import { logoutUser } from '../action.js'
 
 const list = [
   {
@@ -24,19 +26,11 @@ const list = [
     type: 'font-awesome',
     icon: 'wrench',
   },
-  {
-    name: 'Logout',
-    type: 'font-awesome',
-    icon: 'sign-out',
-
-  },
 ]
 
 
 class SideMenu extends Component {
-   /**
-    * Navigate between screens action
-    */
+
    navigateToScreen = (route) => () => {
        let navigateAction = NavigationActions.navigate({
            routeName: route,
@@ -45,18 +39,11 @@ class SideMenu extends Component {
        this.props.navigation.dispatch(navigateAction);
    }
 
-   /**
-    * Logout from firebase
-    */
    onPressLogout = () => {
-       // Firebase.logout();
-       console.log('LOGOUT');
+       deviceStorage.removeJWT('jwt')
        this.navigateToScreen('Login')
    }
 
-   /**
-    * Render side menu
-    */
    render () {
        return (
            <View style = { styles.container } >
@@ -73,15 +60,17 @@ class SideMenu extends Component {
                             />
                           ))
                         }
+                        <ListItem
+                          title='Logout'
+                          leftIcon={{name:'sign-out', type: 'font-awesome'}}
+                          onPress={this.onPressLogout}
+                          />
                    </View>
                </ScrollView>
            </View>
        );
    }
  }
-
-
-
 
 const styles = StyleSheet.create({
   container: {
