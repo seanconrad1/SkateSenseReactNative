@@ -95,11 +95,7 @@ export const failedLogin = (errorMsg) => ({
   payload: errorMsg
 })
 
-export function logoutUser(dispatch){
-  return (dispatch) => {
-    type:'LOGOUT_USER'
-  }
-}
+export const logoutUser = () => ({type: 'LOGOUT_USER' })
 
 export const authenticatingUser = () => ({ type: 'AUTHENTICATING_USER' })
 

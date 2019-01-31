@@ -23,6 +23,7 @@ const initialState = {
 }
 
 export default function reducer(state = initialState, action) {
+  console.log('MY REDUCERS ACTION', action)
   switch (action.type) {
     case 'SET_CURRENT_USER':
       return { ...state, user: action.payload, loggedIn: true, authenticatingUser: false }
@@ -41,7 +42,9 @@ export default function reducer(state = initialState, action) {
         authenticatingUser: false
       }
 
+
     case 'LOGOUT_USER':
+      // console.log('GOT TO LOGOUTUSER IN REDUCER')
       return {...state, loggedIn: false}
 
     // case 'GET_USERS':

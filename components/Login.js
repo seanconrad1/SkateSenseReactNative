@@ -54,6 +54,8 @@ class Login extends Component {
   }
 
   render(){
+    console.log('NAVIGATED TO LOGIN PAGE');
+
     console.log('LOGGED IN??', this.props.loggedIn);
     return(
       this.props.loggedIn

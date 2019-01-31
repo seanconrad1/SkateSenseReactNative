@@ -3,9 +3,9 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, ScrollView, PropType
 import { NavigationActions, withNavigation  } from 'react-navigation'
 import { Icon, Button, Divider, ListItem } from 'react-native-elements'
 import deviceStorage from '../deviceStorage.js'
-import { logoutUser } from '../action.js'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import { logoutUser } from '../action.js'
 
 const list = [
   {
@@ -95,17 +95,16 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    // user: state.user,
     loggedIn: state.user.loggedIn
   }
 }
-
 
 function mapDispatchToProps(dispatch) {
     return {
       logoutUser: () => dispatch(logoutUser())
     }
 }
+
 
 
 const connectMap = connect(mapStateToProps, mapDispatchToProps)

@@ -48,6 +48,7 @@ const Drawer = createStackNavigator(
     'My Spots': {screen: MySpots},
     Settings: {screen: Settings},
     SpotPage: {screen: SpotPage},
+    Login: {screen: Login},
   },
   {
     headerMode: 'none',
