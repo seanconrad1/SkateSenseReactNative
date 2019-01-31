@@ -54,6 +54,7 @@ class Login extends Component {
   }
 
   render(){
+    console.log('LOGGED IN??', this.props.loggedIn);
     return(
       this.props.loggedIn
       ? this.props.navigation.navigate('Map')

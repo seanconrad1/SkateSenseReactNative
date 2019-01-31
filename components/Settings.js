@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     },
 })
 
-class MySpots extends Component {
+class Settings extends Component {
   constructor(props){
     super(props)
     this.state={
@@ -75,4 +75,4 @@ class MySpots extends Component {
   }
 }
 
-export default withNavigation(MySpots)
+export default withNavigation(Settings)

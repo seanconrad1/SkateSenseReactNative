@@ -4,7 +4,7 @@ import { Text,
          YellowBox,
          SafeAreaView,
           } from 'react-native'
-import Login from './components/AuthPage'
+import Login from './components/Login'
 import Map from './components/Map'
 import SignUp from './components/SignUp'
 import SpotPage from './components/SpotPage'
@@ -36,9 +36,9 @@ const RootStack = createStackNavigator(
       headerVisible: false,
     }
   },
-  {
-    initialRouteName: 'Login',
-  }
+  // {
+  //   initialRouteName: 'Login',
+  // }
 )
 
 const Drawer = createStackNavigator(
@@ -47,7 +47,6 @@ const Drawer = createStackNavigator(
     Map2: {screen: Map2},
     'My Spots': {screen: MySpots},
     Settings: {screen: Settings},
-    Logout: {screen: Login},
     SpotPage: {screen: SpotPage},
   },
   {
@@ -63,28 +62,27 @@ const Drawer = createStackNavigator(
 
 
 const HomeNavigationDrawer = createDrawerNavigator({
-    Drawer: {
-        screen: Drawer,
-    },
+    RootStack: {screen: RootStack},
+    Drawer: {screen: Drawer},
 }, {
     contentComponent: SideMenu,
     drawerOpenRoute: 'DrawerOpen',
     drawerCloseRoute: 'DrawerClose',
     drawerToggleRoute: 'DrawerToggle',
-    drawerWidth: 300,
+    drawerWidth: 250,
 });
 
 
 const PrimaryNav = createStackNavigator(
   {
-  RootStack: { screen: RootStack },
+  // RootStack: { screen: RootStack },
   HomeNavigationDrawer: { screen: HomeNavigationDrawer }
   },
   {
   // Default config for all screens
   headerMode: 'none',
   title: 'Main',
-  initialRouteName: 'RootStack',
+  initialRouteName: 'HomeNavigationDrawer',
   gesturesEnabled: false
 })
 

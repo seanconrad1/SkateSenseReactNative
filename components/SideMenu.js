@@ -4,6 +4,8 @@ import { NavigationActions, withNavigation  } from 'react-navigation'
 import { Icon, Button, Divider, ListItem } from 'react-native-elements'
 import deviceStorage from '../deviceStorage.js'
 import { logoutUser } from '../action.js'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
 
 const list = [
   {
@@ -39,10 +41,11 @@ class SideMenu extends Component {
        this.props.navigation.dispatch(navigateAction);
    }
 
-   onPressLogout = () => {
+   logOut = () =>{
        deviceStorage.removeJWT('jwt')
-       this.navigateToScreen('Login')
-   }
+       this.props.logoutUser()
+       this.props.navigation.navigate('Login')
+     }
 
    render () {
        return (
@@ -63,7 +66,7 @@ class SideMenu extends Component {
                         <ListItem
                           title='Logout'
                           leftIcon={{name:'sign-out', type: 'font-awesome'}}
-                          onPress={this.onPressLogout}
+                          onPress={this.logOut}
                           />
                    </View>
                </ScrollView>
@@ -90,4 +93,21 @@ const styles = StyleSheet.create({
   },
 })
 
-export default withNavigation(SideMenu)
+function mapStateToProps(state) {
+  return {
+    // user: state.user,
+    loggedIn: state.user.loggedIn
+  }
+}
+
+
+function mapDispatchToProps(dispatch) {
+    return {
+      logoutUser: () => dispatch(logoutUser())
+    }
+}
+
+
+const connectMap = connect(mapStateToProps, mapDispatchToProps)
+
+export default withNavigation(compose(connectMap)(SideMenu))
