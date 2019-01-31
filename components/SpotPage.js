@@ -60,13 +60,12 @@ class SpotPage extends Component {
 
   componentDidMount(){
     this.setState({
-      skatespot: this.props.navigation.getParam('skatespot', 'defaultVAL'),
-      imageURL: this.props.navigation.getParam('skatespot', 'defaultVAL').skatephoto.url
+      skatespot: this.props.navigation.getParam('skatespot'),
+      imageURL: this.props.navigation.getParam('skatespot').skatephoto.url
     })
   }
 
   render(){
-    console.log('GOT HERE', this.state.skatespot);
     return(
       <View>
         <Header

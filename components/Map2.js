@@ -9,6 +9,7 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   TextInput
 } from "react-native";
 import MapView, {
@@ -95,6 +96,11 @@ class screens extends Component {
         geoLocationSwitch: true
       })
     })
+  }
+
+  sendingPropsTest = (marker) => {
+    console.log('this IS MY TEST DATA SENIDNG AS PROPS----------------', marker)
+    this.props.navigation.navigate('SpotPage', {skatespot: marker })
   }
 
   getSearchResults = () =>{
@@ -215,7 +221,7 @@ class screens extends Component {
                 marginLeft: 310,
               }}
               color="rgb(244, 2, 87)"
-              
+
               />
             </View>
         </Overlay>
@@ -245,19 +251,21 @@ class screens extends Component {
         >
           {this.props.user.skate_spots
            ? this.props.user.skate_spots.map((marker, index) => (
-            <View style={styles.card} key={index}>
-              <Image
-                source={{uri:`http://${environment['BASE_URL']}${marker.skatephoto.url}`}}
-                style={styles.cardImage}
-                resizeMode="cover"
-              />
-              <View style={styles.textContent}>
-                <Text numberOfLines={1} style={styles.cardtitle}>{marker.name}</Text>
-                <Text numberOfLines={1} style={styles.cardDescription}>
-                  {marker.description}
-                </Text>
+              <View style={styles.card} key={index}>
+              <TouchableWithoutFeedback onPress={ () => this.sendingPropsTest(marker)}>
+                <Image
+                  source={{uri:`http://${environment['BASE_URL']}${marker.skatephoto.url}`}}
+                  style={styles.cardImage}
+                  resizeMode="cover"
+                />
+                </TouchableWithoutFeedback>
+                <View style={styles.textContent}>
+                  <Text numberOfLines={1} style={styles.cardtitle}>{marker.name}</Text>
+                  <Text numberOfLines={1} style={styles.cardDescription}>
+                    {marker.description}
+                  </Text>
+                </View>
               </View>
-            </View>
           ))
           : null}
         </Animated.ScrollView>
@@ -265,6 +273,9 @@ class screens extends Component {
     );
   }
 }
+
+// <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
+//   skatespot: marker })}}>
 
 const styles = StyleSheet.create({
   container: {

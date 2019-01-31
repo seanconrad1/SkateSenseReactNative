@@ -19,6 +19,7 @@ import store from './store'
 import { Button } from 'react-native-elements'
 import Map2 from './components/Map2'
 import Map3 from './components/Map3'
+import SideMenu from './components/SideMenu.js'
 
 import AdminConsole from './components/AdminConsole'
 
@@ -32,40 +33,58 @@ const RootStack = createStackNavigator(
   {
     headerMode: 'none',
     navigationOptions: {
-    headerVisible: false,
-  }
+      headerVisible: false,
+    }
   },
   {
     initialRouteName: 'Login',
   }
 )
 
-
-const DrawerStack = createDrawerNavigator(
-    {
-      Map2: {screen: Map2},
-      Map: {screen: Map},
-      'My Spots': {screen: MySpots},
-      Settings: {screen: Settings},
-      Logout: {screen: Login},
-      SpotPage: {screen: SpotPage},
-    },
-    {
-      initialRouteName: 'Logout',
+const Drawer = createStackNavigator(
+  {
+    Map: {screen: Map},
+    Map2: {screen: Map2},
+    'My Spots': {screen: MySpots},
+    Settings: {screen: Settings},
+    Logout: {screen: Login},
+    SpotPage: {screen: SpotPage},
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
     }
+  },
+  {
+    initialRouteName: 'Map',
+  }
 )
+
+
+const HomeNavigationDrawer = createDrawerNavigator({
+    Drawer: {
+        screen: Drawer,
+    },
+}, {
+    contentComponent: SideMenu,
+    drawerOpenRoute: 'DrawerOpen',
+    drawerCloseRoute: 'DrawerClose',
+    drawerToggleRoute: 'DrawerToggle',
+    drawerWidth: 300,
+});
 
 
 const PrimaryNav = createStackNavigator(
   {
   RootStack: { screen: RootStack },
-  DrawerStack: { screen: DrawerStack }
+  HomeNavigationDrawer: { screen: HomeNavigationDrawer }
   },
   {
   // Default config for all screens
   headerMode: 'none',
   title: 'Main',
-  initialRouteName: 'DrawerStack',
+  initialRouteName: 'RootStack',
   gesturesEnabled: false
 })
 

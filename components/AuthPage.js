@@ -56,7 +56,7 @@ class Login extends Component {
   render(){
     return(
       this.props.loggedIn
-      ? this.props.navigation.navigate('Map2')
+      ? this.props.navigation.navigate('Map')
       : <View style={styles.container}>
         <Text style={styles.header}>SkateSense</Text>
 
@@ -136,10 +136,6 @@ const mapStateToProps = ({ user: { authenticatingUser, failedLogin, error, logge
   error,
   loggedIn
 })
-
-
-
-
 
 
 const connectMap = connect(mapStateToProps, { loginUser })
