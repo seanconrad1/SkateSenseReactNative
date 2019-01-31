@@ -34,11 +34,12 @@ const RootStack = createStackNavigator(
     headerMode: 'none',
     navigationOptions: {
       headerVisible: false,
+      drawerLockMode:'locked-closed'
     }
   },
-  // {
-  //   initialRouteName: 'Login',
-  // }
+  {
+    initialRouteName: 'Login',
+  }
 )
 
 const Drawer = createStackNavigator(
@@ -48,7 +49,6 @@ const Drawer = createStackNavigator(
     'My Spots': {screen: MySpots},
     Settings: {screen: Settings},
     SpotPage: {screen: SpotPage},
-    Login: {screen: Login},
   },
   {
     headerMode: 'none',
