@@ -11,7 +11,10 @@ import { withNavigation } from 'react-navigation'
 import ImagePicker from 'react-native-image-picker';
 import environment from '../environment.js'
 import RNFetchBlob from 'rn-fetch-blob'
-import chunk from 'lodash/chunk'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { fetchKeyForSkateSpots } from '../action.js'
+
 
 const styles = StyleSheet.create({
   container: {
@@ -75,7 +78,9 @@ class NewSpotPage extends Component {
     photo: false,
     validation: false,
     streetSpotType: 0,
-    spotContains: []
+    spotContains: [],
+    selectedLat: null,
+    selectedLng: null,
   }
 
   updateStreetSpotType = (streetSpotType) => {
@@ -83,6 +88,13 @@ class NewSpotPage extends Component {
   }
   updateSpotContains = (spotContains) => {
     this.setState({spotContains})
+  }
+
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      selectedLat: nextProps.navigation.getParam('selectedLocation').latitude,
+      selectedLng: nextProps.navigation.getParam('selectedLocation').longitude
+    })
   }
 
   getPhotoFromCameraRoll = () => {
@@ -122,7 +134,8 @@ class NewSpotPage extends Component {
     }
 
     onSubmit = () =>{
-      this.props.navigation.navigate('LocationSelectorMap')
+      this.props.getSkateSpots()
+      // this.props.navigation.navigate('Map')
       // let test = RNFetchBlob.wrap(this.state.photo.uri)
       // RNFetchBlob.fetch('POST', `http://${environment['BASE_URL']}/api/v1/skate_spots`, {
       //     Authorization : `${environment['API_KEY']}`,
@@ -137,14 +150,14 @@ class NewSpotPage extends Component {
       //     { name : 'country', data: 'n/a'},
       //     { name : 'city', data: 'n/a'},
       //     { name : 'state', data: 'n/a'},
-      //     { name : 'latitude', data: this.props.location.latitude},
-      //     { name : 'longitude', data: this.props.location.longitude},
+      //     { name : 'latitude', data: this.state.selectedLat},
+      //     { name : 'longitude', data: this.state.selectedLng},
       //     { name : 'description', data: this.state.description},
       //     { name : 'bust_factor', data: this.state.kickout},
       //     { name : 'user_id', data: this.props.user.user.id},
       //   ]).then((resp) => {
       //     console.log('RESPONSE FROM SERVER', resp)
-      //     this.props.getSkateSpots()
+      //     this.props.navigation.navigate('Map')
       //   }).catch((err) => {
       //     console.log('Error creating new marker: ', error)
       //   })
@@ -166,6 +179,13 @@ class NewSpotPage extends Component {
              fontFamily:'Lobster',
              justifyContent: 'space-around',
            }}/>
+
+          <View><Text>
+           {this.state.selectedLat
+           ? this.state.selectedLat + ' and ' + this.state.selectedLng
+           : null}
+           </Text>
+           </View>
 
           <View style={styles.container}>
 
@@ -261,6 +281,19 @@ class NewSpotPage extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+      getSkateSpots: () => dispatch(fetchKeyForSkateSpots())
+    }
+}
 
 
-export default withNavigation(NewSpotPage)
+const connectMap = connect(mapStateToProps, mapDispatchToProps)
+
+export default withNavigation(compose(connectMap)(NewSpotPage))

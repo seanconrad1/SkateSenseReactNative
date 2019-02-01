@@ -29,10 +29,10 @@ console.disableYellowBox = true;
 
 const RootStack = createStackNavigator(
   {
-    LocationSelectorMap: {screen: LocationSelectorMap},
-    NewSpotPage: {screen: NewSpotPage},
     Login: {screen: Login},
     SignUp: {screen: SignUp},
+    NewSpotPage: {screen: NewSpotPage},
+    LocationSelectorMap: {screen: LocationSelectorMap},
   },
   {
     headerMode: 'none',

@@ -17,10 +17,12 @@ import MapView, {
       Callout,
       Overlay,
       MapCallout } from 'react-native-maps'
-import { Header, ListItem, Avatar, Icon } from 'react-native-elements'
+import { Header, ListItem, Avatar, Icon, Button } from 'react-native-elements'
 import ActionButton from 'react-native-action-button';
 import { withNavigation } from 'react-navigation'
 import environment from '../environment.js'
+
+
 
 console.disableYellowBox = true;
 
@@ -28,31 +30,71 @@ let {height, width} = Dimensions.get('window')
 
 const styles = StyleSheet.create({
   container: {
+    flex:1,
     height: height,
     width: width,
+    position: 'absolute'
   },
   map: {
     ...StyleSheet.absoluteFillObject,
-  }
+  },
 })
+
 
 
 class LocationSelectorMap extends Component {
   constructor(props) {
     super(props)
+    this.state={
+    }
+  }
+
+  selectLocation = () => {
+    // this.props.navigation.goBack('yo', )
+    this.props.navigation.navigate('NewSpotPage', {selectedLocation: this.state.region })
+  }
+
+  onRegionChange = (region) => {
+    this.setState({ region })
   }
 
   render(){
     return(
-      <MapView
-      style={styles.map}
-      initialRegion={{
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }}
-      />
+      <View style={{flex:1}}>
+        <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: 37.78825,
+          longitude: -122.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+        onRegionChange={this.onRegionChange}
+        />
+
+        <View>
+          <Text style={{
+            fontSize:50,
+            top:'600%',
+            left:'50%'}}>
+            X
+          </Text>
+        </View>
+
+        <View style={{position: 'absolute',
+        top: '85%',
+        left: '0%',
+        justifyContent:'center'
+          }}>
+          <Button
+          title="Submit Location"
+          buttonStyle={{width:width, height:80, backgroundColor: "rgb(244, 2, 87)"}}
+          onPress={this.selectLocation}
+          />
+
+        </View>
+    </View>
+
     )
   }
 }
