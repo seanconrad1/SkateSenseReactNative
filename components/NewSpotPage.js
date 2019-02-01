@@ -122,31 +122,32 @@ class NewSpotPage extends Component {
     }
 
     onSubmit = () =>{
-      let test = RNFetchBlob.wrap(this.state.photo.uri)
-      RNFetchBlob.fetch('POST', `http://${environment['BASE_URL']}/api/v1/skate_spots`, {
-          Authorization : `${environment['API_KEY']}`,
-          'Content-Type' : undefined,
-        },[{
-            name : 'skatephoto',
-            filename : 'image.png',
-            type:'image/jpg',
-            data: RNFetchBlob.wrap(this.state.photo.uri)
-          },
-          { name : 'name', data : this.state.name},
-          { name : 'country', data: 'n/a'},
-          { name : 'city', data: 'n/a'},
-          { name : 'state', data: 'n/a'},
-          { name : 'latitude', data: this.props.location.latitude},
-          { name : 'longitude', data: this.props.location.longitude},
-          { name : 'description', data: this.state.description},
-          { name : 'bust_factor', data: this.state.kickout},
-          { name : 'user_id', data: this.props.user.user.id},
-        ]).then((resp) => {
-          console.log('RESPONSE FROM SERVER', resp)
-          this.props.getSkateSpots()
-        }).catch((err) => {
-          console.log('Error creating new marker: ', error)
-        })
+      this.props.navigation.navigate('LocationSelectorMap')
+      // let test = RNFetchBlob.wrap(this.state.photo.uri)
+      // RNFetchBlob.fetch('POST', `http://${environment['BASE_URL']}/api/v1/skate_spots`, {
+      //     Authorization : `${environment['API_KEY']}`,
+      //     'Content-Type' : undefined,
+      //   },[{
+      //       name : 'skatephoto',
+      //       filename : 'image.png',
+      //       type:'image/jpg',
+      //       data: RNFetchBlob.wrap(this.state.photo.uri)
+      //     },
+      //     { name : 'name', data : this.state.name},
+      //     { name : 'country', data: 'n/a'},
+      //     { name : 'city', data: 'n/a'},
+      //     { name : 'state', data: 'n/a'},
+      //     { name : 'latitude', data: this.props.location.latitude},
+      //     { name : 'longitude', data: this.props.location.longitude},
+      //     { name : 'description', data: this.state.description},
+      //     { name : 'bust_factor', data: this.state.kickout},
+      //     { name : 'user_id', data: this.props.user.user.id},
+      //   ]).then((resp) => {
+      //     console.log('RESPONSE FROM SERVER', resp)
+      //     this.props.getSkateSpots()
+      //   }).catch((err) => {
+      //     console.log('Error creating new marker: ', error)
+      //   })
       }
 
   render(){
@@ -193,6 +194,11 @@ class NewSpotPage extends Component {
             keyboardType="default"
             onChangeText={(name) => this.setState({name})}
             />
+
+          <Button
+          title='Spot Location'
+          onPress= {() => this.props.navigation.navigate('LocationSelectorMap')}
+          />
 
           <Input
             placeholder='Description'

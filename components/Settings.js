@@ -33,8 +33,7 @@ class Settings extends Component {
 
   toNightMode= (value) =>{
     this.setState({ isOn: value })
-
-
+    
     this.state.isOn
     ? styles.container = {
         flex: 1,

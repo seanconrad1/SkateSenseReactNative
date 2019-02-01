@@ -21,6 +21,7 @@ import Map2 from './components/Map2'
 import Map3 from './components/Map3'
 import SideMenu from './components/SideMenu.js'
 import NewSpotPage from './components/NewSpotPage.js'
+import LocationSelectorMap from './components/LocationSelectorMap.js'
 
 import AdminConsole from './components/AdminConsole'
 
@@ -28,6 +29,7 @@ console.disableYellowBox = true;
 
 const RootStack = createStackNavigator(
   {
+    LocationSelectorMap: {screen: LocationSelectorMap},
     NewSpotPage: {screen: NewSpotPage},
     Login: {screen: Login},
     SignUp: {screen: SignUp},
