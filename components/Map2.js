@@ -187,7 +187,7 @@ class screens extends Component {
                   />
               </TouchableOpacity>
 
-            <TouchableOpacity onPress= {() => console.log('PLUS BUTTON CLICKED')} >
+            <TouchableOpacity onPress= {() => this.props.navigation.navigate('NewSpotPage')} >
                 <Icon
                   raised
                   name='plus'

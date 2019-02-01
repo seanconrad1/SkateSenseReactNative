@@ -20,6 +20,7 @@ import { Button } from 'react-native-elements'
 import Map2 from './components/Map2'
 import Map3 from './components/Map3'
 import SideMenu from './components/SideMenu.js'
+import NewSpotPage from './components/NewSpotPage.js'
 
 import AdminConsole from './components/AdminConsole'
 
@@ -27,6 +28,7 @@ console.disableYellowBox = true;
 
 const RootStack = createStackNavigator(
   {
+    NewSpotPage: {screen: NewSpotPage},
     Login: {screen: Login},
     SignUp: {screen: SignUp},
   },
@@ -37,9 +39,6 @@ const RootStack = createStackNavigator(
       drawerLockMode:'locked-closed'
     }
   },
-  {
-    // initialRouteName: 'SignUp',
-  }
 )
 
 const Drawer = createStackNavigator(
