@@ -128,6 +128,29 @@ class MySpots extends Component {
   }
 
   unBookmark = (id) =>{
+    console.log('BOOkMARK ID?', id)
+    let bookMarkObjects = this.props.user.user.bookmarks
+    let obj = bookMarkObjects.filter(bookmark => bookmark.skate_spot_id === id)
+    let bookmarkID = obj[0].id
+
+    deviceStorage.loadJWT('jwt')
+    .then(val => fetchToUnbookmarkSpot(val))
+
+    function fetchToUnbookmarkSpot(key){
+    fetch(`http://${environment['BASE_URL']}/api/v1/bookmarks/${bookmarkID}`,{
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+         Accept: 'application/json',
+         Authorization: `Bearer ${key}`
+      }})
+      .then(response=>response.json())
+      .then(r=>console.log(r))
+    }
+
+    this.setState({bookmarkedSpots: this.state.bookmarkedSpots.filter(bookmark => {
+      return bookmark.id !== id
+    })})
 
   }
 
