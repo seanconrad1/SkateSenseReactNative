@@ -57,7 +57,7 @@ class SpotPage extends Component {
     this.state={
       skatespot: '',
       imageURL: '',
-      comments: ['a','b','c','d'],
+      comments: [],
       extendCommentsAndCommentField: false,
       commentContent: '',
     }
@@ -66,7 +66,8 @@ class SpotPage extends Component {
   componentDidMount(){
     this.setState({
       skatespot: this.props.navigation.getParam('skatespot'),
-      imageURL: this.props.navigation.getParam('skatespot').skatephoto.url
+      imageURL: this.props.navigation.getParam('skatespot').skatephoto.url,
+      comments: this.props.navigation.getParam('skatespot').comments.map(comment => comment.content),
     })
   }
 
@@ -77,26 +78,30 @@ class SpotPage extends Component {
   }
 
   postButtonHandler = () =>{
+    let { commentContent } = this.state
+    let skate_spot_id = this.state.skatespot.id
+    let user_id = this.props.user.user.id
 
     deviceStorage.loadJWT('jwt')
-    .then(val => fetchToCommentOnSpot(val))
+    .then(key => fetchToCommentOnSpot(key,
+        commentContent, skate_spot_id, user_id))
 
-    function fetchToCommentOnSpot(key){
 
-    fetch(`http://${environment['BASE_URL']}/api/v1/comments`,{
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-         'Accept': 'application/json',
-         'Authorization': `Bearer ${key}`
-      },
-      body: JSON.stringify({
-        'content': this.state.commentContent,
-        'user_id': this.props.user.user.id,
-        'skate_spot_id': this.state.skatespot.id
-      })
+    function fetchToCommentOnSpot(key, commentContent, skate_spot_id, user_id){
 
-      }).then(r=>json()).then(data=>console.log(data))
+      fetch(`http://${environment['BASE_URL']}/api/v1/comments`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+           Accept: 'application/json',
+           Authorization: `Bearer ${key}`
+        },
+        body: JSON.stringify({
+          'content': commentContent,
+          'skate_spot_id': skate_spot_id,
+          'user_id': user_id
+        })
+      }).then(r=>r.json()).then(data=>console.log(data))
     }
 
     this.setState({ comments: [...this.state.comments, this.state.commentContent]})
