@@ -44,6 +44,8 @@ class screens extends Component {
     this.index = 0;
     this.animation = new Animated.Value(0);
   }
+
+
   componentDidMount() {
     this.getUserLocationHandler()
     this.props.getSkateSpots()
@@ -83,6 +85,10 @@ class screens extends Component {
     }else {
       console.log('spots havent loaded yet');
     }
+  }
+
+  refreshMarkers = () =>{
+    this.props.getSkateSpots()
   }
 
   getUserLocationHandler = () => {
@@ -201,10 +207,10 @@ class screens extends Component {
                 />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress= {() => console.log('redo BUTTON CLICKED')} >
+            <TouchableOpacity onPress= {this.refreshMarkers} >
                 <Icon
                   raised
-                  name='globe'
+                  name='refresh'
                   size={15}
                   type='font-awesome'
                   containerStyle={{

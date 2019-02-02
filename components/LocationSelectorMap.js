@@ -58,25 +58,39 @@ class LocationSelectorMap extends Component {
     this.setState({ region })
   }
 
+  componentDidMount(){
+    this.getUserLocationHandler()
+   }
+
+  getUserLocationHandler = () => {
+    navigator.geolocation.getCurrentPosition(position => {
+      this.setState({
+        userLocation:{
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: 0.115,
+          longitudeDelta: 0.1121,
+        },
+        geoLocationSwitch: true
+      })
+    })
+  }
+
   render(){
     return(
       <View style={{flex:1}}>
         <MapView
         style={styles.map}
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
+        showsUserLocation
+        initialRegion={this.state.userLocation}
         onRegionChange={this.onRegionChange}
         />
 
         <View>
           <Text style={{
             fontSize:50,
-            top:'600%',
-            left:'50%'}}>
+            top:'631%',
+            left:'46%'}}>
             X
           </Text>
         </View>

@@ -133,34 +133,42 @@ class NewSpotPage extends Component {
       })
     }
 
+    // fetchAndNavigate = () => {
+    //   console.log('GOT TO FETCH AND NAVIGATE')
+    //   async () => {
+    //
+    //     this.props.navigation.navigate('Map2')
+    //   }
+    // }
+
     onSubmit = () =>{
-      this.props.getSkateSpots()
-      // this.props.navigation.navigate('Map')
-      // let test = RNFetchBlob.wrap(this.state.photo.uri)
-      // RNFetchBlob.fetch('POST', `http://${environment['BASE_URL']}/api/v1/skate_spots`, {
-      //     Authorization : `${environment['API_KEY']}`,
-      //     'Content-Type' : undefined,
-      //   },[{
-      //       name : 'skatephoto',
-      //       filename : 'image.png',
-      //       type:'image/jpg',
-      //       data: RNFetchBlob.wrap(this.state.photo.uri)
-      //     },
-      //     { name : 'name', data : this.state.name},
-      //     { name : 'country', data: 'n/a'},
-      //     { name : 'city', data: 'n/a'},
-      //     { name : 'state', data: 'n/a'},
-      //     { name : 'latitude', data: this.state.selectedLat},
-      //     { name : 'longitude', data: this.state.selectedLng},
-      //     { name : 'description', data: this.state.description},
-      //     { name : 'bust_factor', data: this.state.kickout},
-      //     { name : 'user_id', data: this.props.user.user.id},
-      //   ]).then((resp) => {
-      //     console.log('RESPONSE FROM SERVER', resp)
-      //     this.props.navigation.navigate('Map')
-      //   }).catch((err) => {
-      //     console.log('Error creating new marker: ', error)
-      //   })
+
+      // this.props.navigation.navigate('Map2')
+      let test = RNFetchBlob.wrap(this.state.photo.uri)
+      RNFetchBlob.fetch('POST', `http://${environment['BASE_URL']}/api/v1/skate_spots`, {
+          Authorization : `${environment['API_KEY']}`,
+          'Content-Type' : undefined,
+        },[{
+            name : 'skatephoto',
+            filename : 'image.png',
+            type:'image/jpg',
+            data: RNFetchBlob.wrap(this.state.photo.uri)
+          },
+          { name : 'name', data : this.state.name},
+          { name : 'country', data: 'n/a'},
+          { name : 'city', data: 'n/a'},
+          { name : 'state', data: 'n/a'},
+          { name : 'latitude', data: this.state.selectedLat},
+          { name : 'longitude', data: this.state.selectedLng},
+          { name : 'description', data: this.state.description},
+          { name : 'bust_factor', data: this.state.kickout},
+          { name : 'user_id', data: this.props.user.user.id},
+        ]).then((resp) => {
+          console.log('RESPONSE FROM SERVER', resp)
+          this.props.navigation.navigate('Map2',{random: '1' })
+        }).catch((err) => {
+          console.log('Error creating new marker: ', error)
+        })
       }
 
   render(){
