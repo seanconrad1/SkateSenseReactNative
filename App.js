@@ -47,6 +47,7 @@ const Drawer = createStackNavigator(
     SpotPage: {screen: SpotPage},
     NewSpotPage: {screen: NewSpotPage},
     LocationSelectorMap: {screen: LocationSelectorMap},
+    AdminConsole:{screen: AdminConsole}
   },
   {
     headerMode: 'none',

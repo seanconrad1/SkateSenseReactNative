@@ -11,6 +11,7 @@ import { Header, Icon, Card, ListItem, Button } from 'react-native-elements'
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
+import deviceStorage from '../deviceStorage.js'
 
 
 const styles = StyleSheet.create({
@@ -31,6 +32,24 @@ class MySpots extends Component {
     }
   }
 
+  componentDidMount(){
+      deviceStorage.loadJWT('jwt')
+      .then(key => fetchUsers(key))
+
+      const fetchUsers = (key) =>{
+        fetch(`http://${environment['BASE_URL']}/api/v1/users`,{
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+             Accept: 'application/json',
+             Authorization: `Bearer ${key}`
+          }
+        })
+        .then(r=>r.json())
+        .then((data)=>this.setState({users: data}))
+      }
+  }
+
   toNightMode= (value) =>{
     this.setState({ isOn: value })
 
@@ -48,6 +67,10 @@ class MySpots extends Component {
       }
 
       console.log(styles.container);
+  }
+
+  toUserPage = (item) =>{
+    console.log('going to users page', item)
   }
 
   render(){
@@ -70,9 +93,41 @@ class MySpots extends Component {
               onValueChange: value => this.toNightMode(value)
             }}
             />
+          <Text>
+            Users
+          </Text>
+
+        <ScrollView>
+          {this.state.users
+             ?this.state.users.map((item, i) => (
+                 <ListItem
+                   title={item.username}
+                   onPress={()=>this.toUserPage(item)}
+                 />
+             ))
+             :null
+           }
+        </ScrollView>
+
+          <Button
+            title='Submit'
+            buttonStyle={{
+              backgroundColor: "rgb(244, 2, 87)",
+              width: 300,
+              borderColor: "transparent",
+              borderWidth: 0,
+              borderRadius: 20
+            }}
+            onPress={()=>this.onSubmit()}
+          />
+
+
+
         </View>
     )
   }
 }
+
+
 
 export default withNavigation(MySpots)

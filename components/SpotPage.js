@@ -112,7 +112,6 @@ class SpotPage extends Component {
 
 
     const fetchToCommentOnSpot = (key) =>{
-
       fetch(`http://${environment['BASE_URL']}/api/v1/comments`,{
         method: 'POST',
         headers: {
@@ -129,8 +128,7 @@ class SpotPage extends Component {
       .then(r=>r.json())
       .then((data)=>this.setState({comments: [...this.state.comments, data]}))
     }
-
-    // debugger
+    
   }
 
   render(){
