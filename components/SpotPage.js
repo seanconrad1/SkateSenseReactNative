@@ -7,7 +7,7 @@ import { View,
          Linking,
          TouchableWithoutFeedback,
          TextInput } from 'react-native'
-import { Header, Icon, Card, ListItem, Button } from 'react-native-elements'
+import { Header, Icon, Card, ListItem, Button, Divider } from 'react-native-elements'
 import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
 import deviceStorage from '../deviceStorage.js'
@@ -17,17 +17,11 @@ import { compose } from 'redux'
 const comments = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
 
 const styles = StyleSheet.create({
-  commentButton:{
-    backgroundColor:"grey",
-    borderRadius: 20,
-    width: '100%',
-    marginLeft: 0,
-    marginRight: 0,
-    marginBottom: 5,
-    paddingRight: 0
+  commentContainer:{
+    flexDirection: 'row',
+    marginTop: 435
   },
   commentInput:{
-    alignItems: 'center',
     borderRadius:20,
     borderColor: 'gray',
     borderWidth: 1,
@@ -35,19 +29,19 @@ const styles = StyleSheet.create({
     paddingBottom: '2%',
     paddingLeft: '2%',
     paddingRight: '2%',
-    marginRight: '20%',
+    width: 250
   },
   postButton:{
     color:'black',
     borderRadius:20,
     backgroundColor: "rgb(244, 2, 87)",
-    marginRight: '70%',
+    width: 80,
     marginTop: '2%'
   },
   cardContainer:{
     marginTop:'10%',
     paddingBottom:'50%',
-    borderRadius: 20
+    borderRadius: 20,
   }
 })
 
@@ -67,11 +61,12 @@ class SpotPage extends Component {
     this.setState({
       skatespot: this.props.navigation.getParam('skatespot'),
       imageURL: this.props.navigation.getParam('skatespot').skatephoto.url,
-      comments: this.props.navigation.getParam('skatespot').comments.map(comment => comment.content),
+      comments: this.props.navigation.getParam('skatespot').comments.map(comment => comment),
     })
   }
 
   onCommentChange = (comment) => {
+    debugger
     this.setState({
       commentContent: comment
     })
@@ -104,7 +99,10 @@ class SpotPage extends Component {
       }).then(r=>r.json()).then(data=>console.log(data))
     }
 
-    this.setState({ comments: [...this.state.comments, this.state.commentContent]})
+    this.setState({
+      comments: [...this.state.comments, this.state.commentContent],
+      commentContainer: ''
+      })
     console.log(this.state.commentContent);
   }
 
@@ -130,13 +128,32 @@ class SpotPage extends Component {
 
           </Text>
 
-          <View>
+          <Divider style={{ backgroundColor: 'grey', borderWidth:.2}} />
+
+          <ScrollView
+            snapToEnd
+            style={{
+              position:'absolute',
+              marginTop:'80%',
+              height: 200,
+              marginLeft: 10,
+              width: '100%',
+              wordWrap:'break-word',
+
+            }}>
               {this.state.comments.map(comment=>{
-              return <Text>
-                      {comment}
-                    </Text>
+              return <View style={{flexDirection:'row', wordWrap:'break-word', justifyContent:'space-between', paddingBottom: 20}}>
+
+                      <Text style={{fontWeight: 'bold'}}>{this.props.user.user.username} </Text>
+                        <Text style={{wordWrap:'break-word', marginRight:100, width: 130}}>{comment.content}</Text>
+                        <View>
+                          {comment.user_id === this.props.user.user.id
+                          ? <Icon name='trash' type='font-awesome'/>
+                          : null}
+                        </View>
+                     </View>
                   })}
-          </View>
+          </ScrollView>
 
           <View style={styles.commentContainer}>
             <TextInput
