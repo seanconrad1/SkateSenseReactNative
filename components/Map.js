@@ -1,119 +1,96 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
+  AppRegistry,
+  StyleSheet,
   Text,
   View,
-  StyleSheet,
-  Dimensions,
-  Image,
-  TextInput,
+  ScrollView,
   Animated,
-  YellowBox } from 'react-native'
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  TextInput,
+  TouchableHighlight
+} from "react-native";
 import MapView, {
       Callout,
       Overlay,
       MapCallout } from 'react-native-maps'
-import { withNavigation, DrawerActions } from 'react-navigation'
-import { Header, ListItem } from 'react-native-elements'
-import Icon from 'react-native-vector-icons/FontAwesome';
-import environment from '../environment.js'
+import { Header, ListItem, Avatar, Icon } from 'react-native-elements'
+// import Icon from 'react-native-vector-icons/FontAwesome';
 import ActionButton from 'react-native-action-button';
 import NewMarkerInfoBoxForm from '../childComponents/newMarkerInfoBoxForm.js'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { fetchKeyForSkateSpots } from '../action.js'
+import { withNavigation, DrawerActions } from 'react-navigation'
+import environment from '../environment.js'
 
-console.disableYellowBox = true;
+const { width, height } = Dimensions.get("window");
 
-let {height, width} = Dimensions.get('window')
-
-const styles = StyleSheet.create({
- container: {
-   height: height,
-   width: width,
- },
- map: {
-   ...StyleSheet.absoluteFillObject,
- },
-
- calloutView: {
-  flexDirection: "row",
-  backgroundColor: "rgba(255, 255, 255, 0.9)",
-  borderRadius: 20,
-  borderStyle:'solid',
-  borderColor:'rgb(236, 229, 235)',
-  borderWidth: 1,
-  width: "70%",
-  marginLeft: "11%",
-  marginRight: "30%",
-  marginTop: '25%',
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 5 },
-  shadowOpacity: 0.3,
-  shadowRadius: 3,
-},
-calloutSearch: {
-  borderColor: "transparent",
-  marginLeft: 10,
-  width: "90%",
-  marginRight: 10,
-  height: 40,
-  borderWidth: 0.0
-},
-markerBottomInfo:{
-  flexDirection: "row",
-  backgroundColor: "red",
-  borderRadius: 10,
-  width: "75%",
-  height: "30%",
-  marginLeft: "5%",
-  marginRight: "0%",
-  marginTop: 450
-},
-geoLocationButton:{
-  flexDirection: "row",
-  marginLeft: "5%",
-  marginRight: "5%",
-  marginTop: "120%"
-},
-geoLocationButtonMoved:{
-  flexDirection: "row",
-  marginLeft: "5%",
-  marginRight: "5%",
-  marginTop: "100%"
-},
-compass:{
-  color: "white",
-  fontSize: 25,
-},
-returnedSearch:{
-  marginLeft:'15%',
-  marginRight:'25%',
-  height:'25%',
-},
-markerWrap:{
-  height:5
-}
-
-});
+const CARD_HEIGHT = height / 4;
+const CARD_WIDTH = CARD_HEIGHT + 90;
 
 class Map extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      userLocation: null,
-      geoLocationSwitch: false,
-      newMarkerLocation: {},
-      newMarkerFormBox: true,
-      term: null,
-      skateSpots: '',
-      counter:0
+  state = {
+    region: {
+      latitudeDelta: 0.04864195044303443,
+      longitudeDelta: 0.040142817690068,
     }
   }
 
-  componentDidMount(){
+  UNSAFE_componentWillMount() {
+    this.index = 0;
+    this.animation = new Animated.Value(0);
+  }
+
+
+  componentDidMount() {
+    console.log('GETTING HERE FIRST');
     this.getUserLocationHandler()
     this.props.getSkateSpots()
-   }
+    // We should detect when scrolling has stopped then animate
+    // We should just debounce the event listener here
+    if (this.props.user.skate_spots){
+    this.animation.addListener(({ value }) => {
+      console.log('VALUE', value);
+      let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
+      if (index >= this.props.user.skate_spots.length) {
+        index = this.props.user.skate_spots.length - 1;
+      }
+      if (index <= 0) {
+        index = 0;
+      }
+
+      clearTimeout(this.regionTimeout);
+        this.regionTimeout = setTimeout(() => {
+          if (this.index !== index) {
+            this.index = index;
+            const latitude = this.props.user.skate_spots[index].latitude
+            const longitude = this.props.user.skate_spots[index].longitude
+            console.log('MY LATITUDE', latitude);
+            console.log('MY longitude', longitude);
+            this.map.animateToRegion(
+              {
+                latitude: latitude,
+                longitude: longitude,
+                latitudeDelta: this.state.region.latitudeDelta,
+                longitudeDelta: this.state.region.longitudeDelta,
+              },
+              350
+            );
+          }
+        }, 10);
+      });
+    }else {
+      console.log('spots havent loaded yet');
+    }
+  }
+
+  refreshMarkers = (marker) =>{
+    this.props.getSkateSpots()
+  }
 
   getUserLocationHandler = () => {
     navigator.geolocation.getCurrentPosition(position => {
@@ -129,111 +106,305 @@ class Map extends Component {
     })
   }
 
+  sendingPropsTest = (marker) => {
+    console.log('this IS MY TEST DATA SENIDNG AS PROPS----------------', marker)
+    this.props.navigation.navigate('SpotPage', {skatespot: marker })
+  }
+
   getSearchResults = () =>{
     let spots = this.state.skateSpots
   }
 
+  render() {
+    const interpolations =
+    this.props.user.skate_spots
+    ?( this.props.user.skate_spots.map((marker, index) => {
+      const inputRange = [
+        (index - 1) * CARD_WIDTH,
+        index * CARD_WIDTH,
+        ((index + 1) * CARD_WIDTH),
+      ];
+      const scale = this.animation.interpolate({
+        inputRange,
+        outputRange: [1, 2.5, 1],
+        extrapolate: "clamp",
+      });
+      const opacity = this.animation.interpolate({
+        inputRange,
+        outputRange: [0.35, 1, 0.35],
+        extrapolate: "clamp",
+      });
+      return { scale, opacity };
+    }))
+    : null
 
-  onLongPress(e) {
-    const newMarker = e.nativeEvent.coordinate
-    this.setState({
-      newMarkerLocation: newMarker,
-      newMarkerFormBox: true,
-    })
-  }
-
-  render(){
-    // onPress={()=>this.setState({newMarkerFormBox: false})}
-
-    return(
-     <View style={styles.container}>
-
-     <MapView
-       style={styles.map}
-       region={ this.state.userLocation }
-       showsUserLocation
-       onLongPress={(e)=>this.onLongPress(e)}
-       >
-
-       <MapView.Marker
-        coordinate={this.state.newMarkerLocation}
-        title='test'
-        description='test description'
-        onPress={()=>this.setState({newMarkerFormBox: true})}
+    return (
+      <View style={styles.container}>
+        <MapView
+          showsUserLocation
+          ref={map => this.map = map}
+          initialRegion ={this.state.userLocation}
+          style={styles.container}
         >
-        </MapView.Marker>
 
         {this.props.user.skate_spots
-          ? this.props.user.skate_spots.map(marker => (
+          ? this.props.user.skate_spots.map((marker, index) => {
+            const scaleStyle = {
+              transform: [
+                {
+                  scale: interpolations[index].scale,
+                },
+              ],
+            };
+            const opacityStyle = {
+              opacity: interpolations[index].opacity,
+            }
+            return(
             <MapView.Marker
-              key={marker.id}
+              key={index}
               coordinate={{latitude:marker.latitude, longitude:marker.longitude}}
-              title={marker.title}
+              title={marker.name}
               description={marker.description}>
+              <Animated.View style={[styles.markerWrap, opacityStyle]}>
+                <Animated.View style={[styles.ring, scaleStyle]} />
+                <View style={styles.marker} />
+              </Animated.View>
 
             </MapView.Marker>
-          ))
+          )})
           : null}
 
-          <Overlay>
-              <View style={styles.calloutView}>
-              <TextInput style={styles.calloutSearch}
-                     placeholder={"Search"} onChangeText={(term) => this.setState({term})}/>
+        </MapView>
+
+        <Overlay>
+          <View>
+            <TouchableOpacity onPress= {() => this.props.navigation.openDrawer()} >
+                  <Icon
+                    raised
+                    name='bars'
+                    size={15}
+                    type='font-awesome'
+
+                    containerStyle={{
+                      marginTop: 60,
+                      marginLeft: 0,
+                    }}
+                    color="rgb(244, 2, 87)"
+                  />
+              </TouchableOpacity>
+
+            <TouchableOpacity onPress= {() => this.props.navigation.navigate('NewSpotPage')} >
+                <Icon
+                  raised
+                  name='plus'
+                  size={15}
+                  type='font-awesome'
+                  containerStyle={{
+                    marginTop: 0,
+                    marginLeft: 0,
+                  }}
+                  color="rgb(244, 2, 87)"
+                />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress= {this.refreshMarkers} >
+                <Icon
+                  raised
+                  name='refresh'
+                  size={15}
+                  type='font-awesome'
+                  containerStyle={{
+                    marginTop: 0,
+                    marginLeft: 0,
+                  }}
+                  color="rgb(244, 2, 87)"
+                />
+            </TouchableOpacity>
+
+              <TouchableOpacity onPress= {() => console.log('LOGOUT BUTTON CLICKED')}>
+                <Icon
+                  raised
+                  size={15}
+                  name='location-arrow'
+                  type='font-awesome'
+                  containerStyle={{
+                    marginRight:0,
+                    marginBottom: 0,
+                    marginLeft: 0,
+                  }}
+                  color="rgb(244, 2, 87)"
+                />
+              </TouchableOpacity>
+
+            </View>
+        </Overlay>
+
+
+
+
+        <Animated.ScrollView
+          horizontal
+          scrollEventThrottle={1}
+          showsHorizontalScrollIndicator={false}
+          snapToInterval={CARD_WIDTH}
+          onScroll={Animated.event(
+            [
+              {
+                nativeEvent: {
+                  contentOffset: {
+                    x: this.animation,
+                  },
+                },
+              },
+            ],
+            { useNativeDriver: true }
+          )}
+          style={styles.scrollView}
+          contentContainerStyle={styles.endPadding}
+        >
+          {this.props.user.skate_spots
+           ? this.props.user.skate_spots.map((marker, index) => (
+              <View style={styles.card} key={index}>
+                <TouchableWithoutFeedback onPress={ () => this.sendingPropsTest(marker)}>
+                  <Image
+                    source={{uri:`http://${environment['BASE_URL']}${marker.skatephoto.url}`}}
+                    style={styles.cardImage}
+                    resizeMode="cover"
+                  />
+                </TouchableWithoutFeedback>
+                <View style={styles.textContent}>
+                  <Text numberOfLines={1} style={styles.cardtitle}>{marker.name}</Text>
+                  <Text numberOfLines={1} style={styles.cardDescription}>
+                    {marker.description}
+                  </Text>
+                </View>
               </View>
-
-              {this.getSearchResults()}
-
-              <View>
-                {this.state.newMarkerFormBox
-                  ? <NewMarkerInfoBoxForm location={this.state.newMarkerLocation}/>
-                :null}
-              </View>
-            </Overlay>
-
-       </MapView>
-
-       <Header
-         leftComponent={{ icon: 'menu', color: 'black', onPress: () => this.props.navigation.openDrawer()}}
-         centerComponent={{ fontFamily:'Lobster', text: 'SkateSense', style: { color: 'black', fontSize: 25 } }}
-         backgroundColor='white'
-         containerStyle={{
-            fontFamily:'Lobster',
-            justifyContent: 'space-around',
-          }}/>
-
-        {this.state.newMarkerFormBox
-        ? <View style={styles.geoLocationButtonMoved}>
-           <ActionButton
-            buttonColor="rgb(244, 2, 87)"
-            onPress={this.getUserLocationHandler}
-            icon={<Icon name='location-arrow' style={styles.compass} />} >
-
-           >
-           </ActionButton>
-         </View>
-        : <View style={styles.geoLocationButton}>
-           <ActionButton
-            buttonColor="rgb(244, 2, 87)"
-            onPress={this.getUserLocationHandler}
-            icon={<Icon name='location-arrow' style={styles.compass} />} >
-
-           >
-           </ActionButton>
-         </View> }
-
-
-
-     </View>
- )}
+          ))
+          : null}
+        </Animated.ScrollView>
+      </View>
+    );
+  }
 }
 
 
+
+// <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
+//   skatespot: marker })}}>
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  calloutView: {
+   flexDirection: "row",
+   backgroundColor: "rgba(255, 255, 255, 0.9)",
+   borderRadius: 20,
+   borderStyle:'solid',
+   borderColor:'rgb(236, 229, 235)',
+   borderWidth: 1,
+   width: "70%",
+   marginLeft: "11%",
+   marginRight: "30%",
+   marginTop: '25%',
+   shadowColor: '#000',
+   shadowOffset: { width: 0, height: 5 },
+   shadowOpacity: 0.3,
+   shadowRadius: 3,
+  },
+  calloutSearch: {
+   borderColor: "transparent",
+   marginLeft: 10,
+   width: "90%",
+   marginRight: 10,
+   height: 40,
+   borderWidth: 0.0
+  },
+  geoLocationButton:{
+    flexDirection: "row",
+    marginLeft: "80%",
+    marginRight: "30%",
+    marginTop: "95%",
+  },
+  menuButtonContainerStyle:{
+    backgroundColor: "rgb(244, 2, 87)",
+    height: 60,
+    width: 60,
+    borderRadius: 50,
+    marginLeft: "0%",
+    marginRight: "75%",
+    marginTop: "50%",
+  },
+  compass:{
+    color: "white",
+    fontSize: 25,
+  },
+  scrollView: {
+    position: "absolute",
+    bottom: -5,
+    left: 0,
+    right: 0,
+    paddingVertical: 10,
+  },
+  endPadding: {
+    paddingRight: width - CARD_WIDTH,
+  },
+  card: {
+    padding: 10,
+    elevation: 2,
+    backgroundColor: "#FFF",
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowRadius: 5,
+    shadowOpacity: 0.3,
+    shadowOffset: { x: 2, y: -2 },
+    height: CARD_HEIGHT,
+    width: CARD_WIDTH,
+    overflow: "hidden",
+  },
+  cardImage: {
+    flex: 3,
+    width: "100%",
+    height: "100%",
+    alignSelf: "center",
+  },
+  textContent: {
+    flex: 1,
+  },
+  cardtitle: {
+    fontSize: 12,
+    marginTop: 5,
+    fontWeight: "bold",
+  },
+  cardDescription: {
+    fontSize: 12,
+    color: "#444",
+  },
+  markerWrap: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  marker: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "rgba(130,4,150, 0.9)",
+  },
+  ring: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: "rgba(130,4,150, 0.3)",
+    position: "absolute",
+    borderWidth: 1,
+    borderColor: "rgba(130,4,150, 0.5)",
+  },
+});
+
 const mapStateToProps = state => {
-  console.log('MY REDUX STATE', state)
   return {
     skate_spots: state.skate_spots,
     user: state.user,
-    loggedIn: state.user.loggedIn
   }
 }
 
@@ -246,15 +417,3 @@ function mapDispatchToProps(dispatch) {
 const connectMap = connect(mapStateToProps, mapDispatchToProps)
 
 export default withNavigation(compose(connectMap)(Map))
-
-// {this.state.newMarkerFormBox
-  // ? <NewMarkerInfoBoxForm/>
-  // : null}
-
-  // this.props.navigation.dispatch(DrawerActions.openDrawer())
-  // this.props.navigation.openDrawer()
-  // <Text onPress={() => this.props.navigation.navigate('DrawerOpen')
-  // <Image source={{uri:`http://${environment['BASE_URL']}${marker.skatephoto.url}`}}
-
-  // grey "rgb(236, 229, 235)"
-  // red "rgb(244, 2, 87)"

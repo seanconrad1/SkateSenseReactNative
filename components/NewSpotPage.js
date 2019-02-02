@@ -165,7 +165,7 @@ class NewSpotPage extends Component {
           { name : 'user_id', data: this.props.user.user.id},
         ]).then((resp) => {
           console.log('RESPONSE FROM SERVER', resp)
-          this.props.navigation.navigate('Map2',{random: '1' })
+          this.props.navigation.navigate('Map',{random: '1' })
         }).catch((err) => {
           console.log('Error creating new marker: ', error)
         })

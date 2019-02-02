@@ -17,12 +17,10 @@ import { createStackNavigator,
 import { Provider } from 'react-redux';
 import store from './store'
 import { Button } from 'react-native-elements'
-import Map2 from './components/Map2'
-import Map3 from './components/Map3'
+// import Map3 from './components/Map3'
 import SideMenu from './components/SideMenu.js'
 import NewSpotPage from './components/NewSpotPage.js'
 import LocationSelectorMap from './components/LocationSelectorMap.js'
-
 import AdminConsole from './components/AdminConsole'
 
 console.disableYellowBox = true;
@@ -31,8 +29,6 @@ const RootStack = createStackNavigator(
   {
     Login: {screen: Login},
     SignUp: {screen: SignUp},
-    NewSpotPage: {screen: NewSpotPage},
-    LocationSelectorMap: {screen: LocationSelectorMap},
   },
   {
     headerMode: 'none',
@@ -46,10 +42,11 @@ const RootStack = createStackNavigator(
 const Drawer = createStackNavigator(
   {
     Map: {screen: Map},
-    Map2: {screen: Map2},
     'My Spots': {screen: MySpots},
     Settings: {screen: Settings},
     SpotPage: {screen: SpotPage},
+    NewSpotPage: {screen: NewSpotPage},
+    LocationSelectorMap: {screen: LocationSelectorMap},
   },
   {
     headerMode: 'none',
@@ -77,8 +74,7 @@ const HomeNavigationDrawer = createDrawerNavigator({
 
 const PrimaryNav = createStackNavigator(
   {
-  // RootStack: { screen: RootStack },
-  HomeNavigationDrawer: { screen: HomeNavigationDrawer }
+    HomeNavigationDrawer: { screen: HomeNavigationDrawer }
   },
   {
   // Default config for all screens

@@ -14,11 +14,6 @@ const list = [
     type: 'font-awesome',
   },
   {
-    name: 'Map2',
-    type: 'font-awesome',
-    icon: 'globe',
-  },
-  {
     name: 'My Spots',
     type: 'font-awesome',
     icon: 'bookmark',
