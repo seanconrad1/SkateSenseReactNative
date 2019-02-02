@@ -221,7 +221,7 @@ class Map extends Component {
                 />
             </TouchableOpacity>
 
-              <TouchableOpacity onPress= {() => console.log('LOGOUT BUTTON CLICKED')}>
+              <TouchableOpacity onPress= {() => console.log('GELOCATION BUTTON CLICKED')}>
                 <Icon
                   raised
                   size={15}
