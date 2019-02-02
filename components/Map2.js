@@ -47,6 +47,7 @@ class screens extends Component {
 
 
   componentDidMount() {
+    console.log('GETTING HERE FIRST');
     this.getUserLocationHandler()
     this.props.getSkateSpots()
     // We should detect when scrolling has stopped then animate
@@ -87,7 +88,7 @@ class screens extends Component {
     }
   }
 
-  refreshMarkers = () =>{
+  refreshMarkers = (marker) =>{
     this.props.getSkateSpots()
   }
 
@@ -115,7 +116,6 @@ class screens extends Component {
   }
 
   render() {
-    console.log("MAP2 state", this.props);
     const interpolations =
     this.props.user.skate_spots
     ?( this.props.user.skate_spots.map((marker, index) => {
@@ -265,12 +265,12 @@ class screens extends Component {
           {this.props.user.skate_spots
            ? this.props.user.skate_spots.map((marker, index) => (
               <View style={styles.card} key={index}>
-              <TouchableWithoutFeedback onPress={ () => this.sendingPropsTest(marker)}>
-                <Image
-                  source={{uri:`http://${environment['BASE_URL']}${marker.skatephoto.url}`}}
-                  style={styles.cardImage}
-                  resizeMode="cover"
-                />
+                <TouchableWithoutFeedback onPress={ () => this.sendingPropsTest(marker)}>
+                  <Image
+                    source={{uri:`http://${environment['BASE_URL']}${marker.skatephoto.url}`}}
+                    style={styles.cardImage}
+                    resizeMode="cover"
+                  />
                 </TouchableWithoutFeedback>
                 <View style={styles.textContent}>
                   <Text numberOfLines={1} style={styles.cardtitle}>{marker.name}</Text>
@@ -286,6 +286,8 @@ class screens extends Component {
     );
   }
 }
+
+
 
 // <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
 //   skatespot: marker })}}>
