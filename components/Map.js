@@ -95,7 +95,7 @@ class Map extends Component {
   getUserLocationHandler = () => {
     navigator.geolocation.getCurrentPosition(position => {
       this.setState({
-        userLocation:{
+        region:{
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
           latitudeDelta: 0.115,
@@ -115,7 +115,9 @@ class Map extends Component {
     let spots = this.state.skateSpots
   }
 
+
   render() {
+    console.log(this.state.region)
     const interpolations =
     this.props.user.skate_spots
     ?( this.props.user.skate_spots.map((marker, index) => {
@@ -143,8 +145,9 @@ class Map extends Component {
         <MapView
           showsUserLocation
           ref={map => this.map = map}
-          initialRegion ={this.state.userLocation}
+          initialRegion={this.state.region}
           style={styles.container}
+          region={this.state.region}
         >
 
         {this.props.user.skate_spots
@@ -221,7 +224,7 @@ class Map extends Component {
                 />
             </TouchableOpacity>
 
-              <TouchableOpacity onPress= {() => console.log('GELOCATION BUTTON CLICKED')}>
+              <TouchableOpacity onPress= {this.getUserLocationHandler}>
                 <Icon
                   raised
                   size={15}
