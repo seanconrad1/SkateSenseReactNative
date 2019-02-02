@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, Image, TouchableHighlight, ScrollView, PropTypes} from 'react-native'
 import { NavigationActions, withNavigation  } from 'react-navigation'
-import { Icon, Button, Divider, ListItem } from 'react-native-elements'
+import { Icon, Button, Divider, ListItem, Header } from 'react-native-elements'
 import deviceStorage from '../deviceStorage.js'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
@@ -45,17 +45,29 @@ class SideMenu extends Component {
    render () {
        return (
            <View style = { styles.container } >
+               <Text
+                 style={{
+                    fontFamily:'Lobster',
+                    justifyContent: 'space-around',
+                    color:'black',
+                    fontSize: 40,
+                    alignSelf:'center',
+                    marginBottom: 20
+                  }}>
+                    SkateSense
+                </Text>
+
                <ScrollView>
+               <Divider style={{ backgroundColor: 'grey', marginTop:0}} />
                    <View>
-                       <Text>{ 'SkateSense' }</Text>
                        {
                           list.map((item, i) => (
-                            <ListItem
-                              key={i}
-                              leftIcon={{ name: item.icon, type: item.type}}
-                              title={item.name}
-                              onPress={this.navigateToScreen(item.name)}
-                            />
+                              <ListItem
+                                key={i}
+                                leftIcon={{ name: item.icon, type: item.type}}
+                                title={item.name}
+                                onPress={this.navigateToScreen(item.name)}
+                              />
                           ))
                         }
                         <ListItem
@@ -66,7 +78,7 @@ class SideMenu extends Component {
                    </View>
                </ScrollView>
            </View>
-       );
+      )
    }
  }
 
@@ -75,7 +87,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f6f6f6',
     paddingTop: 40,
-    paddingHorizontal: 20
   },
   uglyDrawerItem: {
     marginTop: 20,
