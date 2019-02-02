@@ -18,8 +18,21 @@ const comments = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
 
 const styles = StyleSheet.create({
   commentContainer:{
+    position:'absolute',
+    marginTop:'70%',
+    height: 200,
+    marginLeft: 10,
+    width: '100%',
+  },
+  oneCommentContainer:{
+    flexDirection:'row',
+    justifyContent:'space-between',
+    paddingBottom: 20
+  },
+  commentInputandButtonContainer:{
     flexDirection: 'row',
-    marginTop: 435
+    marginTop: 450,
+    position: 'absolute'
   },
   commentInput:{
     borderRadius:20,
@@ -29,19 +42,19 @@ const styles = StyleSheet.create({
     paddingBottom: '2%',
     paddingLeft: '2%',
     paddingRight: '2%',
-    width: 250
+    width: 260
   },
   postButton:{
     color:'black',
     borderRadius:20,
     backgroundColor: "rgb(244, 2, 87)",
     width: 80,
-    marginTop: '2%'
   },
   cardContainer:{
     marginTop:'10%',
     paddingBottom:'50%',
     borderRadius: 20,
+    height:'83%'
   }
 })
 
@@ -66,23 +79,39 @@ class SpotPage extends Component {
   }
 
   onCommentChange = (comment) => {
-    debugger
     this.setState({
       commentContent: comment
     })
   }
 
+  deleteComment = (comment) => {
+    deviceStorage.loadJWT('jwt')
+    .then(key => fetchToDeleteComment(key, comment.id))
+
+    function fetchToDeleteComment(key, commentID){
+      fetch(`http://${environment['BASE_URL']}/api/v1/comments/${commentID}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+           Accept: 'application/json',
+           Authorization: `Bearer ${key}`
+        },
+      }).then(r=>r.json()).then(data=>console.log(data))
+    }
+
+    this.setState({comments: this.state.comments.filter(oneComment => {
+      return oneComment.id !== comment.id
+    })})
+  }
+
   postButtonHandler = () =>{
-    let { commentContent } = this.state
-    let skate_spot_id = this.state.skatespot.id
-    let user_id = this.props.user.user.id
 
     deviceStorage.loadJWT('jwt')
-    .then(key => fetchToCommentOnSpot(key,
-        commentContent, skate_spot_id, user_id))
+    .then(key => fetchToCommentOnSpot(key))
 
 
-    function fetchToCommentOnSpot(key, commentContent, skate_spot_id, user_id){
+    const fetchToCommentOnSpot = (key) =>{
 
       fetch(`http://${environment['BASE_URL']}/api/v1/comments`,{
         method: 'POST',
@@ -92,21 +121,20 @@ class SpotPage extends Component {
            Authorization: `Bearer ${key}`
         },
         body: JSON.stringify({
-          'content': commentContent,
-          'skate_spot_id': skate_spot_id,
-          'user_id': user_id
+          'content': this.state.commentContent,
+          'skate_spot_id': this.state.skatespot.id,
+          'user_id': this.props.user.user.id
         })
-      }).then(r=>r.json()).then(data=>console.log(data))
+      })
+      .then(r=>r.json())
+      .then((data)=>this.setState({comments: [...this.state.comments, data]}))
     }
 
-    this.setState({
-      comments: [...this.state.comments, this.state.commentContent],
-      commentContainer: ''
-      })
-    console.log(this.state.commentContent);
+    // debugger
   }
 
   render(){
+    console.log('2nd: ', this.state.comments);
     return(
       <View>
         <Header
@@ -122,51 +150,48 @@ class SpotPage extends Component {
           containerStyle={styles.cardContainer}
           image={{uri:`http://${environment['BASE_URL']}${this.state.imageURL}`}}
           >
-          <Text style={{marginBottom: 10}}>
+          <Text style={{marginBottom: 10, position:'absolute', marginTop: 10, marginLeft: 10}}>
             {this.state.skatespot.url}
             {this.state.skatespot.description}
-
           </Text>
 
-          <Divider style={{ backgroundColor: 'grey', borderWidth:.2}} />
+          <Divider style={{ backgroundColor: 'grey', borderWidth:.2, marginTop:200}} />
 
           <ScrollView
             snapToEnd
-            style={{
-              position:'absolute',
-              marginTop:'80%',
-              height: 200,
-              marginLeft: 10,
-              width: '100%',
-              wordWrap:'break-word',
-
-            }}>
+            style={styles.commentContainer}>
               {this.state.comments.map(comment=>{
-              return <View style={{flexDirection:'row', wordWrap:'break-word', justifyContent:'space-between', paddingBottom: 20}}>
+              return <View style={styles.oneCommentContainer}>
 
                       <Text style={{fontWeight: 'bold'}}>{this.props.user.user.username} </Text>
                         <Text style={{wordWrap:'break-word', marginRight:100, width: 130}}>{comment.content}</Text>
                         <View>
                           {comment.user_id === this.props.user.user.id
-                          ? <Icon name='trash' type='font-awesome'/>
+                          ? <Icon name='trash' type='font-awesome' onPress={() => this.deleteComment(comment)}/>
                           : null}
                         </View>
                      </View>
                   })}
           </ScrollView>
 
-          <View style={styles.commentContainer}>
+          <View style={styles.commentInputandButtonContainer}>
             <TextInput
               style={styles.commentInput}
               placeholder='Comment'
               onChangeText={(value) => this.onCommentChange(value)}
               />
 
-            <Button
+            {this.state.commentContent
+            ? <Button
             title='Post'
             buttonStyle={styles.postButton}
             onPress={this.postButtonHandler}
             />
+            : <Button
+            disabled
+            title='Post'
+            buttonStyle={styles.postButton}
+            />}
           </View>
 
         </Card>
