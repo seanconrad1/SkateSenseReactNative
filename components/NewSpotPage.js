@@ -14,6 +14,7 @@ import RNFetchBlob from 'rn-fetch-blob'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { fetchKeyForSkateSpots } from '../action.js'
+import deviceStorage from '../deviceStorage.js'
 
 
 const styles = StyleSheet.create({
@@ -133,16 +134,7 @@ class NewSpotPage extends Component {
       })
     }
 
-    // fetchAndNavigate = () => {
-    //   console.log('GOT TO FETCH AND NAVIGATE')
-    //   async () => {
-    //
-    //     this.props.navigation.navigate('Map2')
-    //   }
-    // }
-
     onSubmit = () =>{
-
       // this.props.navigation.navigate('Map2')
       let test = RNFetchBlob.wrap(this.state.photo.uri)
       RNFetchBlob.fetch('POST', `http://${environment['BASE_URL']}/api/v1/skate_spots`, {

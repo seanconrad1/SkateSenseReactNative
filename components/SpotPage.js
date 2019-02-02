@@ -10,6 +10,9 @@ import { View,
 import { Header, Icon, Card, ListItem, Button } from 'react-native-elements'
 import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
+import deviceStorage from '../deviceStorage.js'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
 
 const comments = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
 
@@ -54,7 +57,9 @@ class SpotPage extends Component {
     this.state={
       skatespot: '',
       imageURL: '',
+      comments: ['a','b','c','d'],
       extendCommentsAndCommentField: false,
+      commentContent: '',
     }
   }
 
@@ -63,6 +68,39 @@ class SpotPage extends Component {
       skatespot: this.props.navigation.getParam('skatespot'),
       imageURL: this.props.navigation.getParam('skatespot').skatephoto.url
     })
+  }
+
+  onCommentChange = (comment) => {
+    this.setState({
+      commentContent: comment
+    })
+  }
+
+  postButtonHandler = () =>{
+
+    deviceStorage.loadJWT('jwt')
+    .then(val => fetchToCommentOnSpot(val))
+
+    function fetchToCommentOnSpot(key){
+
+    fetch(`http://${environment['BASE_URL']}/api/v1/comments`,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+         'Accept': 'application/json',
+         'Authorization': `Bearer ${key}`
+      },
+      body: JSON.stringify({
+        'content': this.state.commentContent,
+        'user_id': this.props.user.user.id,
+        'skate_spot_id': this.state.skatespot.id
+      })
+
+      }).then(r=>json()).then(data=>console.log(data))
+    }
+
+    this.setState({ comments: [...this.state.comments, this.state.commentContent]})
+    console.log(this.state.commentContent);
   }
 
   render(){
@@ -84,16 +122,29 @@ class SpotPage extends Component {
           <Text style={{marginBottom: 10}}>
             {this.state.skatespot.url}
             {this.state.skatespot.description}
+
           </Text>
+
+          <View>
+              {this.state.comments.map(comment=>{
+              return <Text>
+                      {comment}
+                    </Text>
+                  })}
+          </View>
 
           <View style={styles.commentContainer}>
             <TextInput
               style={styles.commentInput}
               placeholder='Comment'
+              onChangeText={(value) => this.onCommentChange(value)}
               />
+
             <Button
             title='Post'
-            buttonStyle={styles.postButton}/>
+            buttonStyle={styles.postButton}
+            onPress={this.postButtonHandler}
+            />
           </View>
 
         </Card>
@@ -102,4 +153,12 @@ class SpotPage extends Component {
   }
 }
 
-export default withNavigation(SpotPage)
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+  }
+}
+
+const connectMap = connect(mapStateToProps)
+
+export default withNavigation(compose(connectMap)(SpotPage))
