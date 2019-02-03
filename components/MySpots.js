@@ -172,19 +172,25 @@ class MySpots extends Component {
 
   renderSpots = () => {
     if (this.state.whichTab === 0) {
+
       let spots = this.state.submittedSpots
+
       if(spots === ''){
         return <View><Text>You don't have any spots bookmarked</Text></View>
       }else if (this.state.term === '' || this.state.term === undefined && spots !== undefined) {
+
+        let lastSpot = spots.filter(spot => spot === spots[spots.length -1 ])
+
         return spots.map(spot => (
 
           <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
             skatespot: spot })}}>
+
               <Card
                 key={spot.id}
                 title={spot.name}
                 image={{uri:`http://${environment['BASE_URL']}${spot.skatephoto.url}`}}
-                containerStyle={{borderRadius: 20}}>
+                containerStyle={spot === lastSpot? {paddingBottom:100, borderRadius:20} : {padding:0, borderRadius: 20}}>
 
               <Text style={{marginBottom: 10}}>
               { spot.description}
