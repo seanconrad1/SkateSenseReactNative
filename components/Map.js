@@ -29,8 +29,8 @@ import environment from '../environment.js'
 
 const { width, height } = Dimensions.get("window");
 
-const CARD_HEIGHT = height / 4;
-const CARD_WIDTH = CARD_HEIGHT + 90;
+const CARD_HEIGHT = height / 2.5;
+const CARD_WIDTH = CARD_HEIGHT + 25;
 
 class Map extends Component {
   state = {
@@ -50,12 +50,14 @@ class Map extends Component {
     console.log('GETTING HERE FIRST');
     this.getUserLocationHandler()
     this.props.getSkateSpots()
+
     // We should detect when scrolling has stopped then animate
     // We should just debounce the event listener here
-    if (this.props.user.skate_spots){
     this.animation.addListener(({ value }) => {
+      if (this.props.user.skate_spots){
       console.log('VALUE', value);
-      let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
+      // let index = Math.floor(value / CARD_WIDTH); // animate 30% away from landing on the next item
+      let index = Math.floor(value / CARD_WIDTH + .3); // animate 30% away from landing on the next item
       if (index >= this.props.user.skate_spots.length) {
         index = this.props.user.skate_spots.length - 1;
       }
@@ -82,10 +84,10 @@ class Map extends Component {
             );
           }
         }, 10);
-      });
-    }else {
-      console.log('spots havent loaded yet');
-    }
+      }else {
+        console.log('spots havent loaded yet');
+      }
+    });
   }
 
   refreshMarkers = (marker) =>{
@@ -116,9 +118,13 @@ class Map extends Component {
     let spots = this.state.skateSpots
   }
 
+  bookmarkSpot = () =>{
+    console.log('TRYING TO BOOKMARK SPOT')
+  }
+
 
   render() {
-    console.log(this.state.region)
+    console.log('card width', CARD_WIDTH);
     const interpolations =
     this.props.user.skate_spots
     ?( this.props.user.skate_spots.map((marker, index) => {
@@ -129,7 +135,7 @@ class Map extends Component {
       ];
       const scale = this.animation.interpolate({
         inputRange,
-        outputRange: [1, 2.5, 1],
+        outputRange: [1, 1, 1],
         extrapolate: "clamp",
       });
       const opacity = this.animation.interpolate({
@@ -263,7 +269,7 @@ class Map extends Component {
           horizontal
           scrollEventThrottle={1}
           showsHorizontalScrollIndicator={false}
-          snapToInterval={CARD_WIDTH}
+          snapToInterval={CARD_WIDTH + 20}
           onScroll={Animated.event(
             [
               {
@@ -277,11 +283,21 @@ class Map extends Component {
             { useNativeDriver: true }
           )}
           style={styles.scrollView}
-          contentContainerStyle={styles.endPadding}
         >
           {this.props.user.skate_spots
            ? this.props.user.skate_spots.map((marker, index) => (
               <View style={styles.card} key={index}>
+                <TouchableOpacity onPress={this.bookmarkSpot} style={{position:'absolute', zIndex:1}}>
+                  <Icon
+                  raised
+                  containerStyle={{position:'relative', zIndex:1, marginLeft:10, marginTop:10}}
+                  name="bookmark"
+                  size={15}
+                  type="font-awesome"
+                  color="black"
+                  />
+                </TouchableOpacity>
+
                 <TouchableWithoutFeedback onPress={ () => this.sendingPropsTest(marker)}>
                   <Image
                     source={{uri:`http://${environment['BASE_URL']}${marker.skatephoto.url}`}}
@@ -342,7 +358,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   endPadding: {
-    paddingRight: width - CARD_WIDTH,
+    // paddingRight: width - CARD_WIDTH,
   },
   card: {
     padding: 10,
@@ -383,13 +399,13 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: "rgba(130,4,150, 0.9)",
+    backgroundColor: "rgba(244, 2, 87, .9)",
   },
   ring: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: "rgba(130,4,150, 0.3)",
+    backgroundColor: "rgba(142, 25, 66, .3)",
     position: "absolute",
     borderWidth: 1,
     borderColor: "rgba(130,4,150, 0.5)",
