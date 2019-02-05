@@ -216,7 +216,7 @@ class Map extends Component {
                       position: 'absolute',
                       paddingTop: 0,
                       marginLeft: 10,
-                      marginTop: 510,
+                      marginTop: 410,
                     }}
                     color="rgb(244, 2, 87)"
                   />
@@ -234,7 +234,7 @@ class Map extends Component {
                       position: 'absolute',
                       paddingTop: 0,
                       marginLeft: 310,
-                      marginTop: 250,
+                      marginTop: 150,
                     }}
                     color="rgb(244, 2, 87)"
                   />
@@ -249,7 +249,7 @@ class Map extends Component {
 
                       containerStyle={{
                         position:'absolute',
-                        marginTop: 310,
+                        marginTop: 210,
                         marginLeft: 310,
 
                       }}
