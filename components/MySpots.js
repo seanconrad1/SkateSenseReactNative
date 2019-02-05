@@ -365,22 +365,6 @@ class MySpots extends Component {
 
 
 
-
-
-
-
-
-//
-//
-
-
-
-
-
-
-
-
-
 const mapStateToProps = state => {
   return {
     skate_spots: state.skate_spots,

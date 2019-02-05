@@ -74,8 +74,11 @@ class SpotPage extends Component {
     this.setState({
       skatespot: this.props.navigation.getParam('skatespot'),
       imageURL: this.props.navigation.getParam('skatespot').skatephoto.url,
-      comments: this.props.navigation.getParam('skatespot').comments.map(comment => comment),
     })
+    if (this.props.navigation.getParam('skatespot').comments) {
+      this.setState({comments: this.props.navigation.getParam('skatespot').comments.map(comment => comment)})
+    }
+
   }
 
   onCommentChange = (comment) => {
