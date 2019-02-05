@@ -8,7 +8,8 @@ import { View,
          TouchableWithoutFeedback,
          TextInput,
          YellowBox,
-         Alert} from 'react-native'
+         Alert,
+         RefreshControl} from 'react-native'
 import { Header, Icon,  Card, ListItem, Button } from 'react-native-elements'
 import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
@@ -62,7 +63,8 @@ class MySpots extends Component {
       bookmarkedSpots: '',
       term: '',
       whichTab: 0,
-      deleteThisSpotID: ''
+      deleteThisSpotID: '',
+      refreshing: false,
 
     }
   }
@@ -70,12 +72,25 @@ class MySpots extends Component {
   componentDidMount(){
     this.props.getSkateSpots()
     if (this.props.user.user.skate_spots){
+      let bookmarks = this.props.user.user.skate_spots.reverse()
+      let submitted = this.props.user.skate_spots.filter(spot => spot.user_id === this.props.user.user.id)
+      submitted = submitted.reverse()
+
       this.setState(
-        {bookmarkedSpots: this.props.user.user.skate_spots,
-         submittedSpots: this.props.user.skate_spots.filter(spot => spot.user_id === this.props.user.user.id)
+        {bookmarkedSpots: bookmarks,
+         submittedSpots: submitted
         }
       )
     }
+  }
+
+  _onRefresh = () => {
+    console.log('REFRESHING')
+    this.setState({refreshing: true});
+    this.props.getSkateSpots()
+    // fetchData().then(() => {
+    this.setState({refreshing: false});
+    // });
   }
 
   onSearchChange = (e) => {
@@ -354,7 +369,13 @@ class MySpots extends Component {
 
       <MySpotsButtonGroup onChangeTab={this.onChangeTab}/>
 
-       <ScrollView>
+       <ScrollView
+         refreshControl={
+           <RefreshControl
+             refreshing={this.state.refreshing}
+             onRefresh={this._onRefresh}
+           />
+         }>
           {this.renderSpots()}
         </ScrollView>
 
