@@ -89,6 +89,7 @@ class Map extends Component {
   }
 
   refreshMarkers = (marker) =>{
+    console.log('GETTING NEW SPOTS')
     this.props.getSkateSpots()
   }
 
@@ -191,6 +192,7 @@ class Map extends Component {
                       type='font-awesome'
 
                       containerStyle={{
+                        position:'absolute',
                         marginTop: 60,
                         marginLeft: 10,
                       }}
@@ -208,7 +210,7 @@ class Map extends Component {
                       position: 'absolute',
                       paddingTop: 0,
                       marginLeft: 10,
-                      marginTop: 400,
+                      marginTop: 510,
                     }}
                     color="rgb(244, 2, 87)"
                   />
@@ -232,21 +234,23 @@ class Map extends Component {
                   />
               </TouchableOpacity>
 
-                <TouchableOpacity onPress= {this.getUserLocationHandler}>
-                  <Icon
-                    raised
-                    size={20}
-                    name='location-arrow'
-                    type='font-awesome'
-                    containerStyle={{
-                      position: 'absolute',
-                      paddingTop: 0,
-                      marginLeft: 310,
-                      marginTop: 310,
-                    }}
-                    color="rgb(244, 2, 87)"
-                  />
+              <TouchableOpacity onPress= {this.getUserLocationHandler} >
+                    <Icon
+                      raised
+                      name='location-arrow'
+                      size={20}
+                      type='font-awesome'
+
+                      containerStyle={{
+                        position:'absolute',
+                        marginTop: 310,
+                        marginLeft: 310,
+
+                      }}
+                      color="rgb(244, 2, 87)"
+                    />
                 </TouchableOpacity>
+
               </View>
 
             </View>
