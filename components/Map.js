@@ -146,8 +146,9 @@ class Map extends Component {
           showsUserLocation
           ref={map => this.map = map}
           initialRegion={this.state.region}
-          style={styles.container}
+          style={{flex: 1}}
           region={this.state.region}
+          showsMyLocationButton={true}
         >
 
         {this.props.user.skate_spots
@@ -179,68 +180,77 @@ class Map extends Component {
 
         </MapView>
 
-        <Overlay>
+        <Callout>
           <View>
-            <TouchableOpacity onPress= {() => this.props.navigation.openDrawer()} >
+            <View>
+              <TouchableOpacity onPress= {() => this.props.navigation.openDrawer()} >
+                    <Icon
+                      raised
+                      name='bars'
+                      size={17}
+                      type='font-awesome'
+
+                      containerStyle={{
+                        marginTop: 60,
+                        marginLeft: 10,
+                      }}
+                      color="rgb(244, 2, 87)"
+                    />
+                </TouchableOpacity>
+
+              <TouchableOpacity onPress= {() => this.props.navigation.navigate('NewSpotPage')} >
                   <Icon
                     raised
-                    name='bars'
-                    size={15}
+                    name='plus'
+                    size={20}
                     type='font-awesome'
-
                     containerStyle={{
-                      marginTop: 60,
-                      marginLeft: 0,
+                      position: 'absolute',
+                      paddingTop: 0,
+                      marginLeft: 10,
+                      marginTop: 400,
+                    }}
+                    color="rgb(244, 2, 87)"
+                  />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.rightSideButtons}>
+              <TouchableOpacity onPress= {this.refreshMarkers} >
+                  <Icon
+                    raised
+                    name='refresh'
+                    size={20}
+                    type='font-awesome'
+                    containerStyle={{
+                      position: 'absolute',
+                      paddingTop: 0,
+                      marginLeft: 310,
+                      marginTop: 250,
                     }}
                     color="rgb(244, 2, 87)"
                   />
               </TouchableOpacity>
 
-            <TouchableOpacity onPress= {() => this.props.navigation.navigate('NewSpotPage')} >
-                <Icon
-                  raised
-                  name='plus'
-                  size={15}
-                  type='font-awesome'
-                  containerStyle={{
-                    marginTop: 0,
-                    marginLeft: 0,
-                  }}
-                  color="rgb(244, 2, 87)"
-                />
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress= {this.refreshMarkers} >
-                <Icon
-                  raised
-                  name='refresh'
-                  size={15}
-                  type='font-awesome'
-                  containerStyle={{
-                    marginTop: 0,
-                    marginLeft: 0,
-                  }}
-                  color="rgb(244, 2, 87)"
-                />
-            </TouchableOpacity>
-
-              <TouchableOpacity onPress= {this.getUserLocationHandler}>
-                <Icon
-                  raised
-                  size={15}
-                  name='location-arrow'
-                  type='font-awesome'
-                  containerStyle={{
-                    marginRight:0,
-                    marginBottom: 0,
-                    marginLeft: 0,
-                  }}
-                  color="rgb(244, 2, 87)"
-                />
-              </TouchableOpacity>
+                <TouchableOpacity onPress= {this.getUserLocationHandler}>
+                  <Icon
+                    raised
+                    size={20}
+                    name='location-arrow'
+                    type='font-awesome'
+                    containerStyle={{
+                      position: 'absolute',
+                      paddingTop: 0,
+                      marginLeft: 310,
+                      marginTop: 310,
+                    }}
+                    color="rgb(244, 2, 87)"
+                  />
+                </TouchableOpacity>
+              </View>
 
             </View>
-        </Overlay>
+        </Callout>
 
 
 
@@ -298,6 +308,7 @@ class Map extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    zIndex:0
   },
   calloutView: {
    flexDirection: "row",
@@ -315,32 +326,9 @@ const styles = StyleSheet.create({
    shadowOpacity: 0.3,
    shadowRadius: 3,
   },
-  calloutSearch: {
-   borderColor: "transparent",
-   marginLeft: 10,
-   width: "90%",
-   marginRight: 10,
-   height: 40,
-   borderWidth: 0.0
-  },
-  geoLocationButton:{
-    flexDirection: "row",
-    marginLeft: "80%",
-    marginRight: "30%",
-    marginTop: "95%",
-  },
-  menuButtonContainerStyle:{
-    backgroundColor: "rgb(244, 2, 87)",
-    height: 60,
-    width: 60,
-    borderRadius: 50,
-    marginLeft: "0%",
-    marginRight: "75%",
-    marginTop: "50%",
-  },
-  compass:{
-    color: "white",
-    fontSize: 25,
+  rightSideButtons:{
+    position:'absolute',
+    marginTop: 200,
   },
   scrollView: {
     position: "absolute",
