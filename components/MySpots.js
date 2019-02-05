@@ -370,6 +370,7 @@ class MySpots extends Component {
       <MySpotsButtonGroup onChangeTab={this.onChangeTab}/>
 
        <ScrollView
+         contentContainerStyle={{ paddingBottom: 200 }}
          refreshControl={
            <RefreshControl
              refreshing={this.state.refreshing}
