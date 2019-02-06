@@ -151,7 +151,7 @@ class MySpots extends Component {
     deviceStorage.loadJWT('jwt')
     .then(val => fetchToUnbookmarkSpot(val))
 
-    function fetchToUnbookmarkSpot(key){
+    const fetchToUnbookmarkSpot = (key) => {
     fetch(`http://${environment['BASE_URL']}/api/v1/bookmarks/${bookmarkID}`,{
       method: 'DELETE',
       headers: {
@@ -159,14 +159,11 @@ class MySpots extends Component {
          Accept: 'application/json',
          Authorization: `Bearer ${key}`
       }})
-      .then(response=>response.json())
-      .then(r=>console.log(r))
+      .then(r=>r.json())
+      .then(response=>this.setState({bookmarkedSpots: this.state.bookmarkedSpots.filter(bookmark => {
+        return bookmark.id !== id
+      })}))
     }
-
-    this.setState({bookmarkedSpots: this.state.bookmarkedSpots.filter(bookmark => {
-      return bookmark.id !== id
-    })})
-
   }
 
   unBookmarkAlertMsg = (id) =>{

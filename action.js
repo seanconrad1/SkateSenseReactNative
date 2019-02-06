@@ -141,6 +141,10 @@ export function getUserData() {
     }
 }
 
+export function bookmarkSpot(){
+  console.log('GETTING TO BOOKMARKS SPOT IN ACTIONS')
+}
+
 export function getGeolocation() {
   return (dispatch) => {
     console.log('got here line 27 action.js');

@@ -27,6 +27,8 @@ import { compose } from 'redux'
 import { fetchKeyForSkateSpots } from '../action.js'
 import { withNavigation, DrawerActions } from 'react-navigation'
 import environment from '../environment.js'
+import deviceStorage from '../deviceStorage.js'
+import BookmarkButton from '../childComponents/BookmarkButton'
 
 const { width, height } = Dimensions.get("window");
 
@@ -87,14 +89,6 @@ class Map extends Component {
   sendingPropsTest = (marker) => {
     console.log('this IS MY TEST DATA SENIDNG AS PROPS----------------', marker)
     this.props.navigation.navigate('SpotPage', {skatespot: marker })
-  }
-
-  getSearchResults = () =>{
-    let spots = this.state.skateSpots
-  }
-
-  bookmarkSpot = () =>{
-    console.log('TRYING TO BOOKMARK SPOT')
   }
 
   animateRegionChanges = () => {
@@ -289,18 +283,10 @@ class Map extends Component {
           {this.props.user.skate_spots
            ? this.props.user.skate_spots.map((marker, index) => (
               <View style={styles.card} key={index}>
-                <TouchableOpacity onPress={this.bookmarkSpot} style={{position:'absolute', zIndex:1}}>
-                  <Icon
-                  raised
-                  containerStyle={{position:'relative', zIndex:1, marginLeft:290, marginTop:10}}
-                  name="bookmark"
-                  size={15}
-                  type="font-awesome"
-                  color="black"
-                  />
-                </TouchableOpacity>
 
-                <TouchableOpacity onPress={this.bookmarkSpot} style={{position:'absolute', zIndex:1}}>
+                <BookmarkButton spot={marker} style={{position:'absolute', zIndex:1}}/>
+
+                <TouchableOpacity onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${marker.latitude},${marker.longitude}`)} style={{position:'absolute', zIndex:1}}>
                   <Icon
                   raised
                   containerStyle={{position:'relative', zIndex:1, marginLeft:10, marginTop:10}}
@@ -308,7 +294,6 @@ class Map extends Component {
                   size={15}
                   type="material-community"
                   color="black"
-                  onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${marker.latitude},${marker.longitude}`)}
                   />
                 </TouchableOpacity>
 
@@ -436,7 +421,7 @@ const mapStateToProps = state => {
 
 function mapDispatchToProps(dispatch) {
     return {
-      getSkateSpots: () => dispatch(fetchKeyForSkateSpots())
+      getSkateSpots: () => dispatch(fetchKeyForSkateSpots()),
     }
 }
 
