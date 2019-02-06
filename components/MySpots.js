@@ -16,7 +16,7 @@ import { withNavigation } from 'react-navigation'
 import MySpotsButtonGroup from '../childComponents/MySpotsButtonGroup.js'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { fetchKeyForSkateSpots } from '../action.js'
+import { fetchKeyForSkateSpots, fetchKeyForUserData } from '../action.js'
 import deviceStorage from '../deviceStorage.js'
 
 console.disableYellowBox = true;
@@ -84,11 +84,25 @@ class MySpots extends Component {
     }
   }
 
+  componentDidUpdate(prevProps){
+    if (prevProps.user.user.skate_spots !== this.props.user.user.skate_spots){
+      let bookmarks = this.props.user.user.skate_spots.reverse()
+      let submitted = this.props.user.skate_spots.filter(spot => spot.user_id === this.props.user.user.id)
+      submitted = submitted.reverse()
+
+      this.setState(
+        {bookmarkedSpots: bookmarks,
+         submittedSpots: submitted
+        }
+      )
+    }
+  }
+
   _onRefresh = () => {
     console.log('REFRESHING')
     this.setState({refreshing: true});
-    this.props.getSkateSpots()
-    this.props.fetchKeyForUserData(this.props.user.user.id)
+    // this.props.getSkateSpots()
+    this.props.fetchUserData(this.props.user.user.id)
 
     this.setState({refreshing: false});
   }
@@ -143,7 +157,7 @@ class MySpots extends Component {
   }
 
   unBookmark = (id) =>{
-    debugger
+
     console.log('BOOkMARK ID?', id)
     let bookMarkObjects = this.props.user.user.bookmarks
     let obj = bookMarkObjects.filter(bookmark => bookmark.skate_spot_id === id)
@@ -348,7 +362,6 @@ class MySpots extends Component {
 }
 
   render(){
-
     return(
       <View>
         <Header
@@ -394,7 +407,9 @@ const mapStateToProps = state => {
 
 function mapDispatchToProps(dispatch) {
     return {
-      getSkateSpots: () => dispatch(fetchKeyForSkateSpots())
+      getSkateSpots: () => dispatch(fetchKeyForSkateSpots()),
+      fetchUserData: (id) => dispatch(fetchKeyForUserData(id))
+
     }
 }
 
