@@ -17,7 +17,7 @@ import { createStackNavigator,
 import { Provider } from 'react-redux';
 import store from './store'
 import { Button } from 'react-native-elements'
-// import Map3 from './components/Map3'
+import Map3 from './components/Map3'
 import SideMenu from './components/SideMenu.js'
 import NewSpotPage from './components/NewSpotPage.js'
 import LocationSelectorMap from './components/LocationSelectorMap.js'

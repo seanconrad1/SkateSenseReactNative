@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   TextInput,
-  TouchableHighlight
+  TouchableHighlight,
+  Linking
 } from "react-native";
 import MapView, {
       Callout,
@@ -51,43 +52,17 @@ class Map extends Component {
     this.getUserLocationHandler()
     this.props.getSkateSpots()
 
-    // We should detect when scrolling has stopped then animate
-    // We should just debounce the event listener here
     this.animation.addListener(({ value }) => {
-      if (this.props.user.skate_spots){
-      console.log('VALUE', value);
-      // let index = Math.floor(value / CARD_WIDTH); // animate 30% away from landing on the next item
+      debugger
       let index = Math.floor(value / CARD_WIDTH + .3); // animate 30% away from landing on the next item
       if (index >= this.props.user.skate_spots.length) {
         index = this.props.user.skate_spots.length - 1;
       }
       if (index <= 0) {
-        index = 0;
+        index = 0
       }
+    })
 
-      clearTimeout(this.regionTimeout);
-        this.regionTimeout = setTimeout(() => {
-          if (this.index !== index) {
-            this.index = index;
-            const latitude = this.props.user.skate_spots[index].latitude
-            const longitude = this.props.user.skate_spots[index].longitude
-            console.log('MY LATITUDE', latitude);
-            console.log('MY longitude', longitude);
-            this.map.animateToRegion(
-              {
-                latitude: latitude,
-                longitude: longitude,
-                latitudeDelta: this.state.region.latitudeDelta,
-                longitudeDelta: this.state.region.longitudeDelta,
-              },
-              350
-            );
-          }
-        }, 10);
-      }else {
-        console.log('spots havent loaded yet');
-      }
-    });
   }
 
   refreshMarkers = (marker) =>{
@@ -122,6 +97,32 @@ class Map extends Component {
     console.log('TRYING TO BOOKMARK SPOT')
   }
 
+  animateRegionChanges = () => {
+    // We should detect when scrolling has stopped then animate
+    // We should just debounce the event listener here
+
+
+      clearTimeout(this.regionTimeout);
+        this.regionTimeout = setTimeout(() => {
+          if (this.index !== index) {
+            this.index = index;
+            const latitude = this.props.user.skate_spots[index].latitude
+            const longitude = this.props.user.skate_spots[index].longitude
+            console.log('MY LATITUDE', latitude);
+            console.log('MY longitude', longitude);
+            this.map.animateToRegion(
+              {
+                latitude: latitude,
+                longitude: longitude,
+                latitudeDelta: this.state.region.latitudeDelta,
+                longitudeDelta: this.state.region.longitudeDelta,
+              },
+              350
+            );
+          }
+        }, 10);
+      }
+
 
   render() {
     console.log('card width', CARD_WIDTH);
@@ -135,7 +136,7 @@ class Map extends Component {
       ];
       const scale = this.animation.interpolate({
         inputRange,
-        outputRange: [1, 1, 1],
+        outputRange: [1, 3, 1],
         extrapolate: "clamp",
       });
       const opacity = this.animation.interpolate({
@@ -180,6 +181,7 @@ class Map extends Component {
                 <Animated.View style={[styles.ring, scaleStyle]} />
                 <View style={styles.marker} />
               </Animated.View>
+
 
             </MapView.Marker>
           )})
@@ -290,11 +292,23 @@ class Map extends Component {
                 <TouchableOpacity onPress={this.bookmarkSpot} style={{position:'absolute', zIndex:1}}>
                   <Icon
                   raised
-                  containerStyle={{position:'relative', zIndex:1, marginLeft:10, marginTop:10}}
+                  containerStyle={{position:'relative', zIndex:1, marginLeft:290, marginTop:10}}
                   name="bookmark"
                   size={15}
                   type="font-awesome"
                   color="black"
+                  />
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={this.bookmarkSpot} style={{position:'absolute', zIndex:1}}>
+                  <Icon
+                  raised
+                  containerStyle={{position:'relative', zIndex:1, marginLeft:10, marginTop:10}}
+                  name="directions"
+                  size={15}
+                  type="material-community"
+                  color="black"
+                  onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${marker.latitude},${marker.longitude}`)}
                   />
                 </TouchableOpacity>
 
@@ -312,6 +326,7 @@ class Map extends Component {
                   </Text>
                 </View>
               </View>
+
           ))
           : null}
         </Animated.ScrollView>
