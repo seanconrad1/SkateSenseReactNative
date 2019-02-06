@@ -88,9 +88,9 @@ class MySpots extends Component {
     console.log('REFRESHING')
     this.setState({refreshing: true});
     this.props.getSkateSpots()
-    // fetchData().then(() => {
+    this.props.fetchKeyForUserData(this.props.user.user.id)
+
     this.setState({refreshing: false});
-    // });
   }
 
   onSearchChange = (e) => {
@@ -143,6 +143,7 @@ class MySpots extends Component {
   }
 
   unBookmark = (id) =>{
+    debugger
     console.log('BOOkMARK ID?', id)
     let bookMarkObjects = this.props.user.user.bookmarks
     let obj = bookMarkObjects.filter(bookmark => bookmark.skate_spot_id === id)

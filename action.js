@@ -110,6 +110,7 @@ export function fetchKeyForSkateSpots() {
       })
   }
 }
+
 export function fetchSkateSpots(val){
       return (dispatch) =>{
         return fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`,{
@@ -124,22 +125,31 @@ export function fetchSkateSpots(val){
     }
 
 
-export function getUserData() {
-    return (dispatch) =>{
-      dispatch({type: 'LOADING_DATA'})
-      return fetch(`http://${environment['BASE_URL']}/api/v1/users/1`, {
-        method:'GET',
-        headers:{
-          Authorization: `Bearer ${deviceStorage.loadJWT('jwt')}`
-        }
-      })
-        .then(r=>r.json()).then(data=>{
-        dispatch({type:'GET_USER_DATA', payload:data})
-        dispatch({type:'LOADED_DATA'})
-        return data
-      })
-    }
-}
+// export function fetchKeyForUserData(userID) {
+//   return function action(dispatch) {
+//     dispatch({ type: "LOADING_DATA" })
+//       deviceStorage.loadJWT("jwt")
+//       .then(jwtKey => dispatch(fetchUserData(jwtKey, userID)))
+//       .catch((error) => {
+//         console.log('Action.js line 131 error: ', error)
+//       })
+//   }
+// }
+//
+// export function fetchUserData(key, userID) {
+//     return (dispatch) =>{
+//       dispatch({type: 'LOADING_DATA'})
+//       return fetch(`http://${environment['BASE_URL']}/api/v1/users/${userID}`, {
+//         method:'GET',
+//         headers:{
+//           Authorization: `Bearer ${key}`
+//         }
+//       })
+//         .then(r=>r.json()).then(data=>{
+//         dispatch({type:'GET_USER_DATA', payload:data})
+//       })
+//     }
+// }
 
 export function bookmarkSpot(){
   console.log('GETTING TO BOOKMARKS SPOT IN ACTIONS')
