@@ -57,7 +57,6 @@ class BookmarkButton extends Component {
     }
 
     unBookmarkSpot = () =>{
-
       deviceStorage.loadJWT('jwt')
       .then(val => fetchToUnbookmarkSpot(val))
 
@@ -72,7 +71,6 @@ class BookmarkButton extends Component {
       .then(data=>this.setState({bookmarked:false, currentBookmarkid: data.id}))
     }
   }
-
 
   render(){
     return(
@@ -103,14 +101,7 @@ class BookmarkButton extends Component {
     </View>
     )
   }
-
-
 }
-
-
-
-
-
 
 const mapStateToProps = state => {
   return {
