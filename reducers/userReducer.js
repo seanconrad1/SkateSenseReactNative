@@ -56,7 +56,7 @@ export default function reducer(state = initialState, action) {
     case 'POST_SKATE_SPOT':
       return {...state, skate_spots: action.payload }
     case 'GET_USER_DATA':
-      return {...state, user: action.payload, loggedIn: true, authenticatingUser: false }
+      return {...state, user: action.payload}
     case 'LOADING_DATA':
       return {...state, loadingData: true }
     case 'LOADED_DATA':

@@ -57,6 +57,7 @@ class BookmarkButton extends Component {
     }
 
     unBookmarkSpot = () =>{
+      debugger
       deviceStorage.loadJWT('jwt')
       .then(val => fetchToUnbookmarkSpot(val))
 
@@ -76,7 +77,7 @@ class BookmarkButton extends Component {
     return(
       <View style={{position:'absolute', zIndex:1}}>
         {!this.state.bookmarked
-        ?<TouchableOpacity onPress={this.bookmarkSpot}>
+        ?<TouchableOpacity onPress={() => this.bookmarkSpot()}>
         <Icon
         raised
         containerStyle={{position:'absolute', marginLeft:290, marginTop:10}}

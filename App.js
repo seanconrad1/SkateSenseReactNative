@@ -22,6 +22,7 @@ import SideMenu from './components/SideMenu.js'
 import NewSpotPage from './components/NewSpotPage.js'
 import LocationSelectorMap from './components/LocationSelectorMap.js'
 import AdminConsole from './components/AdminConsole'
+import UserPage from './childComponents/UserPage.js'
 
 console.disableYellowBox = true;
 
@@ -29,6 +30,7 @@ const RootStack = createStackNavigator(
   {
     Login: {screen: Login},
     SignUp: {screen: SignUp},
+    UserPage:{screen: UserPage}
   },
   {
     headerMode: 'none',
@@ -47,7 +49,7 @@ const Drawer = createStackNavigator(
     SpotPage: {screen: SpotPage},
     NewSpotPage: {screen: NewSpotPage},
     LocationSelectorMap: {screen: LocationSelectorMap},
-    AdminConsole:{screen: AdminConsole}
+    AdminConsole:{screen: AdminConsole},
   },
   {
     headerMode: 'none',

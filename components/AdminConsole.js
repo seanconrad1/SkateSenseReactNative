@@ -99,11 +99,14 @@ class MySpots extends Component {
 
         <ScrollView>
           {this.state.users
-             ?this.state.users.map((item, i) => (
-                 <ListItem
-                   title={item.username}
-                   onPress={()=>this.toUserPage(item)}
-                 />
+             ?this.state.users.map((user, i) => (
+               <View>
+                <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('UserPage', {user: user})}}>
+                   <ListItem
+                     title={user.username}
+                   />
+                 </TouchableWithoutFeedback>
+                </View>
              ))
              :null
            }
