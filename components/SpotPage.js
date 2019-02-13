@@ -6,22 +6,26 @@ import { View,
          ScrollView,
          Linking,
          TouchableWithoutFeedback,
-         TextInput } from 'react-native'
+         TextInput,
+         RefreshControl } from 'react-native'
 import { Header, Icon, Card, ListItem, Button, Divider } from 'react-native-elements'
 import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
 import deviceStorage from '../deviceStorage.js'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import {widthPercentageToDP as wp,
+        heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 
 const comments = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
 
 const styles = StyleSheet.create({
   commentContainer:{
     position:'absolute',
-    marginTop:'70%',
-    height: 200,
-    marginLeft: 10,
+    marginTop:hp('28%'),
+    height: hp('20%'),
+    marginLeft: wp('3%'),
     width: '100%',
   },
   oneCommentContainer:{
@@ -31,30 +35,31 @@ const styles = StyleSheet.create({
   },
   commentInputandButtonContainer:{
     flexDirection: 'row',
-    marginTop: 450,
+    marginTop: hp('50%'),
     position: 'absolute'
   },
   commentInput:{
-    borderRadius:20,
+    borderRadius: 20,
     borderColor: 'gray',
     borderWidth: 1,
     paddingTop: '2%',
     paddingBottom: '2%',
-    paddingLeft: '2%',
+    paddingLeft: wp('2%'),
     paddingRight: '2%',
-    width: 260
+    width: wp('65%'),
+    marginLeft: wp('2%'),
+    marginRight: wp('2')
   },
   postButton:{
     color:'black',
     borderRadius:20,
     backgroundColor: "rgb(244, 2, 87)",
-    width: 80,
+    width: wp('20%'),
   },
   cardContainer:{
-    marginTop:'10%',
     paddingBottom:'50%',
     borderRadius: 20,
-    height:'83%'
+    height: hp('80%'),
   }
 })
 
@@ -147,55 +152,56 @@ class SpotPage extends Component {
              justifyContent: 'space-around',
            }}/>
 
-        <Card
-          containerStyle={styles.cardContainer}
-          image={{uri:`http://${environment['BASE_URL']}${this.state.imageURL}`}}
-          >
-          <Text style={{marginBottom: 10, position:'absolute', marginTop: 10, marginLeft: 10}}>
-            {this.state.skatespot.url}
-            {this.state.skatespot.description}
-          </Text>
+          <Card
+            containerStyle={styles.cardContainer}
+            image={{uri:`http://${environment['BASE_URL']}${this.state.imageURL}`}}
+            >
+            <Text style={{marginBottom: 10, position:'absolute', marginTop: 10, marginLeft: 10}}>
+              {this.state.skatespot.url}
+              {this.state.skatespot.description}
+            </Text>
+            <Text>
+            </Text>
 
-          <Divider style={{ backgroundColor: 'grey', borderWidth:.2, marginTop:200}} />
+            <Divider style={{ backgroundColor: 'grey', borderWidth:.2, marginTop: hp('25%')}} />
 
-          <ScrollView
-            snapToEnd
-            style={styles.commentContainer}>
-              {this.state.comments.map(comment=>{
-              return <View style={styles.oneCommentContainer}>
+            <ScrollView
+              snapToEnd
+              style={styles.commentContainer}>
+                {this.state.comments.map(comment=>{
+                return <View style={styles.oneCommentContainer}>
 
-                      <Text style={{fontWeight: 'bold'}}>{this.props.user.user.username} </Text>
-                        <Text style={{wordWrap:'break-word', marginRight:100, width: 130}}>{comment.content}</Text>
-                        <View>
-                          {comment.user_id === this.props.user.user.id
-                          ? <Icon name='trash' type='font-awesome' onPress={() => this.deleteComment(comment)}/>
-                          : null}
-                        </View>
-                     </View>
-                  })}
-          </ScrollView>
+                        <Text style={{fontWeight: 'bold'}}>{this.props.user.user.username} </Text>
+                          <Text style={{wordWrap:'break-word', marginRight:100, width: 130}}>{comment.content}</Text>
+                          <View>
+                            {comment.user_id === this.props.user.user.id
+                            ? <Icon name='trash' type='font-awesome' onPress={() => this.deleteComment(comment)}/>
+                            : null}
+                          </View>
+                       </View>
+                    })}
+            </ScrollView>
 
-          <View style={styles.commentInputandButtonContainer}>
-            <TextInput
-              style={styles.commentInput}
-              placeholder='Comment'
-              onChangeText={(value) => this.onCommentChange(value)}
+            <View style={styles.commentInputandButtonContainer}>
+              <TextInput
+                style={styles.commentInput}
+                placeholder='Comment'
+                onChangeText={(value) => this.onCommentChange(value)}
+                />
+
+              {this.state.commentContent
+              ? <Button
+              title='Post'
+              buttonStyle={styles.postButton}
+              onPress={this.postButtonHandler}
               />
-
-            {this.state.commentContent
-            ? <Button
-            title='Post'
-            buttonStyle={styles.postButton}
-            onPress={this.postButtonHandler}
-            />
-            : <Button
-            disabled
-            title='Post'
-            buttonStyle={styles.postButton}
-            />}
-          </View>
-
-        </Card>
+              : <Button
+              disabled
+              title='Post'
+              buttonStyle={styles.postButton}
+              />}
+            </View>
+          </Card>
       </View>
     )
   }

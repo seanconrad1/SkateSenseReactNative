@@ -29,11 +29,13 @@ import { withNavigation, DrawerActions } from 'react-navigation'
 import environment from '../environment.js'
 import deviceStorage from '../deviceStorage.js'
 import BookmarkButton from '../childComponents/BookmarkButton'
+import {widthPercentageToDP as wp,
+        heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const { width, height } = Dimensions.get("window");
 
-const CARD_HEIGHT = height / 2.5;
-const CARD_WIDTH = CARD_HEIGHT + 25;
+const CARD_HEIGHT = hp('100%') / 2;
+const CARD_WIDTH = wp('90%');
 
 class Map extends Component {
   state = {
@@ -195,8 +197,8 @@ class Map extends Component {
 
                       containerStyle={{
                         position:'absolute',
-                        marginTop: 60,
-                        marginLeft: 10,
+                        marginLeft: wp('3%'),
+                        marginTop: hp('5%'),
                       }}
                       color="rgb(244, 2, 87)"
                     />
@@ -211,61 +213,55 @@ class Map extends Component {
                     containerStyle={{
                       position: 'absolute',
                       paddingTop: 0,
-                      marginLeft: 10,
-                      marginTop: 410,
+                      marginLeft: wp('3%'),
+                      marginTop: hp('50%'),
                     }}
                     color="rgb(244, 2, 87)"
                   />
               </TouchableOpacity>
             </View>
 
-            <View style={styles.rightSideButtons}>
-              <TouchableOpacity onPress= {this.refreshMarkers} >
+            <TouchableOpacity onPress= {this.refreshMarkers} >
+                <Icon
+                  raised
+                  name='refresh'
+                  size={20}
+                  type='font-awesome'
+                  containerStyle={{
+                    position: 'absolute',
+                    paddingTop: 0,
+                    marginLeft: wp('80%'),
+                    marginTop: hp('40%'),
+                  }}
+                  color="rgb(244, 2, 87)"
+                />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress= {this.getUserLocationHandler} >
                   <Icon
                     raised
-                    name='refresh'
+                    name='location-arrow'
                     size={20}
                     type='font-awesome'
+
                     containerStyle={{
-                      position: 'absolute',
-                      paddingTop: 0,
-                      marginLeft: 310,
-                      marginTop: 150,
+                      position:'absolute',
+                      marginLeft: wp('80%'),
+                      marginTop: hp('50%'),
                     }}
                     color="rgb(244, 2, 87)"
                   />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress= {this.getUserLocationHandler} >
-                    <Icon
-                      raised
-                      name='location-arrow'
-                      size={20}
-                      type='font-awesome'
-
-                      containerStyle={{
-                        position:'absolute',
-                        marginTop: 210,
-                        marginLeft: 310,
-
-                      }}
-                      color="rgb(244, 2, 87)"
-                    />
-                </TouchableOpacity>
-
-              </View>
 
             </View>
         </Callout>
-
-
-
 
         <Animated.ScrollView
           horizontal
           scrollEventThrottle={1}
           showsHorizontalScrollIndicator={false}
-          snapToInterval={CARD_WIDTH + 20}
+          snapToInterval={CARD_WIDTH}
           onScroll={Animated.event(
             [
               {
@@ -369,14 +365,14 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOpacity: 0.3,
     shadowOffset: { x: 2, y: -2 },
-    height: CARD_HEIGHT,
-    width: CARD_WIDTH,
+    height: hp('40%'),
+    width: wp('95%'),
     overflow: "hidden",
   },
   cardImage: {
     flex: 3,
-    width: "100%",
-    height: "100%",
+    width: CARD_WIDTH,
+    height: CARD_HEIGHT,
     alignSelf: "center",
   },
   textContent: {
@@ -384,7 +380,7 @@ const styles = StyleSheet.create({
   },
   cardtitle: {
     fontSize: 12,
-    marginTop: 5,
+    marginTop: hp('1%'),
     fontWeight: "bold",
   },
   cardDescription: {
