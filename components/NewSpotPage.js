@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import { Keyboard, Text, StyleSheet, View, CameraRoll } from 'react-native'
+import { Keyboard, Text, StyleSheet, View, CameraRoll, TouchableOpacity } from 'react-native'
 import { Header } from 'react-native-elements'
 import { Icon,
         Input,
         Button,
         ThemeProvider,
         ButtonGroup,
-        Slider} from 'react-native-elements';
+        Slider,} from 'react-native-elements';
 import { withNavigation } from 'react-navigation'
 import ImagePicker from 'react-native-image-picker';
 import environment from '../environment.js'
@@ -15,58 +15,49 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { fetchKeyForSkateSpots } from '../action.js'
 import deviceStorage from '../deviceStorage.js'
+import {widthPercentageToDP as wp,
+        heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
 const styles = StyleSheet.create({
   container: {
     flex: 0,
-    marginTop: 40,
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor: 'white'
+    backgroundColor: 'grey',
+    height: hp('100%'),
+  },
+
+  photoBox:{
+    width: wp('21%'),
+    height: wp('21%'),
+    backgroundColor: 'grey',
+    borderWidth: 5,
+    borderColor: 'white',
+  },
+
+  spotLocationButton:{
+
   },
   header: {
     fontFamily: 'Lobster',
     fontSize: 50,
     fontWeight: 'bold',
-    marginBottom: 80
   },
   submitButton:{
-    marginTop: 10,
+    marginTop: hp('5%'),
     backgroundColor: "rgb(244, 2, 87)",
-    width: 300,
-    height: 45,
+    width: wp('80%'),
+    height: hp('6%'),
     borderColor: "transparent",
     borderWidth: 0,
-    borderRadius: 20,
-    marginBottom: 20,
+    borderRadius: wp('20%'),
+    marginBottom:hp('2%')
   },
-
   buttonGroup: {
     height: 100,
     marginBottom: 0,
     marginTop: 0,
-  },
-  first: {
-    borderTopWidth: 0,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-  },
-  middle: {
-    borderTopWidth: 0,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    // This is the same as `first` but it's just for the example
-  },
-  last: {
-    borderWidth: 0,
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#34495e',
   },
 })
 
@@ -135,7 +126,6 @@ class NewSpotPage extends Component {
     }
 
     onSubmit = () =>{
-      // this.props.navigation.navigate('Map2')
       let test = RNFetchBlob.wrap(this.state.photo.uri)
       RNFetchBlob.fetch('POST', `http://${environment['BASE_URL']}/api/v1/skate_spots`, {
           Authorization : `${environment['API_KEY']}`,
@@ -189,58 +179,58 @@ class NewSpotPage extends Component {
 
           <View style={styles.container}>
 
-          <Text>Add Photo</Text>
-          <Icon
-            name='plus'
-            type='font-awesome'
-            size={40}
-            onPress={this.getPhotoFromCameraRoll}
-            containerStyle={styles.pictureButton}
-            />
+            <Text style={{fontSize:hp('2%')}}>Add Photo</Text>
 
-          {this.state.photo
-          ? <View style={{display: 'flex', flexDirection: 'row', marginRight:10}}>
-              <Text>Photo Uploaded</Text>
-              <Icon
-              name="check"/>
+            <View style={{flexDirection:'row', justifyContent:'center'}}>
+              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}/>
+              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}/>
+              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}/>
+              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}/>
             </View>
-          : null}
 
-          <Input
-            placeholder='Spot Name'
-            clearButtonMode={'never'}
-            autoCorrect={false}
-            autoFocus={true}
-            keyboardType="default"
-            onChangeText={(name) => this.setState({name})}
+            <Button
+              style={styles.spotLocationButton}
+              title='Spot Location'
+              onPress= {() => this.props.navigation.navigate('LocationSelectorMap')}
             />
 
-          <Button
-          title='Spot Location'
-          onPress= {() => this.props.navigation.navigate('LocationSelectorMap')}
-          />
+            {this.state.photo
+            ? <View style={{display: 'flex', flexDirection: 'row', marginRight:10}}>
+                <Text>Photo Uploaded</Text>
+                <Icon
+                name="check"/>
+              </View>
+            : null}
 
-          <Input
-            placeholder='Description'
-            clearButtonMode={'never'}
-            autoCorrect={false}
-            autoFocus={true}
-            keyboardType="default"
-            onChangeText={(description) => this.setState({description})}
-            />
-
-            <Text style={{textAlign:'left'}}>Kickout meter</Text>
-            <View style={{marginLeft:35, width:'100%'}}>
-              <Slider
-                thumbTintColor='rgb(244, 2, 87)'
-                style={{width:'90%'}}
-                step='1'
-                maximumValue='10'
-                animateTransitions='true'
-                value={this.state.kickout}
-                onValueChange={value => this.setState({ kickout: value })}
+            <Input
+              placeholder='Spot Name'
+              clearButtonMode={'never'}
+              autoCorrect={false}
+              autoFocus={true}
+              keyboardType="default"
+              onChangeText={(name) => this.setState({name})}
               />
 
+            <Input
+              placeholder='Description'
+              clearButtonMode={'never'}
+              autoCorrect={false}
+              autoFocus={true}
+              keyboardType="default"
+              onChangeText={(description) => this.setState({description})}
+              />
+
+              <Text style={{textAlign:'left'}}>Kickout meter</Text>
+              <View style={{marginLeft:35, width:'100%'}}>
+                <Slider
+                  thumbTintColor='rgb(244, 2, 87)'
+                  style={{width:'90%'}}
+                  step='1'
+                  maximumValue='10'
+                  animateTransitions='true'
+                  value={this.state.kickout}
+                  onValueChange={value => this.setState({ kickout: value })}
+                />
             </View>
 
             <ButtonGroup
