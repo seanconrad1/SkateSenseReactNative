@@ -6,8 +6,7 @@ import { View,
          ScrollView,
          Linking,
          TouchableWithoutFeedback,
-         TextInput,
-         RefreshControl } from 'react-native'
+         TextInput} from 'react-native'
 import { Header, Icon, Card, ListItem, Button, Divider } from 'react-native-elements'
 import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
@@ -23,7 +22,7 @@ const comments = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
 const styles = StyleSheet.create({
   commentContainer:{
     position:'absolute',
-    marginTop:hp('28%'),
+    marginTop:hp('29%'),
     height: hp('20%'),
     marginLeft: wp('3%'),
     width: '100%',

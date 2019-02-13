@@ -7,6 +7,9 @@ import environment from '../environment.js'
 import deviceStorage from '../deviceStorage.js'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import {widthPercentageToDP as wp,
+        heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 
 class BookmarkButton extends Component {
   constructor(props) {
@@ -77,27 +80,24 @@ class BookmarkButton extends Component {
     return(
       <View style={{position:'absolute', zIndex:1}}>
         {!this.state.bookmarked
-        ?<TouchableOpacity onPress={() => this.bookmarkSpot()}>
-        <Icon
-        raised
-        containerStyle={{position:'absolute', marginLeft:290, marginTop:10}}
-        name="bookmark"
-        size={15}
-        type="font-awesome"
-        color="black"
-        />
-        </TouchableOpacity>
-
-        :<TouchableOpacity onPress={() => this.unBookmarkSpot()}>
-          <Icon
+        ? <Icon
           raised
-          containerStyle={{position:'absolute', zIndex:1, marginLeft:290, marginTop:10}}
+          containerStyle={{position:'absolute', marginLeft:wp('80%'), marginTop:hp('1%')}}
+          name="bookmark"
+          size={15}
+          type="font-awesome"
+          color="black"
+          onPress={() => this.bookmarkSpot()}
+          />
+        : <Icon
+          raised
+          containerStyle={{position:'absolute', marginLeft:wp('80%'), marginTop:hp('1%')}}
           name="bookmark"
           size={15}
           type="font-awesome"
           color="rgb(244, 2, 87)"
+          onPress={() => this.unBookmarkSpot()}
           />
-        </TouchableOpacity>
         }
     </View>
     )

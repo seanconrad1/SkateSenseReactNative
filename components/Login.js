@@ -51,33 +51,10 @@ const styles = StyleSheet.create({
 
 class Login extends Component {
   state = {
-    username: '',
-    password: ''
+    username: 'seanrad',
+    password: '123'
   }
 
-  componentDidMount() {
-   this.keyboardDidShowListener = Keyboard.addListener(
-     'keyboardDidShow',
-     this._keyboardDidShow,
-   );
-   this.keyboardDidHideListener = Keyboard.addListener(
-     'keyboardDidHide',
-     this._keyboardDidHide,
-   );
-  }
-
-  componentWillUnmount() {
-    this.keyboardDidShowListener.remove();
-    this.keyboardDidHideListener.remove();
-  }
-
-  _keyboardDidShow = () => {
-    this.setState({keyboardShown: true})
-  }
-
-  _keyboardDidHide = () => {
-    this.setState({keyboardShown: false})
-  }
 
   onSubmit = (e) => {
     this.props.loginUser(this.state.username, this.state.password)
@@ -144,7 +121,7 @@ class Login extends Component {
               }
               title='Submit'
               buttonStyle={styles.submitButton}
-              onPress={this.onSubmit}
+              onPress={this.onSubmit()}
             />
 
             <Button
