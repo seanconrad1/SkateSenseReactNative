@@ -165,6 +165,14 @@ class SpotPage extends Component {
              justifyContent: 'space-around',
            }}/>
 
+           <Icon
+           raised
+           size={hp('2.8')}
+           name='directions'
+           iconStyle={{color:"rgb(244, 2, 87)"}}
+           containerStyle={{position:'absolute',zIndex:1, marginLeft:wp('85%'), marginTop:('20%')}}
+           onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${this.state.skatespot.latitude},${this.state.skatespot.longitude}`)}
+           title='Directions' />
 
           <Card
             containerStyle={styles.cardContainer}
@@ -181,14 +189,6 @@ class SpotPage extends Component {
 
             </Text>
 
-            <Icon
-            raised
-            size={hp('2.8')}
-            name='directions'
-            iconStyle={{color:"rgb(244, 2, 87)"}}
-            containerStyle={{position:'absolute', marginLeft:wp('70%'), marginTop:hp('3.5%')}}
-            onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${this.state.skatespot.latitude},${this.state.skatespot.longitude}`)}
-            title='Directions' />
 
               <Divider style={styles.divider} />
 
