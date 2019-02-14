@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
     flex: 0,
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor: 'grey',
-    height: hp('100%'),
+    backgroundColor: 'white',
+    height: 600,
   },
 
   photoBox:{
@@ -34,15 +34,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'grey',
     borderWidth: 5,
     borderColor: 'white',
+    marginBottom: 20
   },
 
   spotLocationButton:{
-
-  },
-  header: {
-    fontFamily: 'Lobster',
-    fontSize: 50,
-    fontWeight: 'bold',
+    width: wp('80%'),
+    backgroundColor:"rgb(244, 2, 87)",
   },
   submitButton:{
     marginTop: hp('5%'),
@@ -64,8 +61,8 @@ const styles = StyleSheet.create({
 
 class NewSpotPage extends Component {
   state = {
-    name: '',
-    description: '',
+    name: null,
+    description: null,
     kickout: 0,
     photo: false,
     validation: false,
@@ -118,7 +115,6 @@ class NewSpotPage extends Component {
 
         this.setState({
           photo: photo,
-          validation: true
         })
 
         }
@@ -161,7 +157,6 @@ class NewSpotPage extends Component {
     const { spotContains } = this.state
     return(
       <View>
-
         <Header
           centerComponent={{ fontFamily:'Lobster', text: 'Create New Spot', style: { color: 'black', fontSize: 25 } }}
           backgroundColor='white'
@@ -170,26 +165,28 @@ class NewSpotPage extends Component {
              justifyContent: 'space-around',
            }}/>
 
-          <View><Text>
-           {this.state.selectedLat
-           ? this.state.selectedLat + ' and ' + this.state.selectedLng
-           : null}
-           </Text>
-           </View>
-
           <View style={styles.container}>
 
-            <Text style={{fontSize:hp('2%')}}>Add Photo</Text>
-
             <View style={{flexDirection:'row', justifyContent:'center'}}>
-              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}/>
-              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}/>
-              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}/>
-              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}/>
+              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
+                <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
+                <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
+                <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
+                <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
+              </TouchableOpacity>
             </View>
 
             <Button
-              style={styles.spotLocationButton}
+              buttonStyle={styles.spotLocationButton}
               title='Spot Location'
               onPress= {() => this.props.navigation.navigate('LocationSelectorMap')}
             />
@@ -202,7 +199,16 @@ class NewSpotPage extends Component {
               </View>
             : null}
 
+            {this.state.selectedLat && this.state.selectedLat
+            ? <View style={{display: 'flex', flexDirection: 'row', marginRight:10}}>
+                <Text>Location Selected</Text>
+                <Icon
+                name="check"/>
+              </View>
+            : null}
+
             <Input
+              containerStyle={{marginTop:20}}
               placeholder='Spot Name'
               clearButtonMode={'never'}
               autoCorrect={false}
@@ -220,7 +226,14 @@ class NewSpotPage extends Component {
               onChangeText={(description) => this.setState({description})}
               />
 
-              <Text style={{textAlign:'left'}}>Kickout meter</Text>
+              <Text style={{alignSelf:'flex-start',
+                            marginLeft:wp('7.5%'),
+                            opacity:.5,
+                            fontSize: 17,
+                            marginTop: 10
+                            }}>
+                  Kickout meter
+                </Text>
               <View style={{marginLeft:35, width:'100%'}}>
                 <Slider
                   thumbTintColor='rgb(244, 2, 87)'
@@ -242,34 +255,61 @@ class NewSpotPage extends Component {
             />
 
 
-
-
-          {this.state.validation
-          ? <Button
-            title='Submit'
-            buttonStyle={{
-              marginTop: 10,
-              backgroundColor: "rgb(244, 2, 87)",
-              width: 300,
-              height: 45,
-              borderColor: "transparent",
-              borderWidth: 0,
-              borderRadius: 20
-            }}
-            onPress={this.onSubmit}
-          />
-          : <Button
-            title='Submit'
-            disabled='true'
-            buttonStyle={styles.submitButton}
+            {this.state.name && this.state.description && this.state.photo && this.state.selectedLat && this.state.selectedLng
+            ? <Button
+              title='Submit'
+              buttonStyle={styles.submitButton}
+              onPress={this.onSubmit}
             />
-          }
+            : <Button
+              title='Submit'
+              disabled='true'
+              buttonStyle={styles.submitButton}
+              />
+            }
+
 
       </View>
     </View>
     )
   }
 }
+
+
+
+
+
+// {this.state.name &&
+// this.state.description &&
+// this.state.kickout: 0 &&
+// this.state.photo: false &&
+// this.state.selectedLat: null &&
+// this.state.selectedLng: null
+// ?<Button
+//   title='Submit'
+//   buttonStyle={{
+//     marginTop: 10,
+//     backgroundColor: "rgb(244, 2, 87)",
+//     width: 300,
+//     height: 45,
+//     borderColor: "transparent",
+//     borderWidth: 0,
+//     borderRadius: 20
+//   }}
+//   onPress={this.onSubmit}
+//   : <Button
+//     title='Submit'
+//     disabled='true'
+//     buttonStyle={styles.submitButton}
+//     />
+//   }
+
+
+
+
+
+
+
 
 const mapStateToProps = state => {
   return {
