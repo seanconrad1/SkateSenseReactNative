@@ -18,18 +18,21 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { fetchKeyForSkateSpots, fetchKeyForUserData } from '../action.js'
 import deviceStorage from '../deviceStorage.js'
+import {widthPercentageToDP as wp,
+        heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 
 console.disableYellowBox = true;
 
 const styles = StyleSheet.create({
-  calloutSearch:{
-    marginLeft:"20%",
+  search:{
+    marginLeft:wp('10%'),
     borderColor:"black",
     borderRadius: 30,
-    width: "70%",
-    marginTop: "2%",
-    marginLeft: "11%",
-    marginBottom:"2%"
+    width: wp('100%'),
+    height: hp('5%'),
+    marginBottom:"1%",
+    fontSize:20
   },
   imageStyle:{
     width: 200,
@@ -52,6 +55,22 @@ const styles = StyleSheet.create({
     marginRight: 0,
     marginBottom: 0,
     padding: 0
+  },
+  spot:{
+     padding:0,
+     borderRadius: 20,
+     shadowOpacity: 0.75,
+     shadowRadius: 3,
+     shadowColor: 'grey',
+     shadowOffset: { height: 1, width: 1 }
+  },
+  lastSpot:{
+    paddingBottom:100,
+    borderRadius:20,
+    shadowOpacity: 0.75,
+    shadowRadius: 3,
+    shadowColor: 'grey',
+    shadowOffset: { height: 1, width: 1 }
   }
 })
 
@@ -217,7 +236,8 @@ class MySpots extends Component {
                 key={spot.id}
                 title={spot.name}
                 image={{uri:`http://${environment['BASE_URL']}${spot.skatephoto.url}`}}
-                containerStyle={spot === lastSpot? {paddingBottom:100, borderRadius:20} : {padding:0, borderRadius: 20}}>
+                containerStyle={spot === lastSpot? styles.lastSpot : styles.spot}
+                >
 
               <Text style={{marginBottom: 10}}>
               { spot.description}
@@ -252,7 +272,7 @@ class MySpots extends Component {
               key={spot.id}
               title={spot.name}
               image={{uri:`http://${environment['BASE_URL']}${spot.skatephoto.url}`}}
-              containerStyle={{borderRadius: 20}}>
+              containerStyle={styles.spot}>
 
               <Text style={{marginBottom: 10}}>
                 {spot.description}
@@ -289,7 +309,7 @@ class MySpots extends Component {
             <Card
               title={bookmark.name}
               image={{uri:`http://${environment['BASE_URL']}${bookmark.skatephoto.url}`}}
-              containerStyle={{borderRadius: 20}}>
+              containerStyle={styles.spot}>
 
               <Text style={{marginBottom: 10}}>
                 {bookmark.description}
@@ -329,7 +349,7 @@ class MySpots extends Component {
                 <Card
                   title={bookmark.name}
                   image={{uri:`http://${environment['BASE_URL']}${bookmark.skatephoto.url}`}}
-                  containerStyle={{borderRadius: 20}}>
+                  containerStyle={styles.spot}>
 
                   <Text style={{marginBottom: 10}}>
                     {bookmark.description}
@@ -373,7 +393,7 @@ class MySpots extends Component {
              justifyContent: 'space-around',
            }}/>
 
-       <TextInput style={styles.calloutSearch}
+       <TextInput style={styles.search}
               placeholder={"Search"}
               onChangeText={(value) => this.onSearchChange(value)}
               />
