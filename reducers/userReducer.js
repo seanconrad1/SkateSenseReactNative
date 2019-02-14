@@ -8,7 +8,7 @@ const initialState = {
       state: 'NY',
       city: 'NYC',
       latitude: '40.7128',
-      longitude: '74.0060',
+      longitude: '-74.0060',
       description: 'A good spot',
       bust_factor: 10,
       skatephoto: {url: '/uploads/skate_spot/skatephoto/14/ChinaTownManny.jpg'},

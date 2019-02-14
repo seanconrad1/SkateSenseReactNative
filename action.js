@@ -112,8 +112,8 @@ export function fetchKeyForSkateSpots() {
 }
 
 export function fetchSkateSpots(val){
-      return (dispatch) =>{
-        return fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`,{
+      return async (dispatch) =>{
+        return await fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`,{
           method: 'GET',
           headers: {
             Authorization: `Bearer ${val}`

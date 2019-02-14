@@ -35,7 +35,7 @@ import {widthPercentageToDP as wp,
 const { width, height } = Dimensions.get("window");
 
 const CARD_HEIGHT = hp('100%') / 2;
-const CARD_WIDTH = wp('90%');
+const CARD_WIDTH = wp('95%');
 
 class Map extends Component {
   state = {
@@ -52,20 +52,39 @@ class Map extends Component {
 
 
   componentDidMount() {
-    console.log('GETTING HERE FIRST');
     this.getUserLocationHandler()
     this.props.getSkateSpots()
+  }
 
-    this.animation.addListener(({ value }) => {
-      debugger
-      let index = Math.floor(value / CARD_WIDTH + .3); // animate 30% away from landing on the next item
-      if (index >= this.props.user.skate_spots.length) {
-        index = this.props.user.skate_spots.length - 1;
-      }
-      if (index <= 0) {
-        index = 0
-      }
-    })
+  componentWillReceiveProps(nextProps){
+    if(this.props.user.skate_spots !== nextProps.user.skate_spots && nextProps.user.skate_spots !== undefined){
+      this.setState({skatespots: nextProps.user.skate_spots})
+      this.animation.addListener(({ value }) => {
+        let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
+        if (index >= this.state.skatespots.length) {
+          index = this.state.skatespots.length - 1;
+        }
+        if (index <= 0) {
+          index = 0;
+        }
+
+        clearTimeout(this.regionTimeout);
+        this.regionTimeout = setTimeout(() => {
+          if (this.index !== index) {
+            this.index = index;
+            this.map.animateToRegion(
+              {
+                latitude: this.state.skatespots[index].latitude,
+                longitude: this.state.skatespots[index].longitude,
+                latitudeDelta: this.state.region.latitudeDelta,
+                longitudeDelta: this.state.region.longitudeDelta,
+              },
+              350
+            );
+          }
+        }, 10);
+      });
+    }
   }
 
   refreshMarkers = (marker) =>{
@@ -87,40 +106,12 @@ class Map extends Component {
     })
   }
 
-  sendingPropsTest = (marker) => {
-    console.log('this IS MY TEST DATA SENIDNG AS PROPS----------------', marker)
+  goToSpotPage = (marker) => {
     this.props.navigation.navigate('SpotPage', {skatespot: marker })
   }
 
-  animateRegionChanges = () => {
-    // We should detect when scrolling has stopped then animate
-    // We should just debounce the event listener here
-
-
-      clearTimeout(this.regionTimeout);
-        this.regionTimeout = setTimeout(() => {
-          if (this.index !== index) {
-            this.index = index;
-            const latitude = this.props.user.skate_spots[index].latitude
-            const longitude = this.props.user.skate_spots[index].longitude
-            console.log('MY LATITUDE', latitude);
-            console.log('MY longitude', longitude);
-            this.map.animateToRegion(
-              {
-                latitude: latitude,
-                longitude: longitude,
-                latitudeDelta: this.state.region.latitudeDelta,
-                longitudeDelta: this.state.region.longitudeDelta,
-              },
-              350
-            );
-          }
-        }, 10);
-      }
-
-
   render() {
-    console.log('card width', CARD_WIDTH);
+    console.log('ANIMATION VALUE------',this.state.value);
     const interpolations =
     this.props.user.skate_spots
     ?( this.props.user.skate_spots.map((marker, index) => {
@@ -176,8 +167,6 @@ class Map extends Component {
                 <Animated.View style={[styles.ring, scaleStyle]} />
                 <View style={styles.marker} />
               </Animated.View>
-
-
             </MapView.Marker>
           )})
           : null}
@@ -260,7 +249,8 @@ class Map extends Component {
           horizontal
           scrollEventThrottle={1}
           showsHorizontalScrollIndicator={false}
-          snapToInterval={CARD_WIDTH}
+          snapToInterval={CARD_WIDTH + 20}
+          snapToAlignment='center'
           onScroll={Animated.event(
             [
               {
@@ -292,7 +282,7 @@ class Map extends Component {
                   />
                 </TouchableOpacity>
 
-                <TouchableWithoutFeedback onPress={ () => this.sendingPropsTest(marker)}>
+                <TouchableWithoutFeedback onPress={ () => this.goToSpotPage(marker)}>
                   <Image
                     source={{uri:`http://${environment['BASE_URL']}${marker.skatephoto.url}`}}
                     style={styles.cardImage}
@@ -314,11 +304,6 @@ class Map extends Component {
     );
   }
 }
-
-
-
-// <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
-//   skatespot: marker })}}>
 
 const styles = StyleSheet.create({
   container: {
@@ -356,24 +341,22 @@ const styles = StyleSheet.create({
     // paddingRight: width - CARD_WIDTH,
   },
   card: {
+    width: CARD_WIDTH,
+    height: hp('40%'),
     padding: 10,
     elevation: 1,
-
     shadowOpacity: 0.75,
     shadowRadius: 3,
     shadowColor: 'grey',
     shadowOffset: { height: 1, width: 1 },
-
     backgroundColor: "#FFF",
     marginHorizontal: 10,
-    height: hp('40%'),
-    width: wp('95%'),
     borderRadius: 20,
   },
   cardImage: {
     borderRadius: 20,
     flex: 4,
-    width: CARD_WIDTH,
+    width: wp('90'),
     height: CARD_HEIGHT,
     alignSelf: "center",
   },

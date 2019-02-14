@@ -30,7 +30,8 @@ const RootStack = createStackNavigator(
   {
     Login: {screen: Login},
     SignUp: {screen: SignUp},
-    CommentsPage:{screen: CommentsPage}
+    CommentsPage:{screen: CommentsPage},
+    Map3:{screen: Map3},
   },
   {
     headerMode: 'none',
