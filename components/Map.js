@@ -57,8 +57,12 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps){
+    // debugger
     if(this.props.user.skate_spots !== nextProps.user.skate_spots && nextProps.user.skate_spots !== undefined){
       this.setState({skatespots: nextProps.user.skate_spots})
+      // console.log('KEYs', Object.keys(this.animation._listeners).length);
+
+      // if (Object.keys(this.animation._listeners).length == 0){
       this.animation.addListener(({ value }) => {
         let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
         if (index >= this.state.skatespots.length) {
@@ -84,6 +88,7 @@ class Map extends Component {
           }
         }, 10);
       });
+    // }
     }
   }
 

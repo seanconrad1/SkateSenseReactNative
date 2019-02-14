@@ -52,7 +52,6 @@ class Screens extends Component {
   componentWillReceiveProps(nextProps) {
     if(this.props.user.skate_spots !== nextProps.user.skate_spots && nextProps.user.skate_spots !== undefined){
       this.setState({skatespots: nextProps.user.skate_spots})
-      // debugger
       this.animation.addListener(({ value }) => {
         let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
         if (index >= this.state.skatespots.length) {
