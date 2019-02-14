@@ -57,22 +57,20 @@ class MySpots extends Component {
     return(
       <View style={styles.container}>
         <Header
-          leftComponent={{ icon: 'menu' , color: 'black', onPress: () => this.props.navigation.openDrawer()}}
-          centerComponent={{ fontFamily:'Lobster', text: `Admin Console`, style: { color: 'black', fontSize: 25 } }}
+          leftComponent={{
+            icon: 'menu' ,
+            color: 'black',
+            onPress: () => this.props.navigation.openDrawer()}}
+          centerComponent={{
+            fontFamily:'Lobster',
+            text: `Admin Console`,
+            style: { color: 'black', fontSize: 25 } }}
           backgroundColor='white'
           containerStyle={{
              fontFamily:'Lobster',
              justifyContent: 'space-around',
            }}/>
 
-           <ListItem
-            containerStyle={styles.container}
-            title="Dark Mode"
-            switch={{
-              value: this.state.isOn,
-              onValueChange: value => this.toNightMode(value)
-            }}
-            />
           <Text>
             Users
           </Text>
@@ -81,7 +79,9 @@ class MySpots extends Component {
           {this.state.users
              ?this.state.users.map((user, i) => (
                <View>
-                <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('CommentsPage', {user: user})}}>
+                <TouchableWithoutFeedback
+                  onPress={()=> { this.props.navigation.navigate('CommentsPage', {user: user})}}
+                  >
                    <ListItem
                      title={user.username}
                    />
