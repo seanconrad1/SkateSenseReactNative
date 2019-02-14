@@ -97,7 +97,7 @@ class Map extends Component {
     this.props.getSkateSpots()
   }
 
-  getUserLocationHandler = () => {
+  animateToUserLocation = () =>{
     navigator.geolocation.getCurrentPosition(position => {
       this.map.animateToRegion(
         {
@@ -108,6 +108,20 @@ class Map extends Component {
         },
         350
       )
+    })
+  }
+
+  getUserLocationHandler = () => {
+    navigator.geolocation.getCurrentPosition(position => {
+      this.setState({
+        region:{
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: 0.115,
+          longitudeDelta: 0.1121,
+        },
+        geoLocationSwitch: true
+      })
     })
   }
 
@@ -230,7 +244,7 @@ class Map extends Component {
                 />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress= {this.getUserLocationHandler} >
+            <TouchableOpacity onPress= {this.animateToUserLocation} >
                   <Icon
                     raised
                     name='location-arrow'
