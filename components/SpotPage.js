@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   commentContainer:{
     position: 'relative',
     flexWrap: 'wrap',
-    height: hp('20%'),
+    height: hp('23%'),
     width: wp('100%'),
   },
   oneCommentContainer:{
@@ -31,10 +31,10 @@ const styles = StyleSheet.create({
     width: wp('85%'),
     flexDirection:'row',
     flexWrap:'wrap',
-    justifyContent:'space-between'
+    justifyContent:'space-between',
   },
   commentContent:{
-    alignSelf:'flex-start',
+    alignItems:'flex-start',
   },
   trashIcon:{
     alignSelf:'flex-end',
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   divider:{
     backgroundColor: 'grey',
     borderWidth:.2,
-    marginTop: hp('15%')}
+    marginTop: hp('10%')}
 })
 
 class SpotPage extends Component {
@@ -153,7 +153,7 @@ class SpotPage extends Component {
   }
 
   render(){
-    console.log('2nd: ', this.state.comments);
+    console.log('2nd: ', this.state);
     return(
       <View>
         <Header
@@ -165,6 +165,7 @@ class SpotPage extends Component {
              justifyContent: 'space-around',
            }}/>
 
+
           <Card
             containerStyle={styles.cardContainer}
             image={{uri:`http://${environment['BASE_URL']}${this.state.imageURL}`}}
@@ -172,10 +173,23 @@ class SpotPage extends Component {
             >
             <Text style={{marginBottom: 10, position:'absolute', marginTop: 10, marginLeft: 10}}>
               {this.state.skatespot.url}
-              {this.state.skatespot.description}
+              {this.state.skatespot.description}{"\n"}
+              Posted by {this.state.skatespot.user
+                          ?this.state.skatespot.user.username
+                          :null
+                        }
+
             </Text>
-            <Text>
-              </Text>
+
+            <Icon
+            raised
+            size={hp('2.8')}
+            name='directions'
+            iconStyle={{color:"rgb(244, 2, 87)"}}
+            containerStyle={{position:'absolute', marginLeft:wp('70%'), marginTop:hp('3.5%')}}
+            onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${this.state.skatespot.latitude},${this.state.skatespot.longitude}`)}
+            title='Directions' />
+
               <Divider style={styles.divider} />
 
               <ScrollView

@@ -254,8 +254,6 @@ class NewSpotPage extends Component {
                   />
               </View>
 
-
-
             <ButtonGroup
               onPress={this.updateStreetSpotType}
               selectedIndex={streetSpotType}
@@ -283,42 +281,6 @@ class NewSpotPage extends Component {
     )
   }
 }
-
-
-
-
-
-// {this.state.name &&
-// this.state.description &&
-// this.state.kickout: 0 &&
-// this.state.photo: false &&
-// this.state.selectedLat: null &&
-// this.state.selectedLng: null
-// ?<Button
-//   title='Submit'
-//   buttonStyle={{
-//     marginTop: 10,
-//     backgroundColor: "rgb(244, 2, 87)",
-//     width: 300,
-//     height: 45,
-//     borderColor: "transparent",
-//     borderWidth: 0,
-//     borderRadius: 20
-//   }}
-//   onPress={this.onSubmit}
-//   : <Button
-//     title='Submit'
-//     disabled='true'
-//     buttonStyle={styles.submitButton}
-//     />
-//   }
-
-
-
-
-
-
-
 
 const mapStateToProps = state => {
   return {

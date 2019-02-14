@@ -66,7 +66,6 @@ class Map extends Component {
         index = 0
       }
     })
-
   }
 
   refreshMarkers = (marker) =>{
