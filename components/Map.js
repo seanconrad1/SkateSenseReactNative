@@ -45,7 +45,7 @@ class Map extends Component {
     }
   }
 
-  UNSAFE_componentWillMount() {
+  componentWillMount() {
     this.index = 0;
     this.animation = new Animated.Value(0);
   }

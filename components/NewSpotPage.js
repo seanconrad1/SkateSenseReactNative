@@ -1,12 +1,19 @@
 import React, {Component} from 'react'
-import { Keyboard, Text, StyleSheet, View, CameraRoll, TouchableOpacity } from 'react-native'
+import { Keyboard,
+        Text,
+        StyleSheet,
+        View,
+        CameraRoll,
+        TouchableOpacity,
+        ScrollView} from 'react-native'
 import { Header } from 'react-native-elements'
 import { Icon,
         Input,
         Button,
         ThemeProvider,
         ButtonGroup,
-        Slider,} from 'react-native-elements';
+        Slider,
+        } from 'react-native-elements';
 import { withNavigation } from 'react-navigation'
 import ImagePicker from 'react-native-image-picker';
 import environment from '../environment.js'
@@ -165,86 +172,89 @@ class NewSpotPage extends Component {
              justifyContent: 'space-around',
            }}/>
 
-          <View style={styles.container}>
 
-            <View style={{flexDirection:'row', justifyContent:'center'}}>
-              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
-                <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
-              </TouchableOpacity>
+            <View style={styles.container}>
+            <ScrollView>
+              <View style={{flexDirection:'row', justifyContent:'center'}}>
+                <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
+                  <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
-                <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
-              </TouchableOpacity>
+                <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
+                  <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
-                <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
-              </TouchableOpacity>
+                <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
+                  <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
-                <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
-              </TouchableOpacity>
-            </View>
-
-            <Button
-              buttonStyle={styles.spotLocationButton}
-              title='Spot Location'
-              onPress= {() => this.props.navigation.navigate('LocationSelectorMap')}
-            />
-
-            {this.state.photo
-            ? <View style={{display: 'flex', flexDirection: 'row', marginRight:10}}>
-                <Text>Photo Uploaded</Text>
-                <Icon
-                name="check"/>
+                <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
+                  <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
+                </TouchableOpacity>
               </View>
-            : null}
 
-            {this.state.selectedLat && this.state.selectedLat
-            ? <View style={{display: 'flex', flexDirection: 'row', marginRight:10}}>
-                <Text>Location Selected</Text>
-                <Icon
-                name="check"/>
-              </View>
-            : null}
-
-            <Input
-              containerStyle={{marginTop:20}}
-              placeholder='Spot Name'
-              clearButtonMode={'never'}
-              autoCorrect={false}
-              autoFocus={true}
-              keyboardType="default"
-              onChangeText={(name) => this.setState({name})}
+              <Button
+                buttonStyle={styles.spotLocationButton}
+                title='Spot Location'
+                onPress= {() => this.props.navigation.navigate('LocationSelectorMap')}
               />
 
-            <Input
-              placeholder='Description'
-              clearButtonMode={'never'}
-              autoCorrect={false}
-              autoFocus={true}
-              keyboardType="default"
-              onChangeText={(description) => this.setState({description})}
-              />
+              {this.state.photo
+              ? <View style={{display: 'flex', flexDirection: 'row', marginRight:10}}>
+                  <Text>Photo Uploaded</Text>
+                  <Icon
+                  name="check"/>
+                </View>
+              : null}
 
-              <Text style={{alignSelf:'flex-start',
-                            marginLeft:wp('7.5%'),
-                            opacity:.5,
-                            fontSize: 17,
-                            marginTop: 10
-                            }}>
-                  Kickout meter
-                </Text>
-              <View style={{marginLeft:35, width:'100%'}}>
-                <Slider
-                  thumbTintColor='rgb(244, 2, 87)'
-                  style={{width:'90%'}}
-                  step='1'
-                  maximumValue='10'
-                  animateTransitions='true'
-                  value={this.state.kickout}
-                  onValueChange={value => this.setState({ kickout: value })}
+              {this.state.selectedLat && this.state.selectedLat
+              ? <View style={{display: 'flex', flexDirection: 'row', marginRight:10}}>
+                  <Text>Location Selected</Text>
+                  <Icon
+                  name="check"/>
+                </View>
+              : null}
+
+              <Input
+                containerStyle={{marginTop:20}}
+                placeholder='Spot Name'
+                clearButtonMode={'never'}
+                autoCorrect={false}
+                autoFocus={true}
+                keyboardType="default"
+                onChangeText={(name) => this.setState({name})}
                 />
-            </View>
+
+              <Input
+                placeholder='Description'
+                clearButtonMode={'never'}
+                autoCorrect={false}
+                autoFocus={true}
+                keyboardType="default"
+                onChangeText={(description) => this.setState({description})}
+                />
+
+                <Text style={{alignSelf:'flex-start',
+                              marginLeft:wp('7.5%'),
+                              opacity:.5,
+                              fontSize: 17,
+                              marginTop: 10
+                              }}>
+                    Kickout meter
+                  </Text>
+                <View style={{marginLeft:35, width:'100%'}}>
+                  <Slider
+                    thumbTintColor='rgb(244, 2, 87)'
+                    style={{width:'90%'}}
+                    step='1'
+                    maximumValue='10'
+                    animateTransitions='true'
+                    value={this.state.kickout}
+                    onValueChange={value => this.setState({ kickout: value })}
+                  />
+              </View>
+
+
 
             <ButtonGroup
               onPress={this.updateStreetSpotType}
@@ -267,9 +277,8 @@ class NewSpotPage extends Component {
               buttonStyle={styles.submitButton}
               />
             }
-
-
-      </View>
+            </ScrollView>
+        </View>
     </View>
     )
   }
