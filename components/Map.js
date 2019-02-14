@@ -129,6 +129,10 @@ class Map extends Component {
     this.props.navigation.navigate('SpotPage', {skatespot: marker })
   }
 
+  onMarkerPressHandler = (marker, index) => {
+    this.index = index
+  }
+
   render() {
     console.log('ANIMATION VALUE------',this.state.value);
     const interpolations =
@@ -181,7 +185,8 @@ class Map extends Component {
               key={index}
               coordinate={{latitude:marker.latitude, longitude:marker.longitude}}
               title={marker.name}
-              description={marker.description}>
+              description={marker.description}
+              onPress={() => this.onMarkerPressHandler(marker, index)}>
               <Animated.View style={[styles.markerWrap, opacityStyle]}>
                 <Animated.View style={[styles.ring, scaleStyle]} />
                 <View style={styles.marker} />
