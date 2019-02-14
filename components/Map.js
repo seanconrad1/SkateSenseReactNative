@@ -130,7 +130,8 @@ class Map extends Component {
   }
 
   onMarkerPressHandler = (marker, index) => {
-    this.index = index
+    let x = index * CARD_WIDTH + 60
+    this.myRef.getNode().scrollTo({x: x, animated: true})
   }
 
   render() {
@@ -275,6 +276,7 @@ class Map extends Component {
           showsHorizontalScrollIndicator={false}
           snapToInterval={CARD_WIDTH + 20}
           snapToAlignment='center'
+          ref={c => (this.myRef = c)}
           onScroll={Animated.event(
             [
               {
