@@ -21,8 +21,8 @@ import { Header, ListItem, Avatar, Icon, Button } from 'react-native-elements'
 import ActionButton from 'react-native-action-button';
 import { withNavigation } from 'react-navigation'
 import environment from '../environment.js'
-
-
+import {widthPercentageToDP as wp,
+        heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 console.disableYellowBox = true;
 
@@ -88,9 +88,10 @@ class LocationSelectorMap extends Component {
 
         <View>
           <Text style={{
+            position:'absolute',
             fontSize:50,
-            top:'631%',
-            left:'46%'}}>
+            marginTop:hp('47%'),
+            marginLeft:wp('46%')}}>
             X
           </Text>
         </View>
@@ -112,5 +113,8 @@ class LocationSelectorMap extends Component {
     )
   }
 }
+
+// top:'631%',
+// left:'46%'
 
 export default withNavigation(LocationSelectorMap)
