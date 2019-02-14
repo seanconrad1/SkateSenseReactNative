@@ -21,20 +21,27 @@ const comments = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
 
 const styles = StyleSheet.create({
   commentContainer:{
-    position:'absolute',
-    marginTop:hp('29%'),
+    position: 'relative',
+    flexWrap: 'wrap',
     height: hp('20%'),
-    marginLeft: wp('3%'),
-    width: '100%',
+    width: wp('100%'),
   },
   oneCommentContainer:{
+    paddingBottom: 20,
+    width: wp('85%'),
     flexDirection:'row',
-    justifyContent:'space-between',
-    paddingBottom: 20
+    flexWrap:'wrap',
+    justifyContent:'space-between'
+  },
+  commentContent:{
+    alignSelf:'flex-start',
+  },
+  trashIcon:{
+    alignSelf:'flex-end',
   },
   commentInputandButtonContainer:{
     flexDirection: 'row',
-    marginTop: hp('50%'),
+    marginTop: hp('40%'),
     position: 'absolute'
   },
   commentInput:{
@@ -59,7 +66,14 @@ const styles = StyleSheet.create({
     paddingBottom:'50%',
     borderRadius: 20,
     height: hp('80%'),
-  }
+  },
+  cardImage:{
+    height: hp('30%'),
+  },
+  divider:{
+    backgroundColor: 'grey',
+    borderWidth:.2,
+    marginTop: hp('15%')}
 })
 
 class SpotPage extends Component {
@@ -144,7 +158,7 @@ class SpotPage extends Component {
       <View>
         <Header
           leftComponent={{ icon: 'menu' , color: 'black', onPress: () => this.props.navigation.openDrawer()}}
-          centerComponent={{ fontFamily:'Lobster', text: `${this.state.skatespot.name}`, style: { color: 'black', fontSize: 25 } }}
+          centerComponent={{ fontFamily:'Lobster', text: `${this.state.skatespot.name}`, style: { color: 'black', fontSize: wp('6%') } }}
           backgroundColor='white'
           containerStyle={{
              fontFamily:'Lobster',
@@ -154,51 +168,51 @@ class SpotPage extends Component {
           <Card
             containerStyle={styles.cardContainer}
             image={{uri:`http://${environment['BASE_URL']}${this.state.imageURL}`}}
+            imageStyle={styles.cardImage}
             >
             <Text style={{marginBottom: 10, position:'absolute', marginTop: 10, marginLeft: 10}}>
               {this.state.skatespot.url}
               {this.state.skatespot.description}
             </Text>
             <Text>
-            </Text>
+              </Text>
+              <Divider style={styles.divider} />
 
-            <Divider style={{ backgroundColor: 'grey', borderWidth:.2, marginTop: hp('25%')}} />
+              <ScrollView
+                snapToEnd
+                style={styles.commentContainer}>
+                  {this.state.comments.map(comment=>{
+                  return <View style={styles.oneCommentContainer}>
+                          <Text style={{fontWeight: 'bold'}}>{this.props.user.user.username} </Text>
 
-            <ScrollView
-              snapToEnd
-              style={styles.commentContainer}>
-                {this.state.comments.map(comment=>{
-                return <View style={styles.oneCommentContainer}>
+                            <Text style={styles.commentContent}>{comment.content}</Text>
+                            <View>
+                              {comment.user_id === this.props.user.user.id
+                              ? <Icon name='trash' type='font-awesome' containerStyle={styles.trashIcon} onPress={() => this.deleteComment(comment)}/>
+                              : null}
+                            </View>
+                         </View>
+                      })}
+              </ScrollView>
 
-                        <Text style={{fontWeight: 'bold'}}>{this.props.user.user.username} </Text>
-                          <Text style={{wordWrap:'break-word', marginRight:100, width: 130}}>{comment.content}</Text>
-                          <View>
-                            {comment.user_id === this.props.user.user.id
-                            ? <Icon name='trash' type='font-awesome' onPress={() => this.deleteComment(comment)}/>
-                            : null}
-                          </View>
-                       </View>
-                    })}
-            </ScrollView>
+              <View style={styles.commentInputandButtonContainer}>
+                <TextInput
+                  style={styles.commentInput}
+                  placeholder='Comment'
+                  onChangeText={(value) => this.onCommentChange(value)}
+                  />
 
-            <View style={styles.commentInputandButtonContainer}>
-              <TextInput
-                style={styles.commentInput}
-                placeholder='Comment'
-                onChangeText={(value) => this.onCommentChange(value)}
+                {this.state.commentContent
+                ? <Button
+                title='Post'
+                buttonStyle={styles.postButton}
+                onPress={this.postButtonHandler}
                 />
-
-              {this.state.commentContent
-              ? <Button
-              title='Post'
-              buttonStyle={styles.postButton}
-              onPress={this.postButtonHandler}
-              />
-              : <Button
-              disabled
-              title='Post'
-              buttonStyle={styles.postButton}
-              />}
+                : <Button
+                disabled
+                title='Post'
+                buttonStyle={styles.postButton}
+                />}
             </View>
           </Card>
       </View>

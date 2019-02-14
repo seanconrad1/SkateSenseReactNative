@@ -51,8 +51,8 @@ const styles = StyleSheet.create({
 
 class Login extends Component {
   state = {
-    username: '',
-    password: ''
+    username: 'seanrad',
+    password: '123'
   }
 
 
@@ -121,7 +121,7 @@ class Login extends Component {
               }
               title='Submit'
               buttonStyle={styles.submitButton}
-              onPress={this.onSubmit}
+              onPress={this.onSubmit()}
             />
 
             <Button
