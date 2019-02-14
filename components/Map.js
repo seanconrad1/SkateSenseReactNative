@@ -62,7 +62,7 @@ class Map extends Component {
       this.setState({skatespots: nextProps.user.skate_spots})
       // console.log('KEYs', Object.keys(this.animation._listeners).length);
 
-      // if (Object.keys(this.animation._listeners).length == 0){
+      if (Object.keys(this.animation._listeners).length == 0){
       this.animation.addListener(({ value }) => {
         let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
         if (index >= this.state.skatespots.length) {
@@ -88,7 +88,7 @@ class Map extends Component {
           }
         }, 10);
       });
-    // }
+    }
     }
   }
 
@@ -99,15 +99,15 @@ class Map extends Component {
 
   getUserLocationHandler = () => {
     navigator.geolocation.getCurrentPosition(position => {
-      this.setState({
-        region:{
+      this.map.animateToRegion(
+        {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
           latitudeDelta: 0.115,
           longitudeDelta: 0.1121,
         },
-        geoLocationSwitch: true
-      })
+        350
+      )
     })
   }
 
