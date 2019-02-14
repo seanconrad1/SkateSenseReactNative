@@ -22,7 +22,7 @@ import SideMenu from './components/SideMenu.js'
 import NewSpotPage from './components/NewSpotPage.js'
 import LocationSelectorMap from './components/LocationSelectorMap.js'
 import AdminConsole from './components/AdminConsole'
-import UserPage from './childComponents/UserPage.js'
+import CommentsPage from './childComponents/CommentsPage.js'
 
 console.disableYellowBox = true;
 
@@ -30,7 +30,7 @@ const RootStack = createStackNavigator(
   {
     Login: {screen: Login},
     SignUp: {screen: SignUp},
-    UserPage:{screen: UserPage}
+    CommentsPage:{screen: CommentsPage}
   },
   {
     headerMode: 'none',

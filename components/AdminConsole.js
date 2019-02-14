@@ -28,7 +28,6 @@ class MySpots extends Component {
   constructor(props){
     super(props)
     this.state={
-      isOn: false,
     }
   }
 
@@ -50,26 +49,7 @@ class MySpots extends Component {
       }
   }
 
-  toNightMode= (value) =>{
-    this.setState({ isOn: value })
-
-
-    this.state.isOn
-    ? styles.container = {
-        flex: 1,
-        resizeMode: 'stretch',
-        backgroundColor: 'white',
-    }
-    : styles.container = {
-        flex: 1,
-        resizeMode: 'stretch',
-        backgroundColor: 'grey',
-      }
-
-      console.log(styles.container);
-  }
-
-  toUserPage = (item) =>{
+  toCommentsPage = (item) =>{
     console.log('going to users page', item)
   }
 
@@ -101,7 +81,7 @@ class MySpots extends Component {
           {this.state.users
              ?this.state.users.map((user, i) => (
                <View>
-                <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('UserPage', {user: user})}}>
+                <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('CommentsPage', {user: user})}}>
                    <ListItem
                      title={user.username}
                    />
@@ -111,21 +91,6 @@ class MySpots extends Component {
              :null
            }
         </ScrollView>
-
-          <Button
-            title='Submit'
-            buttonStyle={{
-              backgroundColor: "rgb(244, 2, 87)",
-              width: 300,
-              borderColor: "transparent",
-              borderWidth: 0,
-              borderRadius: 20
-            }}
-            onPress={()=>this.onSubmit()}
-          />
-
-
-
         </View>
     )
   }
