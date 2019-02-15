@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     },
 })
 
-class AdminConsole extends Component {
+class UsersPage extends Component {
   constructor(props){
     super(props)
     this.state={
@@ -63,27 +63,33 @@ class AdminConsole extends Component {
             onPress: () => this.props.navigation.openDrawer()}}
           centerComponent={{
             fontFamily:'Lobster',
-            text: `Admin Console`,
+            text: `Users`,
             style: { color: 'black', fontSize: 25 } }}
           backgroundColor='white'
           containerStyle={{
              fontFamily:'Lobster',
              justifyContent: 'space-around',
            }}/>
-          <ListItem
-            title="Post"
-            onPress={()=> { this.props.navigation.navigate('PostsPage')}}
-          />
-          <ListItem
-            title="Users"
-            onPress={()=> { this.props.navigation.navigate('UsersPage')}}
-            />
-      </View>
+
+        <ScrollView>
+          {this.state.users
+             ?this.state.users.map((user, i) => (
+               <View>
+                   <ListItem
+                     title={user.username}
+                     onPress={() => this.props.navigation.navigate('CommentsPage', {user: user })}
+                     onLongPress={() => console.log('DELEETTING')}
+                   />
+                </View>
+             ))
+             :null
+           }
+        </ScrollView>
+        </View>
     )
   }
-
 }
 
 
 
-export default withNavigation(AdminConsole)
+export default withNavigation(UsersPage)

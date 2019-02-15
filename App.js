@@ -23,6 +23,9 @@ import NewSpotPage from './components/NewSpotPage.js'
 import LocationSelectorMap from './components/LocationSelectorMap.js'
 import AdminConsole from './components/AdminConsole'
 import CommentsPage from './childComponents/CommentsPage.js'
+import UsersPage from './childComponents/UsersPage.js'
+import PostsPage from './childComponents/PostsPage.js'
+
 
 console.disableYellowBox = true;
 
@@ -31,6 +34,7 @@ const RootStack = createStackNavigator(
     Login: {screen: Login},
     SignUp: {screen: SignUp},
     CommentsPage:{screen: CommentsPage},
+    UsersPage:{screen: UsersPage},
     Map3:{screen: Map3},
   },
   {
@@ -51,6 +55,7 @@ const Drawer = createStackNavigator(
     NewSpotPage: {screen: NewSpotPage},
     LocationSelectorMap: {screen: LocationSelectorMap},
     AdminConsole:{screen: AdminConsole},
+    PostsPage:{screen: PostsPage}
   },
   {
     headerMode: 'none',
