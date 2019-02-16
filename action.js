@@ -20,7 +20,7 @@ export const createUser = (username, password, first_name, last_name, email, pho
       }
     })
   }
-
+ 
   return(dispatch) => {
     dispatch({ type: 'AUTHENTICATING_USER'})
     fetch(`http://${environment['BASE_URL']}/api/v1/users`, objData)
@@ -32,7 +32,6 @@ export const createUser = (username, password, first_name, last_name, email, pho
       }
     })
       .then(JSONResponse => {
-        console.log(JSONResponse);
         deviceStorage.saveItem("jwt", JSONResponse.jwt)
         dispatch({ type: 'SET_CURRENT_USER', payload: JSONResponse.user })
       })
@@ -152,17 +151,12 @@ export function fetchUserData(key, userID) {
 }
 
 export function bookmarkSpot(){
-  console.log('GETTING TO BOOKMARKS SPOT IN ACTIONS')
 }
 
 export function getGeolocation() {
   return (dispatch) => {
-    console.log('got here line 27 action.js');
     navigator.geolocation.getCurrentPosition(function(position) {
-      console.log('got here line 29 action.js');
       let data = {latitude: position.coords.latitude, longitude:position.coords.longitude}
-      console.log('got here line 31 action.js');
-      console.log(data)
       dispatch({type: 'GET_USER_GEOLOCATION', payload:data})
       return data
     })
