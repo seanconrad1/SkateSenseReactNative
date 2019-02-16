@@ -89,12 +89,11 @@ class Map extends Component {
           }
         }, 10);
       });
-    }
+      }
     }
   }
 
   refreshMarkers = (marker) =>{
-    console.log('GETTING NEW SPOTS')
     this.props.getSkateSpots()
   }
 
@@ -131,6 +130,7 @@ class Map extends Component {
   }
 
   onMarkerPressHandler = (marker, index) => {
+    console.log("MARKER PRESSED----------------------------")
     this.myRef.getNode().scrollToIndex({'index':index})
   }
 
@@ -187,10 +187,12 @@ class Map extends Component {
               coordinate={{latitude:marker.latitude, longitude:marker.longitude}}
               title={marker.name}
               description={marker.description}
-              onPress={() => this.onMarkerPressHandler(marker, index)}>
+              style={{ width: 40, height: 40 }}
+              onPress={(e) => {e.stopPropagation(); this.onMarkerPressHandler(marker, index)}}
+              >
               <Animated.View style={[styles.markerWrap, opacityStyle]}>
-                <Animated.View style={[styles.ring, scaleStyle]} />
-                <View style={styles.marker} />
+                <Animated.View style={[styles.ring, scaleStyle]}/>
+                <View style={styles.marker}/>
               </Animated.View>
             </MapView.Marker>
           )})
@@ -275,6 +277,7 @@ class Map extends Component {
           style={styles.scrollView}
           ref={c => (this.myRef = c)}
           scrollEventThrottle={1}
+          snapToInterval={CARD_WIDTH + 20}
           onScroll={Animated.event(
             [
               {
