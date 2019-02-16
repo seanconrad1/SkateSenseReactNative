@@ -13,7 +13,7 @@ class SignUp extends Component {
     username: '',
     password: '',
     validatePassword: '',
-    email: '',
+    email: 'n/a',
     firstName: 'n/a',
     lastName: 'n/a',
     photo: 'n/a',
@@ -114,22 +114,6 @@ class SignUp extends Component {
               }
               onChangeText={(validatePassword) => this.setState({validatePassword})}
             />
-
-              <Input
-                placeholder='Email'
-                leftIcon={
-                  <Icon
-                    name='envelope'
-                    size={17}
-                    color='black'
-                  />
-                }
-                clearButtonMode={'never'}
-                autoCapitalize={'none'}
-                autoCorrect={false}
-                keyboardType={'email-address'}
-                onChangeText={(username) => this.setState({username})}
-                />
 
 
                 <Button

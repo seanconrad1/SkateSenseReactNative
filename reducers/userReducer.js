@@ -11,9 +11,10 @@ const initialState = {
       longitude: '-74.0060',
       description: 'A good spot',
       bust_factor: 10,
-      skatephoto: {url: '/uploads/skate_spot/skatephoto/14/ChinaTownManny.jpg'},
+      avatars:[{url:'/uploads/skate_spot/avatars/10/image.png'}],
       photo: 'n/a',
-      user_id: 1
+      user_id: 1,
+
     }
   ],
   user: null,

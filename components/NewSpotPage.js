@@ -5,7 +5,8 @@ import { Keyboard,
         View,
         CameraRoll,
         TouchableOpacity,
-        ScrollView} from 'react-native'
+        ScrollView,
+        Image} from 'react-native'
 import { Header } from 'react-native-elements'
 import { Icon,
         Input,
@@ -71,7 +72,7 @@ class NewSpotPage extends Component {
     name: null,
     description: null,
     kickout: 0,
-    photo: false,
+    // photo: false,
     validation: false,
     streetSpotType: 0,
     spotContains: [],
@@ -120,35 +121,43 @@ class NewSpotPage extends Component {
           name: response.fileName
         }
 
-        this.setState({
-          photo: photo,
-        })
+        this.state.photo ? this.setState({ photo: [...this.state.photo, photo]}) : this.setState({ photo: [photo]})
 
         }
       })
     }
 
     onSubmit = () =>{
-      let test = RNFetchBlob.wrap(this.state.photo.uri)
+      let data = [
+            { name : 'name', data : this.state.name},
+            { name : 'country', data: 'n/a'},
+            { name : 'city', data: 'n/a'},
+            { name : 'state', data: 'n/a'},
+            { name : 'latitude', data: this.state.selectedLat},
+            { name : 'longitude', data: this.state.selectedLng},
+            { name : 'description', data: this.state.description},
+            { name : 'bust_factor', data: this.state.kickout},
+            { name : 'user_id', data: this.props.user.user.id}
+          ]
+      for (i of this.state.photo){
+        // debugger
+      	data.push({
+      		name : 'avatars[]',
+          filename : 'image.png',
+          type:'image/jpg',
+      		data: `RNFetchBlob-file://${i.uri}`
+      	})
+      }
+
+      // debugger
+
+
       RNFetchBlob.fetch('POST', `http://${environment['BASE_URL']}/api/v1/skate_spots`, {
           Authorization : `${environment['API_KEY']}`,
           'Content-Type' : undefined,
-        },[{
-            name : 'skatephoto',
-            filename : 'image.png',
-            type:'image/jpg',
-            data: RNFetchBlob.wrap(this.state.photo.uri)
-          },
-          { name : 'name', data : this.state.name},
-          { name : 'country', data: 'n/a'},
-          { name : 'city', data: 'n/a'},
-          { name : 'state', data: 'n/a'},
-          { name : 'latitude', data: this.state.selectedLat},
-          { name : 'longitude', data: this.state.selectedLng},
-          { name : 'description', data: this.state.description},
-          { name : 'bust_factor', data: this.state.kickout},
-          { name : 'user_id', data: this.props.user.user.id},
-        ]).then((resp) => {
+        },
+          data
+        ).then((resp) => {
           console.log('RESPONSE FROM SERVER', resp)
           this.props.navigation.navigate('Map',{random: '1' })
         }).catch((err) => {
@@ -157,11 +166,13 @@ class NewSpotPage extends Component {
       }
 
   render(){
+    console.log(this.state.photo);
     const streetSpotTypebuttons = ['Street Spot', 'Skatepark', 'DIY']
     const streetSpotContains = ['Flatbar', 'Bank', 'Stair', 'Ditch', 'Wallride',
                                 'Drop Gap', 'Flat Gap', 'Ledge', 'Polejam', 'Manual Pad', 'QP']
     const { streetSpotType } = this.state
     const { spotContains } = this.state
+
     return(
       <View>
         <Header
@@ -177,18 +188,34 @@ class NewSpotPage extends Component {
             <ScrollView>
               <View style={{flexDirection:'row', justifyContent:'center'}}>
                 <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
+                  {this.state.photo
+                    ?<Image style={[styles.photoBox, {marginTop:-5}]} source={{ uri: this.state.photo[0].uri }}/>
+                    : null
+                  }
                   <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
+                  {this.state.photo && this.state.photo[1]
+                    ?<Image style={[styles.photoBox, {marginTop:-5}]} source={{ uri: this.state.photo[1].uri }}/>
+                    : null
+                  }
                   <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
+                  {this.state.photo && this.state.photo[2]
+                    ?<Image style={[styles.photoBox, {marginTop:-5}]} source={{ uri: this.state.photo[2].uri }}/>
+                    : null
+                  }
                   <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.photoBox} onPress={this.getPhotoFromCameraRoll}>
+                  {this.state.photo && this.state.photo[3]
+                    ?<Image style={[styles.photoBox, {marginTop:-5}]} source={{ uri: this.state.photo[3].uri }}/>
+                    : null
+                  }
                   <Text style={{alignSelf:'flex-end', color:'white'}}> + </Text>
                 </TouchableOpacity>
               </View>
@@ -198,6 +225,7 @@ class NewSpotPage extends Component {
                 title='Spot Location'
                 onPress= {() => this.props.navigation.navigate('LocationSelectorMap')}
               />
+
 
               {this.state.photo
               ? <View style={{display: 'flex', flexDirection: 'row', marginRight:10}}>

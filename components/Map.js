@@ -135,6 +135,8 @@ class Map extends Component {
   }
 
   render() {
+
+    // debugger
     console.log('ANIMATION VALUE------',this.state.value);
     const interpolations =
     this.props.user.skate_spots
@@ -292,11 +294,12 @@ class Map extends Component {
           )}
           data={this.props.user.skate_spots}
           renderItem={({item, separators}) => (
+
             item
             ? <View style={styles.card}>
                 <BookmarkButton spot={item} style={{position:'absolute', zIndex:1}}/>
 
-                <TouchableOpacity onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${marker.latitude},${marker.longitude}`)} style={{position:'absolute', zIndex:1}}>
+                <TouchableOpacity onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${item.latitude},${item.longitude}`)} style={{position:'absolute', zIndex:1}}>
                   <Icon
                   raised
                   containerStyle={{position:'relative', zIndex:1, marginLeft:10, marginTop:10}}
@@ -308,13 +311,16 @@ class Map extends Component {
                 </TouchableOpacity>
 
                 <TouchableWithoutFeedback onPress={ () => this.goToSpotPage(item)}>
-                  <Image
-                    source={{uri:`http://${environment['BASE_URL']}${item.skatephoto.url}`}}
-                    style={styles.cardImage}
-                    resizeMode="cover"
-                  />
-                </TouchableWithoutFeedback>
+                  <View>
+                    {item.avatars[0].url
+                    ?<Image
+                        style={styles.cardImage}
+                        resizeMode="cover"
+                        source={{uri:`http://${environment['BASE_URL']}${item.avatars[0].url}`}}/>
+                    :null}
 
+                      </View>
+                </TouchableWithoutFeedback>
                 <View style={styles.textContent}>
                   <Text numberOfLines={1} style={styles.cardtitle}>{item.name}</Text>
                   <Text numberOfLines={1} style={styles.cardDescription}>
@@ -452,19 +458,21 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   cardImage: {
+    position: 'absolute',
     borderRadius: 20,
     flex: 4,
-    width: wp('90'),
-    height: CARD_HEIGHT,
+    width: wp('90%'),
+    height: hp('32%'),
     alignSelf: "center",
   },
   textContent: {
     flex: 1,
   },
   cardtitle: {
-    fontSize: 12,
-    marginTop: hp('1%'),
+    fontSize: hp('2%'),
+    marginTop: hp('32%'),
     fontWeight: "bold",
+    alignSelf:'center',
   },
   cardDescription: {
     fontSize: 12,
