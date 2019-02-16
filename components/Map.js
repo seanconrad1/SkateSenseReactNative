@@ -274,6 +274,18 @@ class Map extends Component {
           horizontal
           style={styles.scrollView}
           ref={c => (this.myRef = c)}
+          onScroll={Animated.event(
+            [
+              {
+                nativeEvent: {
+                  contentOffset: {
+                    x: this.animation,
+                  },
+                },
+              },
+            ],
+            { useNativeDriver: true }
+          )}
           data={this.props.user.skate_spots}
           renderItem={({item, separators}) => (
             item
@@ -307,12 +319,7 @@ class Map extends Component {
                 </View>
               </View>
             : null
-          )}
-          >
-
-        </Animated.FlatList>
-
-
+          )}/>
       </View>
     );
   }
@@ -329,18 +336,18 @@ class Map extends Component {
 //   snapToInterval={CARD_WIDTH + 20}
 //   snapToAlignment='center'
   // ref={c => (this.myRef = c)}
-//   onScroll={Animated.event(
-//     [
-//       {
-//         nativeEvent: {
-//           contentOffset: {
-//             x: this.animation,
-//           },
-//         },
-//       },
-//     ],
-//     { useNativeDriver: true }
-//   )}
+  // onScroll={Animated.event(
+  //   [
+  //     {
+  //       nativeEvent: {
+  //         contentOffset: {
+  //           x: this.animation,
+  //         },
+  //       },
+  //     },
+  //   ],
+  //   { useNativeDriver: true }
+  // )}
 //   style={styles.scrollView}
 // >
   // {this.props.user.skate_spots
