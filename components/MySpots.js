@@ -235,7 +235,7 @@ class MySpots extends Component {
               <Card
                 key={spot.id}
                 title={spot.name}
-                image={{uri:`http://${environment['BASE_URL']}${spot.skatephoto.url}`}}
+                image={{uri:`http://${environment['BASE_URL']}${spot.avatars[0].url}`}}
                 containerStyle={spot === lastSpot? styles.lastSpot : styles.spot}
                 >
 

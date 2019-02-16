@@ -81,7 +81,7 @@ class SpotPage extends Component {
     super(props)
     this.state={
       skatespot: '',
-      imageURL: '',
+      images: [{url:'/uploads/skate_spot/avatars/10/image.png'}],
       comments: [],
       extendCommentsAndCommentField: false,
       commentContent: '',
@@ -91,7 +91,7 @@ class SpotPage extends Component {
   componentDidMount(){
     this.setState({
       skatespot: this.props.navigation.getParam('skatespot'),
-      imageURL: this.props.navigation.getParam('skatespot').skatephoto.url,
+      images: this.props.navigation.getParam('skatespot').avatars,
     })
     if (this.props.navigation.getParam('skatespot').comments) {
       this.setState({comments: this.props.navigation.getParam('skatespot').comments.map(comment => comment)})
@@ -153,7 +153,8 @@ class SpotPage extends Component {
   }
 
   render(){
-    console.log('2nd: ', this.state);
+    console.log('2nd: ', this.state.images[0].url);
+
     return(
       <View>
         <Header
@@ -176,8 +177,8 @@ class SpotPage extends Component {
 
           <Card
             containerStyle={styles.cardContainer}
-            image={{uri:`http://${environment['BASE_URL']}${this.state.imageURL}`}}
             imageStyle={styles.cardImage}
+            image={{uri:`http://${environment['BASE_URL']}${this.state.images[0].url}`}}
             >
             <Text style={{marginBottom: 10, position:'absolute', marginTop: 10, marginLeft: 10}}>
               {this.state.skatespot.url}

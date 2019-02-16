@@ -126,6 +126,7 @@ class Map extends Component {
   }
 
   goToSpotPage = (marker) => {
+    console.log('GOINGTOSPOTPAGE')
     this.props.navigation.navigate('SpotPage', {skatespot: marker })
   }
 
@@ -294,41 +295,42 @@ class Map extends Component {
           )}
           data={this.props.user.skate_spots}
           renderItem={({item, separators}) => (
+              <TouchableWithoutFeedback onPress={() => this.goToSpotPage(item)} >
+                <View style={styles.card}>
+                  <BookmarkButton spot={item} style={{position:'absolute', zIndex:1}}/>
 
-            item
-            ? <View style={styles.card}>
-                <BookmarkButton spot={item} style={{position:'absolute', zIndex:1}}/>
+                  <TouchableOpacity onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${item.latitude},${item.longitude}`)} style={{position:'absolute', zIndex:1}}>
+                    <Icon
+                    raised
+                    containerStyle={{position:'relative', zIndex:1, marginLeft:10, marginTop:10}}
+                    name="directions"
+                    size={15}
+                    type="material-community"
+                    color="black"
+                    />
+                  </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${item.latitude},${item.longitude}`)} style={{position:'absolute', zIndex:1}}>
-                  <Icon
-                  raised
-                  containerStyle={{position:'relative', zIndex:1, marginLeft:10, marginTop:10}}
-                  name="directions"
-                  size={15}
-                  type="material-community"
-                  color="black"
-                  />
-                </TouchableOpacity>
+                  <TouchableOpacity onPress={() => this.goToSpotPage(item)}>
+                    <View>
+                      {item.avatars[0].url
+                      ?<Image
+                          style={styles.cardImage}
+                          resizeMode="cover"
+                          source={{uri:`http://${environment['BASE_URL']}${item.avatars[0].url}`}}
+                          onPress={ () => this.goToSpotPage(item)}
+                          />
+                      :null}
 
-                <TouchableWithoutFeedback onPress={ () => this.goToSpotPage(item)}>
-                  <View>
-                    {item.avatars[0].url
-                    ?<Image
-                        style={styles.cardImage}
-                        resizeMode="cover"
-                        source={{uri:`http://${environment['BASE_URL']}${item.avatars[0].url}`}}/>
-                    :null}
-
-                      </View>
-                </TouchableWithoutFeedback>
-                <View style={styles.textContent}>
-                  <Text numberOfLines={1} style={styles.cardtitle}>{item.name}</Text>
-                  <Text numberOfLines={1} style={styles.cardDescription}>
-                    {item.description}
-                  </Text>
+                        </View>
+                  </TouchableOpacity>
+                  <View style={styles.textContent}>
+                    <Text numberOfLines={1} style={styles.cardtitle}>{item.name}</Text>
+                    <Text numberOfLines={1} style={styles.cardDescription}>
+                      {item.description}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            : null
+            </TouchableWithoutFeedback>
           )}/>
       </View>
     );
@@ -458,7 +460,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   cardImage: {
-    position: 'absolute',
+    position:'absolute',
+    zIndex:20,
     borderRadius: 20,
     flex: 4,
     width: wp('90%'),
