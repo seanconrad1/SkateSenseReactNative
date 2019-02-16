@@ -274,6 +274,7 @@ class Map extends Component {
           horizontal
           style={styles.scrollView}
           ref={c => (this.myRef = c)}
+          scrollEventThrottle={1}
           onScroll={Animated.event(
             [
               {
