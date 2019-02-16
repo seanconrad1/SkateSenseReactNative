@@ -12,7 +12,8 @@ import {
   TouchableWithoutFeedback,
   TextInput,
   TouchableHighlight,
-  Linking
+  Linking,
+  FlatList
 } from "react-native";
 import MapView, {
       Callout,
@@ -130,8 +131,7 @@ class Map extends Component {
   }
 
   onMarkerPressHandler = (marker, index) => {
-    let x = index * CARD_WIDTH + 60
-    this.myRef.getNode().scrollTo({x: x, animated: true})
+    this.myRef.getNode().scrollToIndex({'index':index})
   }
 
   render() {
@@ -270,32 +270,15 @@ class Map extends Component {
             </View>
         </Callout>
 
-        <Animated.ScrollView
+        <Animated.FlatList
           horizontal
-          scrollEventThrottle={1}
-          showsHorizontalScrollIndicator={false}
-          snapToInterval={CARD_WIDTH + 20}
-          snapToAlignment='center'
-          ref={c => (this.myRef = c)}
-          onScroll={Animated.event(
-            [
-              {
-                nativeEvent: {
-                  contentOffset: {
-                    x: this.animation,
-                  },
-                },
-              },
-            ],
-            { useNativeDriver: true }
-          )}
           style={styles.scrollView}
-        >
-          {this.props.user.skate_spots
-           ? this.props.user.skate_spots.map((marker, index) => (
-              <View style={styles.card} key={index}>
-
-                <BookmarkButton spot={marker} style={{position:'absolute', zIndex:1}}/>
+          ref={c => (this.myRef = c)}
+          data={this.props.user.skate_spots}
+          renderItem={({item, separators}) => (
+            item
+            ? <View style={styles.card}>
+                <BookmarkButton spot={item} style={{position:'absolute', zIndex:1}}/>
 
                 <TouchableOpacity onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${marker.latitude},${marker.longitude}`)} style={{position:'absolute', zIndex:1}}>
                   <Icon
@@ -308,28 +291,105 @@ class Map extends Component {
                   />
                 </TouchableOpacity>
 
-                <TouchableWithoutFeedback onPress={ () => this.goToSpotPage(marker)}>
+                <TouchableWithoutFeedback onPress={ () => this.goToSpotPage(item)}>
                   <Image
-                    source={{uri:`http://${environment['BASE_URL']}${marker.skatephoto.url}`}}
+                    source={{uri:`http://${environment['BASE_URL']}${item.skatephoto.url}`}}
                     style={styles.cardImage}
                     resizeMode="cover"
                   />
                 </TouchableWithoutFeedback>
+
                 <View style={styles.textContent}>
-                  <Text numberOfLines={1} style={styles.cardtitle}>{marker.name}</Text>
+                  <Text numberOfLines={1} style={styles.cardtitle}>{item.name}</Text>
                   <Text numberOfLines={1} style={styles.cardDescription}>
-                    {marker.description}
+                    {item.description}
                   </Text>
                 </View>
               </View>
+            : null
+          )}
+          >
 
-          ))
-          : null}
-        </Animated.ScrollView>
+        </Animated.FlatList>
+
+
       </View>
     );
   }
 }
+
+
+
+
+
+// <Animated.ScrollView
+//   horizontal
+//   scrollEventThrottle={1}
+//   showsHorizontalScrollIndicator={false}
+//   snapToInterval={CARD_WIDTH + 20}
+//   snapToAlignment='center'
+  // ref={c => (this.myRef = c)}
+//   onScroll={Animated.event(
+//     [
+//       {
+//         nativeEvent: {
+//           contentOffset: {
+//             x: this.animation,
+//           },
+//         },
+//       },
+//     ],
+//     { useNativeDriver: true }
+//   )}
+//   style={styles.scrollView}
+// >
+  // {this.props.user.skate_spots
+  //  ? this.props.user.skate_spots.map((marker, index) => (
+      // <View style={styles.card} key={index}>
+  //
+        // <BookmarkButton spot={marker} style={{position:'absolute', zIndex:1}}/>
+  //
+        // <TouchableOpacity onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${marker.latitude},${marker.longitude}`)} style={{position:'absolute', zIndex:1}}>
+        //   <Icon
+        //   raised
+        //   containerStyle={{position:'relative', zIndex:1, marginLeft:10, marginTop:10}}
+        //   name="directions"
+        //   size={15}
+        //   type="material-community"
+        //   color="black"
+        //   />
+        // </TouchableOpacity>
+  //
+        // <TouchableWithoutFeedback onPress={ () => this.goToSpotPage(marker)}>
+        //   <Image
+        //     source={{uri:`http://${environment['BASE_URL']}${marker.skatephoto.url}`}}
+        //     style={styles.cardImage}
+        //     resizeMode="cover"
+        //   />
+        // </TouchableWithoutFeedback>
+      //   <View style={styles.textContent}>
+      //     <Text numberOfLines={1} style={styles.cardtitle}>{marker.name}</Text>
+      //     <Text numberOfLines={1} style={styles.cardDescription}>
+      //       {marker.description}
+      //     </Text>
+      //   </View>
+      // </View>
+  //
+  // ))
+  // : null}
+// </Animated.ScrollView>
+
+
+
+
+
+
+
+
+
+
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -358,6 +418,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     position: "absolute",
+    backgroundColor:'transparent',
     bottom: -5,
     left: 0,
     right: 0,
