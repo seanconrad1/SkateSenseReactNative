@@ -174,92 +174,93 @@ class SpotPageRemake extends Component {
     console.log(this.state.comments);
     return(
       <View>
-        <Header
-          leftComponent={{ icon: 'menu' , color: 'black', onPress: () => this.props.navigation.openDrawer()}}
-          centerComponent={{ fontFamily:'Lobster', text: `${this.state.skatespot.name}`, style: { color: 'black', fontSize: wp('6%') } }}
-          backgroundColor='white'
-          containerStyle={{
-             fontFamily:'Lobster',
-             justifyContent: 'space-around',
-           }}/>
+          <Header
+            leftComponent={{ icon: 'menu' , color: 'black', onPress: () => this.props.navigation.openDrawer()}}
+            centerComponent={{ fontFamily:'Lobster', text: `${this.state.skatespot.name}`, style: { color: 'black', fontSize: wp('6%') } }}
+            backgroundColor='white'
+            containerStyle={{
+               fontFamily:'Lobster',
+               justifyContent: 'space-around',
+             }}/>
 
-           <Icon
-           raised
-           size={hp('2.8')}
-           name='directions'
-           iconStyle={{color:"rgb(244, 2, 87)"}}
-           containerStyle={{position:'absolute',zIndex:1, marginLeft:wp('85%'), marginTop:('20%')}}
-           onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${this.state.skatespot.latitude},${this.state.skatespot.longitude}`)}
-           title='Directions' />
-
-
-          <Animated.FlatList
-              horizontal
-              data={this.state.images}
-              renderItem={this._renderItem}
-              sliderWidth={wp('50%')}
-              itemWidth={wp('50%')}
-              ref={c => (this.myRef = c)}
-              scrollEventThrottle={1}
-              snapToInterval={wp('100%')}
-            />
+       <ScrollView>
+             <Icon
+             raised
+             size={hp('2.8')}
+             name='directions'
+             iconStyle={{color:"rgb(244, 2, 87)"}}
+             containerStyle={{position:'absolute',zIndex:1, marginLeft:wp('85%'), marginTop:('20%')}}
+             onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${this.state.skatespot.latitude},${this.state.skatespot.longitude}`)}
+             title='Directions' />
 
 
-
-            <Text style={{marginBottom: 10, position:'relative', marginTop: 10, marginLeft: wp('2%')}}>
-              {this.state.skatespot.url}
-              {this.state.skatespot.description}{"\n"}
-              Posted by {this.state.skatespot.user
-                          ?this.state.skatespot.user.username
-                          :null
-                        }
-            </Text>
-
-
-            <Animated.ScrollView
-              snapToEnd
-            >
-              <View style={styles.commentContainer}>
-                {this.state.comments.map(comment=>{
-                  return <View style={styles.oneCommentContainer}>
-                  <Text style={{fontWeight: 'bold'}}>{this.props.user.user.username} </Text>
-                  <Text style={styles.commentContent}>{comment.content}</Text>
-                  <View>
-                  {comment.user_id === this.props.user.user.id
-                    ? <Icon name='trash' type='font-awesome' containerStyle={styles.trashIcon} onPress={() => this.deleteComment(comment)}/>
-                    : null}
-                    </View>
-                    </View>
-                  })}
-                </View>
-            </Animated.ScrollView>
-
-            <Divider style={styles.divider} />
+            <Animated.FlatList
+                horizontal
+                data={this.state.images}
+                renderItem={this._renderItem}
+                sliderWidth={wp('50%')}
+                itemWidth={wp('50%')}
+                ref={c => (this.myRef = c)}
+                scrollEventThrottle={1}
+                snapToInterval={wp('100%')}
+              />
 
 
-            <View style={styles.commentInputandButtonContainer}>
-              <TextInput
-                style={styles.commentInput}
-                placeholder='Comment'
-                onChangeText={(value) => this.onCommentChange(value)}
-                />
 
-                {this.state.commentContent
-                  ? <Button
-                  title='Post'
-                  buttonStyle={styles.postButton}
-                  onPress={this.postButtonHandler}
+              <Text style={{marginBottom: 10, position:'relative', marginTop: 10, marginLeft: wp('2%')}}>
+                {this.state.skatespot.url}
+                {this.state.skatespot.description}{"\n"}
+                Posted by {this.state.skatespot.user
+                            ?this.state.skatespot.user.username
+                            :null
+                          }
+              </Text>
+
+
+              <Animated.ScrollView
+                snapToEnd
+              >
+                <View style={styles.commentContainer}>
+                  {this.state.comments.map(comment=>{
+                    return <View style={styles.oneCommentContainer}>
+                    <Text style={{fontWeight: 'bold'}}>{this.props.user.user.username} </Text>
+                    <Text style={styles.commentContent}>{comment.content}</Text>
+                    <View>
+                    {comment.user_id === this.props.user.user.id
+                      ? <Icon name='trash' type='font-awesome' containerStyle={styles.trashIcon} onPress={() => this.deleteComment(comment)}/>
+                      : null}
+                      </View>
+                      </View>
+                    })}
+                  </View>
+              </Animated.ScrollView>
+
+              <Divider style={styles.divider} />
+
+
+              <View style={styles.commentInputandButtonContainer}>
+                <TextInput
+                  style={styles.commentInput}
+                  placeholder='Comment'
+                  onChangeText={(value) => this.onCommentChange(value)}
                   />
-                  : <Button
-                  disabled
-                  title='Post'
-                  buttonStyle={styles.postButton}
-                  />}
 
-              </View>
+                  {this.state.commentContent
+                    ? <Button
+                    title='Post'
+                    buttonStyle={styles.postButton}
+                    onPress={this.postButtonHandler}
+                    />
+                    : <Button
+                    disabled
+                    title='Post'
+                    buttonStyle={styles.postButton}
+                    />}
 
-        </View>
-    )
+                </View>
+            </ScrollView>
+          </View>
+        )
   }
 
 }

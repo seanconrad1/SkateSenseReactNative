@@ -271,7 +271,7 @@ class MySpots extends Component {
             <Card
               key={spot.id}
               title={spot.name}
-              image={{uri:`http://${environment['BASE_URL']}${spot.skatephoto.url}`}}
+              image={{uri:`http://${environment['BASE_URL']}${spot.avatars[0].url}`}}
               containerStyle={styles.spot}>
 
               <Text style={{marginBottom: 10}}>
@@ -308,7 +308,7 @@ class MySpots extends Component {
               })}}>
             <Card
               title={bookmark.name}
-              image={{uri:`http://${environment['BASE_URL']}${bookmark.skatephoto.url}`}}
+              image={{uri:`http://${environment['BASE_URL']}${bookmark.avatars[0].url}`}}
               containerStyle={styles.spot}>
 
               <Text style={{marginBottom: 10}}>
@@ -348,7 +348,7 @@ class MySpots extends Component {
 
                 <Card
                   title={bookmark.name}
-                  image={{uri:`http://${environment['BASE_URL']}${bookmark.skatephoto.url}`}}
+                  image={{uri:`http://${environment['BASE_URL']}${bookmark.avatars[0].url}`}}
                   containerStyle={styles.spot}>
 
                   <Text style={{marginBottom: 10}}>

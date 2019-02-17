@@ -97,14 +97,18 @@ class NewSpotPage extends Component {
   getPhotoFromCameraRoll = () => {
       const options = {
         title: 'Select Skatespot Photo',
-        customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+        // customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
         storageOptions: {
           skipBackup: true,
           path: 'images',
         },
       }
 
-    ImagePicker.launchImageLibrary(options, (response) => {
+    //   ImagePicker.launchCamera(options, (response) => {
+    // // Same code as in above section!
+    //   });
+
+    ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
         console.log('User cancelled photo picker');
       }
