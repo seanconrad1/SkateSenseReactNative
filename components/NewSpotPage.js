@@ -143,7 +143,7 @@ class NewSpotPage extends Component {
         // debugger
       	data.push({
       		name : 'avatars[]',
-          filename : 'image.png',
+          filename : `${i.name}`,
           type:'image/jpg',
       		data: `RNFetchBlob-file://${i.uri}`
       	})
