@@ -25,59 +25,61 @@ const comments = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
 
 const styles = StyleSheet.create({
   commentContainer:{
+    marginLeft: wp('2%'),
+    marginTop:hp('10%'),
     position: 'relative',
-    flexWrap: 'wrap',
-    height: hp('23%'),
+    // flexWrap: 'no-wrap',
+    height: hp('20%'),
     width: wp('100%'),
+    justifyContent:'space-between',
+
   },
-//   oneCommentContainer:{
-//     paddingBottom: 20,
-//     width: wp('85%'),
-//     flexDirection:'row',
-//     flexWrap:'wrap',
-//     justifyContent:'space-between',
-//   },
+  oneCommentContainer:{
+    paddingBottom: 10,
+    flexDirection:'row',
+
+  },
   commentContent:{
-    alignItems:'flex-start',
+    // justifyContent:'space-between',
+    // justifyContent:'flex-end',
+    // alignItems:'flex-end',
+    // alignSelf: 'flex-start',
+    // justifyContent: 'flex-start'
   },
-//   trashIcon:{
-//     alignSelf:'flex-end',
-//   },
-//   commentInputandButtonContainer:{
-//     flexDirection: 'row',
-//     marginTop: hp('40%'),
-//     position: 'absolute'
-//   },
-//   commentInput:{
-//     borderRadius: 20,
-//     borderColor: 'gray',
-//     borderWidth: 1,
-//     paddingTop: '2%',
-//     paddingBottom: '2%',
-//     paddingLeft: wp('2%'),
-//     paddingRight: '2%',
-//     width: wp('65%'),
-//     marginLeft: wp('2%'),
-//     marginRight: wp('2')
-//   },
-//   postButton:{
-//     color:'black',
-//     borderRadius:20,
-//     backgroundColor: "rgb(244, 2, 87)",
-//     width: wp('20%'),
-//   },
-//   cardContainer:{
-//     paddingBottom:'50%',
-//     borderRadius: 20,
-//     height: hp('80%'),
-//   },
-  // cardImage:{
-  //   height: hp('30%'),
-  // },
+  trashIcon:{
+    position:'relative',
+    marginLeft:wp('20%'),
+    // justifyContent:'space-between',
+    // alignSelf: 'flex-end',
+    // alignSelf:'flex-end',
+  },
+  commentInputandButtonContainer:{
+    flexDirection: 'row',
+    position: 'relative'
+  },
+  commentInput:{
+    borderRadius: 20,
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingTop: '2%',
+    paddingBottom: '2%',
+    paddingLeft: wp('2%'),
+    paddingRight: '2%',
+    width: wp('65%'),
+    marginLeft: wp('2%'),
+    marginRight: wp('2')
+  },
+  postButton:{
+    color:'black',
+    borderRadius:20,
+    backgroundColor: "rgb(244, 2, 87)",
+    width: wp('20%'),
+  },
   divider:{
     backgroundColor: 'grey',
     borderWidth:.2,
-    marginTop: hp('10%')}
+    marginBottom: hp('5%'),
+    marginTop: hp('5%')}
 })
 
 class SpotPageRemake extends Component {
@@ -136,7 +138,6 @@ class SpotPageRemake extends Component {
     deviceStorage.loadJWT('jwt')
     .then(key => fetchToCommentOnSpot(key))
 
-
     const fetchToCommentOnSpot = (key) =>{
       fetch(`http://${environment['BASE_URL']}/api/v1/comments`,{
         method: 'POST',
@@ -154,7 +155,6 @@ class SpotPageRemake extends Component {
       .then(r=>r.json())
       .then((data)=>this.setState({comments: [...this.state.comments, data]}))
     }
-
   }
 
   _renderItem = ({item, index}) => {
@@ -206,7 +206,7 @@ class SpotPageRemake extends Component {
 
 
 
-            <Text style={{marginBottom: 10, position:'absolute', marginTop: 400, marginLeft: 10}}>
+            <Text style={{marginBottom: 10, position:'relative', marginTop: 10, marginLeft: wp('2%')}}>
               {this.state.skatespot.url}
               {this.state.skatespot.description}{"\n"}
               Posted by {this.state.skatespot.user
@@ -216,22 +216,25 @@ class SpotPageRemake extends Component {
             </Text>
 
 
+            <Animated.ScrollView
+              snapToEnd
+            >
+              <View style={styles.commentContainer}>
+                {this.state.comments.map(comment=>{
+                  return <View style={styles.oneCommentContainer}>
+                  <Text style={{fontWeight: 'bold'}}>{this.props.user.user.username} </Text>
+                  <Text style={styles.commentContent}>{comment.content}</Text>
+                  <View>
+                  {comment.user_id === this.props.user.user.id
+                    ? <Icon name='trash' type='font-awesome' containerStyle={styles.trashIcon} onPress={() => this.deleteComment(comment)}/>
+                    : null}
+                    </View>
+                    </View>
+                  })}
+                </View>
+            </Animated.ScrollView>
 
-            <View style={styles.commentContainer}>
-              {this.state.comments.map(comment=>{
-                return <View style={styles.oneCommentContainer}>
-                <Text style={{fontWeight: 'bold'}}>{this.props.user.user.username} </Text>
-                <Text style={styles.commentContent}>{comment.content}</Text>
-                <View>
-                {comment.user_id === this.props.user.user.id
-                  ? <Icon name='trash' type='font-awesome' containerStyle={styles.trashIcon} onPress={() => this.deleteComment(comment)}/>
-                  : null}
-                  </View>
-                  </View>
-                })}
-              </View>
-
-              <Divider style={styles.divider} />
+            <Divider style={styles.divider} />
 
 
             <View style={styles.commentInputandButtonContainer}>

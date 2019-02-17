@@ -188,14 +188,14 @@ class SpotPage extends Component {
 //      justifyContent: 'space-around',
 //    }}/>
 //
-   <Icon
-   raised
-   size={hp('2.8')}
-   name='directions'
-   iconStyle={{color:"rgb(244, 2, 87)"}}
-   containerStyle={{position:'absolute',zIndex:1, marginLeft:wp('85%'), marginTop:('20%')}}
-   onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${this.state.skatespot.latitude},${this.state.skatespot.longitude}`)}
-   title='Directions' />
+   // <Icon
+   // raised
+   // size={hp('2.8')}
+   // name='directions'
+   // iconStyle={{color:"rgb(244, 2, 87)"}}
+   // containerStyle={{position:'absolute',zIndex:1, marginLeft:wp('85%'), marginTop:('20%')}}
+   // onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${this.state.skatespot.latitude},${this.state.skatespot.longitude}`)}
+   // title='Directions' />
 
 // <Card
 //   containerStyle={styles.cardContainer}
@@ -206,7 +206,7 @@ class SpotPage extends Component {
 
 
 
-
+//
 // <Text style={{marginBottom: 10, position:'absolute', marginTop: 10, marginLeft: 10}}>
 //   {this.state.skatespot.url}
 //   {this.state.skatespot.description}{"\n"}
@@ -234,26 +234,26 @@ class SpotPage extends Component {
 
               // <Divider style={styles.divider} />
 
-//   <View style={styles.commentInputandButtonContainer}>
-//   <TextInput
-//   style={styles.commentInput}
-//   placeholder='Comment'
-//   onChangeText={(value) => this.onCommentChange(value)}
-//   />
-//
-//   {this.state.commentContent
-//     ? <Button
-//     title='Post'
-//     buttonStyle={styles.postButton}
-//     onPress={this.postButtonHandler}
-//     />
-//     : <Button
-//     disabled
-//     title='Post'
-//     buttonStyle={styles.postButton}
-//     />}
-//     </View>
-//     </Card>
+  // <View style={styles.commentInputandButtonContainer}>
+  // <TextInput
+  // style={styles.commentInput}
+  // placeholder='Comment'
+  // onChangeText={(value) => this.onCommentChange(value)}
+  // />
+  //
+  // {this.state.commentContent
+  //   ? <Button
+  //   title='Post'
+  //   buttonStyle={styles.postButton}
+  //   onPress={this.postButtonHandler}
+  //   />
+  //   : <Button
+  //   disabled
+  //   title='Post'
+  //   buttonStyle={styles.postButton}
+  //   />}
+  //   </View>
+  //   </Card>
 
 const mapStateToProps = state => {
   return {

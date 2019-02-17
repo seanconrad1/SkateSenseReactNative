@@ -229,7 +229,7 @@ class MySpots extends Component {
 
         return spots.map(spot => (
 
-          <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
+          <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPageRemake', {
             skatespot: spot })}}>
 
               <Card
@@ -265,7 +265,7 @@ class MySpots extends Component {
         let filteredArray = spots.filter(spot => spot.name.toLowerCase().includes(this.state.term.toLowerCase()) || spot.description.toLowerCase().includes(this.state.term.toLowerCase()))
         return filteredArray.map(spot => (
 
-          <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
+          <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPageRemake', {
             skatespot: spot
           })}}>
             <Card
@@ -303,7 +303,7 @@ class MySpots extends Component {
       let bookmarks = this.state.bookmarkedSpots
       if (this.state.term === '' || this.state.term === undefined && bookmarks !== undefined) {
         return bookmarks.map(bookmark => (
-          <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
+          <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPageRemake', {
                 skatespot: bookmark
               })}}>
             <Card
@@ -342,7 +342,7 @@ class MySpots extends Component {
         return filteredArray.map(bookmark => (
           <View>
 
-            <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
+            <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPageRemake', {
                   skatespot: bookmark
                 })}}>
 
