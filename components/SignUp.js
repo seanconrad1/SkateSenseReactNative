@@ -17,13 +17,13 @@ class SignUp extends Component {
     firstName: 'n/a',
     lastName: 'n/a',
     photo: 'n/a',
-    passwordMustMatch: false
+    passwordMustMatch: false,
+    errors:''
   }
 
 
   onSubmit = () =>{
-    // console.log('got here')
-    if (this.state.password === this.state.validatePassword){
+    if(this.state.password === this.state.validatePassword){
       this.props.createUser(this.state.username,
         this.state.password,
         this.state.firstName,
@@ -31,8 +31,7 @@ class SignUp extends Component {
         this.state.email,
         this.state.photo
       )
-      // this.props.navigation.navigate('Map')
-    }else {
+    }else{
       this.setState({passwordMustMatch: true})
     }
   }
@@ -62,7 +61,16 @@ class SignUp extends Component {
 
           <View>
             <Text style={{color:'red'}}>
+              {this.state.passwordMustBeLessThan20 ? 'Passwords must be less than 20 characters.' : null}
+            </Text>
+            <Text style={{color:'red'}}>
+              {this.state.usernameMustExist ? 'You must enter a username.' : null}
+            </Text>
+            <Text style={{color:'red'}}>
               {this.state.passwordMustMatch ? 'Passwords Must Match' : null}
+            </Text>
+            <Text style={{color:'red'}}>
+              {this.state.passwordMustBeGreaterThanSix ? 'Password must be greater than 6 characters' : null}
             </Text>
           </View>
 

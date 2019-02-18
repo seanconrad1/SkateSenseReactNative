@@ -58,7 +58,14 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    // debugger
+
+    console.log('INDEX----------------------------',nextProps.navigation.getParam('index'))
+
+    if (this.props.navigation.getParam('index') !== nextProps.navigation.getParam('index') && nextProps.navigation.getParam('index') !== undefined) {
+      this.props.getSkateSpots()
+      this.scrollToNewSpot()
+    }
+
     if(this.props.user.skate_spots !== nextProps.user.skate_spots && nextProps.user.skate_spots !== undefined){
       this.setState({skatespots: nextProps.user.skate_spots})
       // console.log('KEYs', Object.keys(this.animation._listeners).length);
@@ -131,8 +138,12 @@ class Map extends Component {
   }
 
   onMarkerPressHandler = (marker, index) => {
-    console.log("MARKER PRESSED----------------------------")
     this.myRef.getNode().scrollToIndex({'index':index})
+  }
+
+  scrollToNewSpot = () => {
+    // this.myRef.getNode().scrollToIndex({'index':index})
+    this.myRef.getNode().scrollToEnd()
   }
 
   render() {
@@ -222,7 +233,7 @@ class Map extends Component {
                     />
                 </TouchableOpacity>
 
-              <TouchableOpacity onPress= {() => this.props.navigation.navigate('NewSpotPage')} >
+              <TouchableOpacity onPress= {() => this.props.navigation.navigate('NewSpotPage', {scrollToNewSpot: this.scrollToNewSpot})} >
                   <Icon
                     raised
                     name='plus'

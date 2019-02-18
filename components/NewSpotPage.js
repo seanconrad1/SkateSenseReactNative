@@ -88,10 +88,12 @@ class NewSpotPage extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    this.setState({
-      selectedLat: nextProps.navigation.getParam('selectedLocation').latitude,
-      selectedLng: nextProps.navigation.getParam('selectedLocation').longitude
-    })
+    if (nextProps.navigation.getParam('selectedLocation').latitude !== undefined && nextProps.navigation.getParam('selectedLocation').longitude !== undefined) {
+      this.setState({
+        selectedLat: nextProps.navigation.getParam('selectedLocation').latitude,
+        selectedLng: nextProps.navigation.getParam('selectedLocation').longitude
+      })
+    }
   }
 
   getPhotoFromCameraRoll = () => {
@@ -108,7 +110,7 @@ class NewSpotPage extends Component {
     // // Same code as in above section!
     //   });
 
-    ImagePicker.showImagePicker(options, (response) => {
+    ImagePicker.launchImageLibrary(options, (response) => {
       if (response.didCancel) {
         console.log('User cancelled photo picker');
       }
@@ -153,9 +155,6 @@ class NewSpotPage extends Component {
       	})
       }
 
-      // debugger
-
-
       RNFetchBlob.fetch('POST', `http://${environment['BASE_URL']}/api/v1/skate_spots`, {
           Authorization : `${environment['API_KEY']}`,
           'Content-Type' : undefined,
@@ -163,14 +162,17 @@ class NewSpotPage extends Component {
           data
         ).then((resp) => {
           console.log('RESPONSE FROM SERVER', resp)
-          this.props.navigation.navigate('Map',{random: '1' })
-        }).catch((err) => {
-          console.log('Error creating new marker: ', error)
+          // this.props.getSkateSpots()
+          let index = this.props.user.skate_spots.length - 1
+          // debugger
+          this.props.navigation.navigate('Map',{index: index })
+        })
+        .catch((err) => {
+          console.log('Error creating new marker: ', err)
         })
       }
 
   render(){
-    console.log(this.state.photo);
     const streetSpotTypebuttons = ['Street Spot', 'Skatepark', 'DIY']
     const streetSpotContains = ['Flatbar', 'Bank', 'Stair', 'Ditch', 'Wallride',
                                 'Drop Gap', 'Flat Gap', 'Ledge', 'Polejam', 'Manual Pad', 'QP']
@@ -317,6 +319,7 @@ class NewSpotPage extends Component {
 const mapStateToProps = state => {
   return {
     user: state.user,
+    skate_spots: state.skate_spots,
   }
 }
 
