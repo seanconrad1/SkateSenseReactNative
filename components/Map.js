@@ -129,7 +129,13 @@ class Map extends Component {
   }
 
   refreshMarkers = (marker) =>{
-    this.props.getSkateSpots()
+    let area = .5
+    if (this.state.currentRegion && this.state.currentRegion.latitude > 0){
+      let filteredSpots = this.props.user.skate_spots.filter(spot => spot.latitude < (this.state.currentRegion.latitude + area) && spot.latitude > (this.state.currentRegion.latitude - area) && spot.longitude < (this.state.currentRegion.longitude + area) && spot.longitude > (this.state.currentRegion.longitude - area))
+      console.log('BEFORE FILTER', this.state.skatespots);
+      console.log('AFTER FILTER', filteredSpots);
+      this.setState({filteredSpots: filteredSpots})
+    }
   }
 
   animateToUserLocation = () =>{
@@ -225,15 +231,9 @@ class Map extends Component {
 
 
   render() {
-    let radius = .5
+    // let area = .5
     console.log('FILTEREDSPOTS', this.state.filteredSpots);
-    // if (this.state.currentRegion && this.state.currentRegion.latitude > 0){
-    //   let filteredSpots = this.state.skatespots.filter(spot =>{
-    //     return spot.latitude < (this.state.currentRegion.latitude + radius) && spot.latitude < (this.state.currentRegion.latitude - radius) && spot.longitude < (this.state.currentRegion.longitude - radius) && spot.longitude < (this.state.currentRegion.longitude + radius)
-    //   })
-    //   // console.log('BEFORE FILTER', this.state.skatespots);
-    //   // console.log('AFTER FILTER', filteredSpots);
-    // }
+
 
     const interpolations =
     this.state.filteredSpots
