@@ -23,10 +23,17 @@ class BookmarkButton extends Component {
   }
 
   componentDidMount(){
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (this.props.spot !== nextProps.spot ){
+      this.setState({spotID: nextProps.spot.id})
       this.checkIfUserBookmarkedSpot()
+    }
   }
 
   checkIfUserBookmarkedSpot = () =>{
+    // debugger
     let data = this.props.user.user ? this.props.user.user.bookmarks : null
     if (data !== null){
       const bookmarked = data.find(bookmarks=>(bookmarks.skate_spot_id === this.state.spotID))
@@ -36,6 +43,7 @@ class BookmarkButton extends Component {
 
 
   bookmarkSpot = () =>{
+    debugger
     let userID = this.state.currentUserid
     let spotID = this.state.spotID
     deviceStorage.loadJWT('jwt')
@@ -60,7 +68,7 @@ class BookmarkButton extends Component {
     }
 
     unBookmarkSpot = () =>{
-      debugger
+      // debugger
       deviceStorage.loadJWT('jwt')
       .then(val => fetchToUnbookmarkSpot(val))
 
