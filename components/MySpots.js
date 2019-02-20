@@ -157,6 +157,7 @@ class MySpots extends Component {
     this.setState({submittedSpots: this.state.submittedSpots.filter(spot => {
       return spot.id !== id
     })})
+    this.props.getSkateSpots()
   }
 
   deleteAlertMsg = (id) =>{

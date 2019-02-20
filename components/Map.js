@@ -129,9 +129,9 @@ class Map extends Component {
   }
 
   refreshMarkers = (marker) =>{
-    console.log('refreshing');
+    this.props.getSkateSpots()
     let area = .5
-    if (this.state.currentRegion && this.state.currentRegion.latitude > 0){
+    if (this.state.currentRegion && this.state.currentRegion.latitude > 0 && this.props.user.skate_spots !== undefined){
       let filteredSpots = this.props.user.skate_spots.filter(spot => spot.latitude < (this.state.currentRegion.latitude + area) && spot.latitude > (this.state.currentRegion.latitude - area) && spot.longitude < (this.state.currentRegion.longitude + area) && spot.longitude > (this.state.currentRegion.longitude - area))
       this.setState({filteredSpots: filteredSpots})
     }

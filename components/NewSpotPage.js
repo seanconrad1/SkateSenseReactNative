@@ -127,8 +127,7 @@ class NewSpotPage extends Component {
           name: response.fileName
         }
 
-        this.state.photo ? console.log(this.state.photo.length) : null
-
+        // Limit to 4 photos uploaded
         if(this.state.photo && this.state.photo.length === 4){
           null
         }else if (this.state.photo) {
