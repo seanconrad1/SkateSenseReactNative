@@ -403,7 +403,7 @@ class Map extends Component {
 
                   <TouchableOpacity onPress={() => this.goToSpotPage(item)}>
                     <View>
-                      {item.avatars[0].url
+                      {item.avatars[0]
                       ?<Image
                           style={styles.cardImage}
                           resizeMode="cover"
@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     borderWidth: 1,
     borderColor: "rgba(130,4,150, 0.5)",
-    
+
   },
 });
 

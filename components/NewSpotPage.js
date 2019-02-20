@@ -127,7 +127,16 @@ class NewSpotPage extends Component {
           name: response.fileName
         }
 
-        this.state.photo ? this.setState({ photo: [...this.state.photo, photo]}) : this.setState({ photo: [photo]})
+        this.state.photo ? console.log(this.state.photo.length) : null
+
+        if(this.state.photo && this.state.photo.length === 4){
+          null
+        }else if (this.state.photo) {
+          this.setState({ photo: [...this.state.photo, photo]})
+        }else if (!this.state.photo) {
+          this.setState({ photo: [photo]})
+        }
+
 
         }
       })
@@ -145,6 +154,7 @@ class NewSpotPage extends Component {
             { name : 'bust_factor', data: this.state.kickout},
             { name : 'user_id', data: this.props.user.user.id}
           ]
+
       for (i of this.state.photo){
         // debugger
       	data.push({
