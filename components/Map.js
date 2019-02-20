@@ -63,8 +63,8 @@ class Map extends Component {
   }
 
   componentWillMount() {
-    this.index = 0;
-    this.animation = new Animated.Value(0);
+    this.index = 0
+    this.animation = new Animated.Value(0)
   }
 
 
@@ -123,17 +123,16 @@ class Map extends Component {
             );
           }
         }, 10);
-      });
-      }
+      })
+     }
     }
   }
 
   refreshMarkers = (marker) =>{
+    console.log('refreshing');
     let area = .5
     if (this.state.currentRegion && this.state.currentRegion.latitude > 0){
       let filteredSpots = this.props.user.skate_spots.filter(spot => spot.latitude < (this.state.currentRegion.latitude + area) && spot.latitude > (this.state.currentRegion.latitude - area) && spot.longitude < (this.state.currentRegion.longitude + area) && spot.longitude > (this.state.currentRegion.longitude - area))
-      console.log('BEFORE FILTER', this.state.skatespots);
-      console.log('AFTER FILTER', filteredSpots);
       this.setState({filteredSpots: filteredSpots})
     }
   }
@@ -229,12 +228,7 @@ class Map extends Component {
     this.setState({currentRegion: region})
   }
 
-
   render() {
-    // let area = .5
-    console.log('FILTEREDSPOTS', this.state.filteredSpots);
-
-
     const interpolations =
     this.state.filteredSpots
     ?( this.state.filteredSpots.map((marker, index) => {
@@ -430,7 +424,7 @@ class Map extends Component {
             </TouchableWithoutFeedback>
           )}/>
       </View>
-    );
+    )
   }
 }
 
@@ -439,26 +433,6 @@ const styles = StyleSheet.create({
     flex: 1,
     zIndex:0
   },
-  calloutView: {
-   flexDirection: "row",
-   backgroundColor: "rgba(255, 255, 255, 0.9)",
-   borderRadius: 20,
-   borderStyle:'solid',
-   borderColor:'rgb(236, 229, 235)',
-   borderWidth: 1,
-   width: "70%",
-   marginLeft: "11%",
-   marginRight: "30%",
-   marginTop: '25%',
-   shadowColor: '#000',
-   shadowOffset: { width: 10, height: 10 },
-   shadowOpacity: 0.3,
-   shadowRadius: 10,
-  },
-  rightSideButtons:{
-    position:'absolute',
-    marginTop: 200,
-  },
   scrollView: {
     position: "absolute",
     backgroundColor:'transparent',
@@ -466,9 +440,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     paddingVertical: 10,
-  },
-  endPadding: {
-    // paddingRight: width - CARD_WIDTH,
   },
   card: {
     width: CARD_WIDTH,
@@ -516,13 +487,14 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(244, 2, 87, .9)",
   },
   ring: {
-    width: 24,
-    height: 24,
+    width: 12,
+    height: 12,
     borderRadius: 12,
     backgroundColor: "rgba(142, 25, 66, .3)",
     position: "absolute",
     borderWidth: 1,
     borderColor: "rgba(130,4,150, 0.5)",
+    
   },
 });
 

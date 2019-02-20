@@ -53,6 +53,43 @@ class UsersPage extends Component {
     console.log('going to users page', item)
   }
 
+  deleteAlert = (user) =>{
+    Alert.alert(
+      'Deleting user',
+      "Are you sure you want to delete this user?",
+      [
+        {text: 'Yes', onPress: () => this.deleteUser(user)},
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+      ],
+      {cancelable: false},
+    )
+  }
+
+  deleteUser = (user) => {
+    deviceStorage.loadJWT('jwt')
+    .then(key => fetchToDeleteUser(key, user.id))
+
+    function fetchToDeleteUser(key, userID){
+      fetch(`http://${environment['BASE_URL']}/api/v1/users/${userID}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+           Accept: 'application/json',
+           Authorization: `Bearer ${key}`
+        },
+      }).then(r=>r.json()).then(data=>console.log(data))
+    }
+
+    this.setState({users: this.state.users.filter(oneUser => {
+      return oneUser.id !== user.id
+    })})
+  }
+
   render(){
     return(
       <View style={styles.container}>
@@ -78,7 +115,7 @@ class UsersPage extends Component {
                    <ListItem
                      title={user.username}
                      onPress={() => this.props.navigation.navigate('CommentsPage', {user: user })}
-                     onLongPress={() => console.log('DELEETTING')}
+                     onLongPress={() => this.deleteAlert(user) }
                    />
                 </View>
              ))

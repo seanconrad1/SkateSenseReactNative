@@ -39,9 +39,9 @@ class PostsPage extends Component {
 
   componentDidMount(){
     deviceStorage.loadJWT('jwt')
-    .then(key => fetchUsers(key))
+    .then(key => fetchSpots(key))
 
-    const fetchUsers = (key) => {
+    const fetchSpots = (key) => {
       fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots`,
       {
         method: 'GET',
