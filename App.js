@@ -25,7 +25,6 @@ import AdminConsole from './components/AdminConsole'
 import CommentsPage from './childComponents/CommentsPage.js'
 import UsersPage from './childComponents/UsersPage.js'
 import PostsPage from './childComponents/PostsPage.js'
-import SpotPageRemake from './components/SpotPageRemake.js'
 
 
 console.disableYellowBox = true;
@@ -53,7 +52,6 @@ const Drawer = createStackNavigator(
     'My Spots': {screen: MySpots},
     Settings: {screen: Settings},
     SpotPage: {screen: SpotPage},
-    SpotPageRemake:{screen: SpotPageRemake},
     NewSpotPage: {screen: NewSpotPage},
     LocationSelectorMap: {screen: LocationSelectorMap},
     AdminConsole:{screen: AdminConsole},

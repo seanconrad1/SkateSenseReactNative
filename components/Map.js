@@ -22,7 +22,6 @@ import MapView, {
 import { Header, ListItem, Avatar, Icon } from 'react-native-elements'
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import ActionButton from 'react-native-action-button';
-import NewMarkerInfoBoxForm from '../childComponents/newMarkerInfoBoxForm.js'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { fetchKeyForSkateSpots } from '../action.js'
