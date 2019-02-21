@@ -66,13 +66,9 @@ class Map extends Component {
     this.animation = new Animated.Value(0)
   }
 
-
   componentDidMount() {
     this.getUserLocationHandler()
     this.props.getSkateSpots()
-
-    // this.setState({skatespots: this.props.user.skate_spots})
-
   }
 
   componentWillReceiveProps(nextProps){
@@ -97,38 +93,39 @@ class Map extends Component {
       }
 
       //Animate to spot
+      debugger
       if (Object.keys(this.animation._listeners).length == 0){
-      this.animation.addListener(({ value }) => {
-        let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
-        if (index >= this.state.filteredSpots.length) {
-          index = this.state.filteredSpots.length - 1;
-        }
-        if (index <= 0) {
-          index = 0;
-        }
-
-        clearTimeout(this.regionTimeout);
-        this.regionTimeout = setTimeout(() => {
-          if (this.index !== index) {
-            this.index = index;
-            this.map.animateToRegion(
-              {
-                latitude: this.state.filteredSpots[index].latitude,
-                longitude: this.state.filteredSpots[index].longitude,
-                latitudeDelta: this.state.region.latitudeDelta,
-                longitudeDelta: this.state.region.longitudeDelta,
-              },
-              350
-            );
+        this.animation.addListener(({ value }) => {
+          let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
+          if (index >= this.state.filteredSpots.length) {
+            index = this.state.filteredSpots.length - 1;
           }
-        }, 10);
-      })
-     }
+          if (index <= 0) {
+            index = 0;
+          }
+
+          clearTimeout(this.regionTimeout);
+          this.regionTimeout = setTimeout(() => {
+            if (this.index !== index) {
+              this.index = index;
+              this.map.animateToRegion(
+                {
+                  latitude: this.state.filteredSpots[index].latitude,
+                  longitude: this.state.filteredSpots[index].longitude,
+                  latitudeDelta: this.state.region.latitudeDelta,
+                  longitudeDelta: this.state.region.longitudeDelta,
+                },
+                350
+              );
+            }
+          }, 10);
+        })
+      }
+
     }
   }
 
   refreshMarkers = (marker) =>{
-    this.props.getSkateSpots()
     let area = .5
     if (this.state.currentRegion && this.state.currentRegion.latitude > 0 && this.props.user.skate_spots !== undefined){
       let filteredSpots = this.props.user.skate_spots.filter(spot => spot.latitude < (this.state.currentRegion.latitude + area) && spot.latitude > (this.state.currentRegion.latitude - area) && spot.longitude < (this.state.currentRegion.longitude + area) && spot.longitude > (this.state.currentRegion.longitude - area))
@@ -163,53 +160,6 @@ class Map extends Component {
       })
     })
   }
-
-  // getPosition = (options) => {
-  // return new Promise(function (resolve, reject) {
-  //   navigator.geolocation.getCurrentPosition(resolve, reject, options);
-  //     });
-  //   }
-  //
-  // getUserLocation = () => {
-  //   this.getPosition()
-  //   .then((position) => {
-      // this.setState({
-      //   initialRegion:{
-      //     latitude: position.coords.latitude,
-      //     longitude: position.coords.longitude,
-      //     latitudeDelta: 0.115,
-      //     longitudeDelta: 0.1121,
-      //   },
-      //   geoLocationSwitch: true
-      // })
-  //   })
-  //   .catch((err) => {
-  //     console.error(err.message);
-  //   })
-  // }
-
-
-  // getPosition = () => {
-  //   // Simple wrapper
-  //   return new Promise((res, rej) => {
-  //       navigator.geolocation.getCurrentPosition(res, rej);
-  //   });
-  // }
-  //
-  // getUserLocation = async () => {
-  //     let position = await this.getPosition();  // wait for getPosition to complete
-  //     this.setState({
-  //       initialRegion:{
-  //         latitude: position.coords.latitude,
-  //         longitude: position.coords.longitude,
-  //         latitudeDelta: 0.115,
-  //         longitudeDelta: 0.1121,
-  //       },
-  //       geoLocationSwitch: true
-  //     })
-  // }
-
-
 
   goToSpotPage = (marker) => {
     this.props.navigation.navigate('SpotPageRemake', {skatespot: marker })

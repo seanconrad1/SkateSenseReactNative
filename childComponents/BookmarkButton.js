@@ -23,13 +23,14 @@ class BookmarkButton extends Component {
   }
 
   componentDidMount(){
+    this.checkIfUserBookmarkedSpot()
   }
 
   componentWillReceiveProps(nextProps){
     if (this.props.spot !== nextProps.spot ){
       this.setState({spotID: nextProps.spot.id})
-      this.checkIfUserBookmarkedSpot()
     }
+    this.checkIfUserBookmarkedSpot()
   }
 
   checkIfUserBookmarkedSpot = () =>{
@@ -43,7 +44,7 @@ class BookmarkButton extends Component {
 
 
   bookmarkSpot = () =>{
-    debugger
+    // debugger
     let userID = this.state.currentUserid
     let spotID = this.state.spotID
     deviceStorage.loadJWT('jwt')
