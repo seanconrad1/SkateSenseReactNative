@@ -208,8 +208,8 @@ class Map extends Component {
 
   scrollToNewSpot = () => {
     this.props.getSkateSpots()
-    setTimeout(this.myRef.getNode().scrollToEnd, 500);
-    // this.myRef.getNode().scrollToEnd()
+    // setTimeout(this.myRef.getNode().scrollToEnd, 500);
+    this.myRef.getNode().scrollToEnd()
   }
 
   onRegionChange = (region) => {
