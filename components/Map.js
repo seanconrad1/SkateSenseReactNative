@@ -73,6 +73,7 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps){
+
     // This is the function to scroll
     // to the end of the spots when a new spot is created
     if (this.props.navigation.getParam('index') !== nextProps.navigation.getParam('index') && nextProps.navigation.getParam('index') !== undefined) {
@@ -82,9 +83,6 @@ class Map extends Component {
 
     if(this.props.user.skate_spots !== nextProps.user.skate_spots && nextProps.user.skate_spots !== undefined){
       this.setState({skatespots: nextProps.user.skate_spots})
-      // console.log('KEYs', Object.keys(this.animation._listeners).length);
-
-
       // filter to show only spots near initial starting point
       if (this.state.updateCounter <= 0) {
         console.log('GOT TO LINE 90');
@@ -97,7 +95,6 @@ class Map extends Component {
         this.addAnEventListener()
         this.setState({updateCounter: 1})
       }
-
     }
   }
 
@@ -117,7 +114,6 @@ class Map extends Component {
     }
 
     const setAnimatorListener = () =>{
-      // debugger
       this.animation.addListener(({ value }) => {
         let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
         if (index >= this.state.filteredSpots.length) {
@@ -144,8 +140,6 @@ class Map extends Component {
         }, 10);
       })
     }
-
-    // debugger
   }
 
   addAnEventListener = () =>{
@@ -213,7 +207,9 @@ class Map extends Component {
   }
 
   scrollToNewSpot = () => {
-    this.myRef.getNode().scrollToEnd()
+    this.props.getSkateSpots()
+    setTimeout(this.myRef.getNode().scrollToEnd, 500);
+    // this.myRef.getNode().scrollToEnd()
   }
 
   onRegionChange = (region) => {
@@ -222,7 +218,6 @@ class Map extends Component {
 
   render() {
 
-    console.log('filtered spots?', this.state.filteredSpots);
     const interpolations =
     this.state.filteredSpots
     ?( this.state.filteredSpots.map((marker, index) => {

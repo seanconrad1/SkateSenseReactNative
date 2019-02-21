@@ -171,10 +171,11 @@ class NewSpotPage extends Component {
           data
         ).then((resp) => {
           console.log('RESPONSE FROM SERVER', resp)
-          // this.props.getSkateSpots()
-          let index = this.props.user.skate_spots.length - 1
+          // let a = true
           // debugger
-          this.props.navigation.navigate('Map',{index: index })
+          let index = this.props.user.skate_spots.length + 1
+          this.props.navigation.navigate('Map', {index:index})
+
         })
         .catch((err) => {
           console.log('Error creating new marker: ', err)
