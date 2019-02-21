@@ -39,6 +39,7 @@ const CARD_WIDTH = wp('95%');
 
 class Map extends Component {
   state = {
+    updateCounter: 0,
     region: {
       latitudeDelta: 0.04864195044303443,
       longitudeDelta: 0.040142817690068,
@@ -72,7 +73,6 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-
     // This is the function to scroll
     // to the end of the spots when a new spot is created
     if (this.props.navigation.getParam('index') !== nextProps.navigation.getParam('index') && nextProps.navigation.getParam('index') !== undefined) {
@@ -84,16 +84,19 @@ class Map extends Component {
       this.setState({skatespots: nextProps.user.skate_spots})
       // console.log('KEYs', Object.keys(this.animation._listeners).length);
 
-      // filter to show only spots near current area
-      let area = .5
-      if (this.state.initialRegion && this.state.initialRegion.latitude > 0){
-        console.log(this.state.initialRegion);
-        let filteredSpots = nextProps.user.skate_spots.filter( spot => spot.latitude < (this.state.initialRegion.latitude + area) && spot.latitude > (this.state.initialRegion.latitude - area) && spot.longitude < (this.state.initialRegion.longitude + area) && spot.longitude > (this.state.initialRegion.longitude - area))
-        this.setState({filteredSpots: filteredSpots})
-      }
 
-      //Animate to spot
-      this.addAnEventListener()
+      // filter to show only spots near initial starting point
+      if (this.state.updateCounter <= 0) {
+        console.log('GOT TO LINE 90');
+        let area = .5
+        if (this.state.initialRegion && this.state.initialRegion.latitude > 0){
+          let filteredSpots = nextProps.user.skate_spots.filter( spot => spot.latitude < (this.state.initialRegion.latitude + area) && spot.latitude > (this.state.initialRegion.latitude - area) && spot.longitude < (this.state.initialRegion.longitude + area) && spot.longitude > (this.state.initialRegion.longitude - area))
+          this.setState({filteredSpots: filteredSpots})
+        }
+        //Animate to spot
+        this.addAnEventListener()
+        this.setState({updateCounter: 1})
+      }
 
     }
   }
@@ -101,38 +104,48 @@ class Map extends Component {
   refreshMarkers = (marker) =>{
     this.animation.removeAllListeners()
 
+    this.props.getSkateSpots()
+
     let area = .5
     if (this.state.currentRegion && this.state.currentRegion.latitude > 0 && this.props.user.skate_spots !== undefined){
+      console.log(this.state.currentRegion.latitude, this.state.currentRegion.longitude);
       let filteredSpots = this.props.user.skate_spots.filter(spot => spot.latitude < (this.state.currentRegion.latitude + area) && spot.latitude > (this.state.currentRegion.latitude - area) && spot.longitude < (this.state.currentRegion.longitude + area) && spot.longitude > (this.state.currentRegion.longitude - area))
-      this.setState({filteredSpots: filteredSpots})
+      // this.setState({filteredSpots: filteredSpots})
+      this.setState({filteredSpots: filteredSpots}, () => {
+          setAnimatorListener()
+      });
     }
 
-    this.animation.addListener(({ value }) => {
-      let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
-      if (index >= this.state.filteredSpots.length) {
-        index = this.state.filteredSpots.length - 1;
-      }
-      if (index <= 0) {
-        index = 0;
-      }
-
-      clearTimeout(this.regionTimeout);
-      this.regionTimeout = setTimeout(() => {
-        if (this.index !== index) {
-          this.index = index;
-          this.map.animateToRegion(
-            {
-              latitude: this.state.filteredSpots[index].latitude,
-              longitude: this.state.filteredSpots[index].longitude,
-              latitudeDelta: this.state.region.latitudeDelta,
-              longitudeDelta: this.state.region.longitudeDelta,
-            },
-            350
-          );
+    const setAnimatorListener = () =>{
+      // debugger
+      this.animation.addListener(({ value }) => {
+        let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
+        if (index >= this.state.filteredSpots.length) {
+          index = this.state.filteredSpots.length - 1;
         }
-      }, 10);
-    })
+        if (index <= 0) {
+          index = 0;
+        }
 
+        clearTimeout(this.regionTimeout);
+        this.regionTimeout = setTimeout(() => {
+          if (this.index !== index) {
+            this.index = index;
+            this.map.animateToRegion(
+              {
+                latitude: this.state.filteredSpots[index].latitude,
+                longitude: this.state.filteredSpots[index].longitude,
+                latitudeDelta: this.state.region.latitudeDelta,
+                longitudeDelta: this.state.region.longitudeDelta,
+              },
+              350
+            );
+          }
+        }, 10);
+      })
+    }
+
+    // debugger
   }
 
   addAnEventListener = () =>{
@@ -208,6 +221,8 @@ class Map extends Component {
   }
 
   render() {
+
+    console.log('filtered spots?', this.state.filteredSpots);
     const interpolations =
     this.state.filteredSpots
     ?( this.state.filteredSpots.map((marker, index) => {
