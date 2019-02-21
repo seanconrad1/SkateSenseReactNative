@@ -93,44 +93,74 @@ class Map extends Component {
       }
 
       //Animate to spot
-      debugger
-      if (Object.keys(this.animation._listeners).length == 0){
-        this.animation.addListener(({ value }) => {
-          let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
-          if (index >= this.state.filteredSpots.length) {
-            index = this.state.filteredSpots.length - 1;
-          }
-          if (index <= 0) {
-            index = 0;
-          }
-
-          clearTimeout(this.regionTimeout);
-          this.regionTimeout = setTimeout(() => {
-            if (this.index !== index) {
-              this.index = index;
-              this.map.animateToRegion(
-                {
-                  latitude: this.state.filteredSpots[index].latitude,
-                  longitude: this.state.filteredSpots[index].longitude,
-                  latitudeDelta: this.state.region.latitudeDelta,
-                  longitudeDelta: this.state.region.longitudeDelta,
-                },
-                350
-              );
-            }
-          }, 10);
-        })
-      }
+      this.addAnEventListener()
 
     }
   }
 
   refreshMarkers = (marker) =>{
+    this.animation.removeAllListeners()
+
     let area = .5
     if (this.state.currentRegion && this.state.currentRegion.latitude > 0 && this.props.user.skate_spots !== undefined){
       let filteredSpots = this.props.user.skate_spots.filter(spot => spot.latitude < (this.state.currentRegion.latitude + area) && spot.latitude > (this.state.currentRegion.latitude - area) && spot.longitude < (this.state.currentRegion.longitude + area) && spot.longitude > (this.state.currentRegion.longitude - area))
       this.setState({filteredSpots: filteredSpots})
     }
+
+    this.animation.addListener(({ value }) => {
+      let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
+      if (index >= this.state.filteredSpots.length) {
+        index = this.state.filteredSpots.length - 1;
+      }
+      if (index <= 0) {
+        index = 0;
+      }
+
+      clearTimeout(this.regionTimeout);
+      this.regionTimeout = setTimeout(() => {
+        if (this.index !== index) {
+          this.index = index;
+          this.map.animateToRegion(
+            {
+              latitude: this.state.filteredSpots[index].latitude,
+              longitude: this.state.filteredSpots[index].longitude,
+              latitudeDelta: this.state.region.latitudeDelta,
+              longitudeDelta: this.state.region.longitudeDelta,
+            },
+            350
+          );
+        }
+      }, 10);
+    })
+
+  }
+
+  addAnEventListener = () =>{
+    this.animation.addListener(({ value }) => {
+      let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
+      if (index >= this.state.filteredSpots.length) {
+        index = this.state.filteredSpots.length - 1;
+      }
+      if (index <= 0) {
+        index = 0;
+      }
+
+      clearTimeout(this.regionTimeout);
+      this.regionTimeout = setTimeout(() => {
+        if (this.index !== index) {
+          this.index = index;
+          this.map.animateToRegion(
+            {
+              latitude: this.state.filteredSpots[index].latitude,
+              longitude: this.state.filteredSpots[index].longitude,
+              latitudeDelta: this.state.region.latitudeDelta,
+              longitudeDelta: this.state.region.longitudeDelta,
+            },
+            350
+          );
+        }
+      }, 10);
+    })
   }
 
   animateToUserLocation = () =>{
