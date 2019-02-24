@@ -6,7 +6,7 @@ import {
   View,
   ScrollView,
   Animated,
-  Image,
+  // Image,
   Dimensions,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -31,6 +31,8 @@ import deviceStorage from '../deviceStorage.js'
 import BookmarkButton from '../childComponents/BookmarkButton'
 import {widthPercentageToDP as wp,
         heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import Image from 'react-native-remote-svg'
+
 
 const { width, height } = Dimensions.get("window");
 
@@ -233,7 +235,7 @@ class Map extends Component {
       });
       const opacity = this.animation.interpolate({
         inputRange,
-        outputRange: [0.35, 1, 0.35],
+        outputRange: [10, 1, 10],
         extrapolate: "clamp",
       });
       return { scale, opacity };
@@ -242,6 +244,7 @@ class Map extends Component {
 
     return (
       <View style={styles.container}>
+
         <MapView
           showsUserLocation
           ref={map => this.map = map}
@@ -274,8 +277,12 @@ class Map extends Component {
               onPress={(e) => {e.stopPropagation(); this.onMarkerPressHandler(marker, index)}}
               >
               <Animated.View style={[styles.markerWrap, opacityStyle]}>
-                <Animated.View style={[styles.ring, scaleStyle]}/>
-                <View style={styles.marker}/>
+                <Animated.View style={[styles.marker, scaleStyle]}>
+                  <Image
+                    source={{ uri: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/134893/pin-red.svg' }}
+                    style={styles.marker}
+                    />
+                </Animated.View>
               </Animated.View>
             </MapView.Marker>
           )})
@@ -470,20 +477,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   marker: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "rgba(244, 2, 87, .9)",
-  },
-  ring: {
-    width: 12,
-    height: 12,
-    borderRadius: 12,
-    backgroundColor: "rgba(142, 25, 66, .3)",
-    position: "absolute",
-    borderWidth: 1,
-    borderColor: "rgba(130,4,150, 0.5)",
-
+    width: 20,
+    height: 20,
+    // borderRadius: 4,
+    // backgroundColor: "rgba(244, 2, 87, .9)",
   },
 });
 

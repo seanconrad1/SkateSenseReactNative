@@ -142,45 +142,51 @@ class NewSpotPage extends Component {
     }
 
     onSubmit = () =>{
-      let data = [
-            { name : 'name', data : this.state.name},
-            { name : 'country', data: 'n/a'},
-            { name : 'city', data: 'n/a'},
-            { name : 'state', data: 'n/a'},
-            { name : 'latitude', data: this.state.selectedLat},
-            { name : 'longitude', data: this.state.selectedLng},
-            { name : 'description', data: this.state.description},
-            { name : 'bust_factor', data: this.state.kickout},
-            { name : 'user_id', data: this.props.user.user.id}
-          ]
+      deviceStorage.loadJWT('jwt')
+      .then(val => fetchToPostSpot(val))
 
-      for (i of this.state.photo){
-        // debugger
-      	data.push({
-      		name : 'avatars[]',
-          filename : `${i.name}`,
-          type:'image/jpg',
-      		data: `RNFetchBlob-file://${i.uri}`
-      	})
-      }
+      const fetchToPostSpot = (val) =>{
+        debugger
+        let data = [
+              { name : 'name', data : this.state.name},
+              { name : 'country', data: 'n/a'},
+              { name : 'city', data: 'n/a'},
+              { name : 'state', data: 'n/a'},
+              { name : 'latitude', data: this.state.selectedLat},
+              { name : 'longitude', data: this.state.selectedLng},
+              { name : 'description', data: this.state.description},
+              { name : 'bust_factor', data: this.state.kickout},
+              { name : 'user_id', data: this.props.user.user.id}
+            ]
 
-      RNFetchBlob.fetch('POST', `http://${environment['BASE_URL']}/api/v1/skate_spots`, {
-          Authorization : `${environment['API_KEY']}`,
-          'Content-Type' : undefined,
-        },
-          data
-        ).then((resp) => {
-          console.log('RESPONSE FROM SERVER', resp)
-          // let a = true
+        for (i of this.state.photo){
           // debugger
-          let index = this.props.user.skate_spots.length + 1
-          this.props.navigation.navigate('Map', {index:index})
+        	data.push({
+        		name : 'avatars[]',
+            filename : `${i.name}`,
+            type:'image/jpg',
+        		data: `RNFetchBlob-file://${i.uri}`
+        	})
+        }
 
-        })
-        .catch((err) => {
-          console.log('Error creating new marker: ', err)
-        })
-      }
+        RNFetchBlob.fetch('POST', `http://${environment['BASE_URL']}/api/v1/skate_spots`, {
+            Authorization: `Bearer ${val}`,
+            'Content-Type' : undefined,
+          },
+            data
+          ).then((resp) => {
+            console.log('RESPONSE FROM SERVER', resp.data)
+            // let a = true
+            // debugger
+            let index = this.props.user.skate_spots.length + 1
+            this.props.navigation.navigate('Map', {index:index})
+
+          })
+          .catch((err) => {
+            console.log('Error creating new marker: ', err)
+          })
+        }
+    }
 
   render(){
     const streetSpotTypebuttons = ['Street Spot', 'Skatepark', 'DIY']
