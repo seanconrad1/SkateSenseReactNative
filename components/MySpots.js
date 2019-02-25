@@ -230,7 +230,7 @@ class MySpots extends Component {
 
         return spots.map(spot => (
 
-          <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPageRemake', {
+          <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
             skatespot: spot })}}>
 
               <Card

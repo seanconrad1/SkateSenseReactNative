@@ -201,7 +201,7 @@ class Map extends Component {
   }
 
   goToSpotPage = (marker) => {
-    this.props.navigation.navigate('SpotPageRemake', {skatespot: marker })
+    this.props.navigation.navigate('SpotPage', {skatespot: marker })
   }
 
   onMarkerPressHandler = (marker, index) => {
