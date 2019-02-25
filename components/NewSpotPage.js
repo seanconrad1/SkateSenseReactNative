@@ -198,6 +198,7 @@ class NewSpotPage extends Component {
     return(
       <View>
         <Header
+          leftComponent={{ icon: 'arrow-left', type:'font-awesome', color: 'black', onPress: () => this.props.navigation.goBack()}}
           centerComponent={{ fontFamily:'Lobster', text: 'Create New Spot', style: { color: 'black', fontSize: 25 } }}
           backgroundColor='white'
           containerStyle={{
