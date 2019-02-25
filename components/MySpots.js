@@ -41,16 +41,16 @@ const styles = StyleSheet.create({
   directionsButton:{
     backgroundColor:"grey",
     borderRadius: 20,
-    width: '100%',
+    width: '70%',
     marginLeft: 0,
     marginRight: 0,
-    marginBottom: 5,
+    // marginBottom: 5,
     paddingRight: 0
   },
   unBookmarkButton:{
     backgroundColor:"#f40257",
     borderRadius: 20,
-    width: '100%',
+    width: '50%',
     marginLeft: 0,
     marginRight: 0,
     marginBottom: 0,
@@ -244,19 +244,36 @@ class MySpots extends Component {
               { spot.description}
               </Text>
 
-              <Button
-                raised
-                icon={<Icon name="directions"/>}
-                buttonStyle={styles.directionsButton}
-                onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
-                title='Directions' />
+              <View style={{flexDirection:'row'}}>
+                  <Icon
+                    raised
+                    name='directions'
+                    size={17}
+                    type='material'
+                    color="black"
+                    onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
+                    />
 
-              <Button
-                raised
-                icon={{name: 'trash', type: 'font-awesome'}}
-                buttonStyle={styles.unBookmarkButton}
-                onPress={() => this.deleteAlertMsg(spot.id)}
-                title='Delete Spot' />
+                  <Icon
+                    raised
+                    name='trash'
+                    type='font-awesome'
+                    size={17}
+                    type='font-awesome'
+                    color="rgb(244, 2, 87)"
+                    onPress={() => this.deleteAlertMsg(spot.id)}
+                    />
+                    <Icon
+                      raised
+                      name='share'
+                      type='font-awesome'
+                      size={17}
+                      type='font-awesome'
+                      color="rgb(244, 2, 87)"
+                      onPress={() => this.deleteAlertMsg(spot.id)}
+                      />
+                </View>
+
               </Card>
             </TouchableWithoutFeedback>
 
@@ -266,7 +283,7 @@ class MySpots extends Component {
         let filteredArray = spots.filter(spot => spot.name.toLowerCase().includes(this.state.term.toLowerCase()) || spot.description.toLowerCase().includes(this.state.term.toLowerCase()))
         return filteredArray.map(spot => (
 
-          <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPageRemake', {
+          <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
             skatespot: spot
           })}}>
             <Card
@@ -304,7 +321,7 @@ class MySpots extends Component {
       let bookmarks = this.state.bookmarkedSpots
       if (this.state.term === '' || this.state.term === undefined && bookmarks !== undefined) {
         return bookmarks.map(bookmark => (
-          <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPageRemake', {
+          <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
                 skatespot: bookmark
               })}}>
             <Card
@@ -317,11 +334,11 @@ class MySpots extends Component {
               </Text>
 
               <Button
-              raised
-              icon={<Icon name="directions"/>}
-              buttonStyle={styles.directionsButton}
-              onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${bookmark.latitude},${bookmark.longitude}`)}
-              title='Directions' />
+                raised
+                icon={<Icon name="directions"/>}
+                buttonStyle={styles.directionsButton}
+                onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${bookmark.latitude},${bookmark.longitude}`)}
+                title='Directions' />
 
               <Button
                 raised
@@ -343,7 +360,7 @@ class MySpots extends Component {
         return filteredArray.map(bookmark => (
           <View>
 
-            <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPageRemake', {
+            <TouchableWithoutFeedback onPress={()=> { this.props.navigation.navigate('SpotPage', {
                   skatespot: bookmark
                 })}}>
 
