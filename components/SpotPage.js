@@ -97,6 +97,7 @@ class SpotPageRemake extends Component {
   }
 
   componentDidMount(){
+    this.getUsers()
     this.setState({
       skatespot: this.props.navigation.getParam('skatespot'),
       images: this.props.navigation.getParam('skatespot').avatars,
@@ -133,8 +134,30 @@ class SpotPageRemake extends Component {
     })})
   }
 
-  postButtonHandler = () =>{
+  getUsers = () => {
+    deviceStorage.loadJWT('jwt')
+    .then(key => fetchUsers(key))
 
+    const fetchUsers = async (key) =>{
+      let response = await fetch(`http://${environment['BASE_URL']}/api/v1/users/`,{
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+           Accept: 'application/json',
+           Authorization: `Bearer ${key}`
+        },
+      })
+      const json = await response.json();
+      this.setState({users:json})
+    }
+  }
+
+  findCommentOwner = (id) =>{
+    let user = this.state.users.filter(user => user.id === id)
+    return `${user[0].username} `
+  }
+
+  postButtonHandler = () =>{
     deviceStorage.loadJWT('jwt')
     .then(key => fetchToCommentOnSpot(key))
 
@@ -158,7 +181,6 @@ class SpotPageRemake extends Component {
   }
 
   _renderItem = ({item, index}) => {
-    console.log('ITEM', item.url);
         return (
             <View>
               <Image
@@ -171,7 +193,6 @@ class SpotPageRemake extends Component {
 
 
   render(){
-    console.log(this.state.comments);
     return(
       <View>
           <Header
@@ -183,7 +204,6 @@ class SpotPageRemake extends Component {
                justifyContent: 'space-around',
              }}/>
 
-       <ScrollView>
              <Icon
              raised
              size={hp('2.8')}
@@ -223,7 +243,14 @@ class SpotPageRemake extends Component {
                 <View style={styles.commentContainer}>
                   {this.state.comments.map(comment=>{
                     return <View style={styles.oneCommentContainer}>
-                    <Text style={{fontWeight: 'bold'}}>{this.props.user.user.username} </Text>
+                    <Text
+                      style={{fontWeight: 'bold'}}>
+
+                      {this.state.users
+                        ?this.findCommentOwner(comment.user_id)
+                        :null
+                      }
+                    </Text>
                     <Text style={styles.commentContent}>{comment.content}</Text>
                     <View>
                     {comment.user_id === this.props.user.user.id
@@ -258,7 +285,6 @@ class SpotPageRemake extends Component {
                     />}
 
                 </View>
-            </ScrollView>
           </View>
         )
   }
