@@ -24,38 +24,32 @@ const comments = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
 
 
 const styles = StyleSheet.create({
+  scrollView:{
+    height: hp('22%'),
+  },
+  homeView:{
+    // alignItems: 'flex-end',
+    // justifyContent: 'flex-end',
+  },
   commentContainer:{
     marginLeft: wp('2%'),
-    marginTop:hp('10%'),
     position: 'relative',
-    // flexWrap: 'no-wrap',
-    height: hp('20%'),
     width: wp('100%'),
-    justifyContent:'space-between',
-
+    flexDirection: 'column'
   },
   oneCommentContainer:{
-    paddingBottom: 10,
     flexDirection:'row',
-
-  },
-  commentContent:{
-    // justifyContent:'space-between',
-    // justifyContent:'flex-end',
-    // alignItems:'flex-end',
-    // alignSelf: 'flex-start',
-    // justifyContent: 'flex-start'
+    padding: 0,
+    margin: 0
   },
   trashIcon:{
     position:'relative',
     marginLeft:wp('20%'),
-    // justifyContent:'space-between',
-    // alignSelf: 'flex-end',
-    // alignSelf:'flex-end',
   },
   commentInputandButtonContainer:{
     flexDirection: 'row',
-    position: 'relative'
+    position: 'relative',
+    // marginTop: hp('15%'),
   },
   commentInput:{
     borderRadius: 20,
@@ -78,8 +72,7 @@ const styles = StyleSheet.create({
   divider:{
     backgroundColor: 'grey',
     borderWidth:.2,
-    marginBottom: hp('5%'),
-    marginTop: hp('5%')}
+  }
 })
 
 class SpotPageRemake extends Component {
@@ -184,7 +177,7 @@ class SpotPageRemake extends Component {
         return (
             <View>
               <Image
-                style={{width: wp('100%'), height: hp('30%')}}
+                style={{width: wp('100%'), height: hp('50%')}}
                 source={{uri:`http://${environment['BASE_URL']}${item.url}`}}
               />
             </View>
@@ -236,10 +229,11 @@ class SpotPageRemake extends Component {
                           }
               </Text>
 
+              <Divider style={styles.divider} />
 
-              <Animated.ScrollView
-                snapToEnd
-              >
+
+
+              <ScrollView style={styles.scrollView} contentContainerStyle={styles.homeView}>
                 <View style={styles.commentContainer}>
                   {this.state.comments.map(comment=>{
                     return <View style={styles.oneCommentContainer}>
@@ -260,9 +254,8 @@ class SpotPageRemake extends Component {
                       </View>
                     })}
                   </View>
-              </Animated.ScrollView>
+              </ScrollView>
 
-              <Divider style={styles.divider} />
 
 
               <View style={styles.commentInputandButtonContainer}>
