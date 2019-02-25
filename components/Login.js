@@ -51,8 +51,8 @@ const styles = StyleSheet.create({
 
 class Login extends Component {
   state = {
-    username: 'seanrad',
-    password: '123456789'
+    username: '',
+    password: ''
   }
 
 
