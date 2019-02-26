@@ -19,7 +19,7 @@ import MapView, {
       Callout,
       Overlay,
       MapCallout } from 'react-native-maps'
-import { Header, ListItem, Avatar, Icon } from 'react-native-elements'
+import { Header, ListItem, Avatar, Icon, Button } from 'react-native-elements'
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import ActionButton from 'react-native-action-button';
 import { connect } from 'react-redux'
@@ -230,7 +230,7 @@ class Map extends Component {
       ];
       const scale = this.animation.interpolate({
         inputRange,
-        outputRange: [1, 3, 1],
+        outputRange: [1, 2.5, 1],
         extrapolate: "clamp",
       });
       const opacity = this.animation.interpolate({
@@ -326,21 +326,38 @@ class Map extends Component {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity onPress={this.refreshMarkers}>
-                <Icon
-                  raised
-                  name='refresh'
-                  size={20}
-                  type='font-awesome'
-                  containerStyle={{
-                    position: 'absolute',
-                    paddingTop: 0,
-                    marginLeft: wp('80%'),
-                    marginTop: hp('40%'),
-                  }}
-                  color="rgb(244, 2, 87)"
-                />
-            </TouchableOpacity>
+
+              <Button
+                raised
+                icon={{
+                  name: "refresh",
+                  size: 18,
+                  color: "rgb(244, 2, 87)",
+                  type: 'font-awesome',
+                  marginLeft:5
+                }}
+                title='Search this area'
+                containerStyle={{
+                  position: 'absolute',
+                  paddingTop: 0,
+                  marginLeft: wp('53%'),
+                  marginTop: hp('6%'),
+                }}
+                buttonStyle={{
+                  backgroundColor: 'white',
+                  borderColor: "transparent",
+                  borderWidth: 0,
+                  borderRadius: wp('20%'),
+                }}
+                titleStyle={{
+                  color:"rgb(244, 2, 87)",
+                  marginRight:10,
+                  fontSize:wp('4')
+                }}
+                onPress={this.refreshMarkers}
+              />
+
+
 
             <TouchableOpacity onPress={this.animateToUserLocation}>
                   <Icon
@@ -482,6 +499,25 @@ const styles = StyleSheet.create({
     // backgroundColor: "rgba(244, 2, 87, .9)",
   },
 });
+
+
+// <TouchableOpacity onPress={this.refreshMarkers}>
+//     <Icon
+//       raised
+//       name='refresh'
+//       size={20}
+//       type='font-awesome'
+//       containerStyle={{
+//         position: 'absolute',
+//         paddingTop: 0,
+//         marginLeft: wp('80%'),
+//         marginTop: hp('40%'),
+//       }}
+//       color="rgb(244, 2, 87)"
+//     />
+// </TouchableOpacity>
+
+
 
 const mapStateToProps = state => {
   return {
