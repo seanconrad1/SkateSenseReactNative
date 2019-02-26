@@ -107,7 +107,9 @@ class Login extends Component {
             behavior="padding"
             >
 
-            <Animated.Text style={[styles.header, {fontSize:this.fontSizeBig}]}>SkateSense</Animated.Text>
+            <View>
+              <Animated.Text style={[styles.header, {fontSize:this.fontSizeBig}]}>SkateSense</Animated.Text>
+            </View>
 
             <View>
               <Text style={{color:'red'}}>

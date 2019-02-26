@@ -35,10 +35,16 @@ export const createUser = (username, password, first_name, last_name, email, pho
         deviceStorage.saveItem("jwt", JSONResponse.jwt)
         dispatch({ type: 'SET_CURRENT_USER', payload: JSONResponse.user })
       })
-      // .catch( res => {res.json().then(e => dispatch({ type: 'FAILED_LOGIN', payload: e.message }))})
-      .catch( res => console.log('res ',res))
+      .catch(res => res.json().then(e => {
+        if (e.error.password){
+          dispatch({ type: 'CREATE_USER_FAILED_PASSWORD', payload: e.error.password })
+        }if (e.error.username) {
+          dispatch({ type: 'CREATE_USER_FAILED_USERNAME', payload: e.error.username })
+        }
+      }))
     }
 }
+
 
 export const loginUser = (username, password) => {
   return (dispatch) => {

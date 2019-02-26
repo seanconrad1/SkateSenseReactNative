@@ -25,7 +25,7 @@ const initialState = {
 }
 
 export default function reducer(state = initialState, action) {
-  // console.log('MY REDUCERS ACTION', action)
+  // console.log('MY REDUCERS ACTION', action.payload)
   switch (action.type) {
     case 'SET_CURRENT_USER':
       return { ...state, user: action.payload, loggedIn: true, authenticatingUser: false }
@@ -36,6 +36,12 @@ export default function reducer(state = initialState, action) {
     case 'AUTHENTICATED_USER':
       return { ...state, authenticatingUser: false }
 
+    case 'CREATE_USER_FAILED_PASSWORD':
+      return { ...state, failed_login_error_password: action.payload }
+
+    case 'CREATE_USER_FAILED_USERNAME':
+      return { ...state, failed_login_error_username: action.payload }
+
     case 'FAILED_LOGIN':
       return {
         ...state,
@@ -43,7 +49,6 @@ export default function reducer(state = initialState, action) {
         error: action.payload,
         authenticatingUser: false
       }
-
 
     case 'LOGOUT_USER':
       // console.log('GOT TO LOGOUTUSER IN REDUCER')

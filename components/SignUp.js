@@ -18,7 +18,7 @@ class SignUp extends Component {
     lastName: 'n/a',
     photo: 'n/a',
     passwordMustMatch: false,
-    errors:''
+    error:''
   }
 
 
@@ -33,6 +33,17 @@ class SignUp extends Component {
       )
     }else{
       this.setState({passwordMustMatch: true})
+    }
+  }
+
+  returnError = () => {
+    // if (this.props.failed_login_error_password){
+    //   this.props.failed_login_error_password.map(error => {
+    //     return <Text> error </Text>
+    //   })
+    // }
+    if (this.props.failed_login_error_username){
+      return <Text> Username {this.props.failed_login_error_username[0]}</Text>
     }
   }
 
@@ -55,22 +66,18 @@ class SignUp extends Component {
 
     return(
       <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <ThemeProvider>
-          <Animated.Text style={styles.header}>Signup</Animated.Text>
 
+          <View>
+            <Animated.Text style={styles.header}>Signup</Animated.Text>
+          </View>
+
+          <Text style={{color:'red'}}>
+            {this.returnError()}
+          </Text>
 
           <View>
             <Text style={{color:'red'}}>
-              {this.state.passwordMustBeLessThan20 ? 'Passwords must be less than 20 characters.' : null}
-            </Text>
-            <Text style={{color:'red'}}>
-              {this.state.usernameMustExist ? 'You must enter a username.' : null}
-            </Text>
-            <Text style={{color:'red'}}>
               {this.state.passwordMustMatch ? 'Passwords Must Match' : null}
-            </Text>
-            <Text style={{color:'red'}}>
-              {this.state.passwordMustBeGreaterThanSix ? 'Password must be greater than 6 characters' : null}
             </Text>
           </View>
 
@@ -144,20 +151,18 @@ class SignUp extends Component {
                   }}
                   onPress={this.onSubmit}
                 />
-
-
-        </ThemeProvider>
       </KeyboardAvoidingView>
     )
   }
 }
 
 
-const mapStateToProps = ({ user: { authenticatingUser, failedLogin, error, loggedIn } }) => ({
+const mapStateToProps = ({ user: { authenticatingUser, failedLogin, error, loggedIn, failed_login_error_password, failed_login_error_username } }) => ({
   authenticatingUser,
   failedLogin,
-  error,
-  loggedIn
+  loggedIn,
+  failed_login_error_password,
+  failed_login_error_username
 })
 
 
