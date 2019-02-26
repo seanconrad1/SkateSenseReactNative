@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Keyboard, Text, StyleSheet, View } from 'react-native'
+import { Keyboard, Text, StyleSheet, View, KeyboardAvoidingView, Animated } from 'react-native'
 import { Header } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input, Button, ThemeProvider } from 'react-native-elements';
@@ -39,8 +39,8 @@ class SignUp extends Component {
   render(){
     const styles = StyleSheet.create({
       container: {
-        flex: 0,
-        marginTop: 75,
+        flex: 1,
+        // marginTop: 75,
         justifyContent:'center',
         alignItems:'center',
         backgroundColor: 'white'
@@ -49,14 +49,14 @@ class SignUp extends Component {
         fontFamily: 'Lobster',
         fontSize: 50,
         fontWeight: 'bold',
-        marginBottom: 80
+        // marginBottom: 80
       },
     })
 
     return(
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
         <ThemeProvider>
-          <Text style={styles.header}>Signup</Text>
+          <Animated.Text style={styles.header}>Signup</Animated.Text>
 
 
           <View>
@@ -147,7 +147,7 @@ class SignUp extends Component {
 
 
         </ThemeProvider>
-      </View>
+      </KeyboardAvoidingView>
     )
   }
 }

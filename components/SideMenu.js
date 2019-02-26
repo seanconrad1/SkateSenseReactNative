@@ -18,11 +18,11 @@ const list = [
     type: 'font-awesome',
     icon: 'bookmark',
   },
-  {
-    name: 'Settings',
-    type: 'font-awesome',
-    icon: 'wrench',
-  },
+  // {
+  //   name: 'Settings',
+  //   type: 'font-awesome',
+  //   icon: 'wrench',
+  // },
 ]
 
 

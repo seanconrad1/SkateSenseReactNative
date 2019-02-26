@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
   }
 })
 
-const FONT_SIZE_BIG = hp('10')
-const FONT_SIZE_SMALL = hp('8')
+const FONT_SIZE_BIG = hp('8')
+const FONT_SIZE_SMALL = hp('6')
 
 class Login extends Component {
   constructor(props){
@@ -59,7 +59,7 @@ class Login extends Component {
       username: '',
       password: ''
     }
-    this.fontSizeBig = new Animated.Value(hp('10'))
+    this.fontSizeBig = new Animated.Value(hp('8'))
   }
 
   componentWillMount () {
