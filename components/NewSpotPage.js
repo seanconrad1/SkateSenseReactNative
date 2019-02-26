@@ -110,7 +110,7 @@ class NewSpotPage extends Component {
     // // Same code as in above section!
     //   });
 
-    ImagePicker.launchImageLibrary(options, (response) => {
+    ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
         console.log('User cancelled photo picker');
       }

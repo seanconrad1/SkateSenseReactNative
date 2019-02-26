@@ -249,7 +249,7 @@ class MySpots extends Component {
                     raised
                     name='directions'
                     size={17}
-                    type='material'
+                    type='material-community'
                     color="black"
                     onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
                     />
@@ -266,11 +266,11 @@ class MySpots extends Component {
                     <Icon
                       raised
                       name='share'
-                      type='font-awesome'
+                      type='ionicon'
                       size={17}
                       type='font-awesome'
                       color="rgb(244, 2, 87)"
-                      onPress={() => this.deleteAlertMsg(spot.id)}
+                      onPress={'share me'}
                       />
                 </View>
 
@@ -296,21 +296,34 @@ class MySpots extends Component {
                 {spot.description}
               </Text>
 
-              <Button
-                raised
-                icon={<Icon name="directions"/>}
-                buttonStyle={styles.directionsButton}
-                onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
-                title='Directions'
-              />
-
-              <Button
-                raised
-                icon={{name: 'trash', type: 'font-awesome'}}
-                buttonStyle={styles.unBookmarkButton}
-                title='Delete Spot'
-                onPress={() => this.deleteAlertMsg(spot.id)}
-            />
+              <View style={{flexDirection:'row'}}>
+                  <Icon
+                    raised
+                    name='directions'
+                    size={17}
+                    type='material-community'
+                    color="black"
+                    onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
+                    />
+                  <Icon
+                    raised
+                    name='trash'
+                    type='font-awesome'
+                    size={17}
+                    type='font-awesome'
+                    color="rgb(244, 2, 87)"
+                    onPress={() => this.deleteAlertMsg(spot.id)}
+                    />
+                  <Icon
+                    raised
+                    name='share'
+                    type='ionicon'
+                    size={17}
+                    type='font-awesome'
+                    color="rgb(244, 2, 87)"
+                    onPress={'share me'}
+                    />
+                </View>
           </Card>
           </TouchableWithoutFeedback>
 
@@ -347,6 +360,35 @@ class MySpots extends Component {
                 onPress={() => this.unBookmarkAlertMsg(bookmark.id)}
                 />
 
+              <View style={{flexDirection:'row'}}>
+                  <Icon
+                    raised
+                    name='directions'
+                    size={17}
+                    type='material-community'
+                    color="black"
+                    onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
+                    />
+                  <Icon
+                    raised
+                    name='bookmark'
+                    type='font-awesome'
+                    size={17}
+                    type='font-awesome'
+                    color="rgb(244, 2, 87)"
+                    onPress={() => this.unBookmarkAlertMsg(bookmark.id)}
+                    />
+                  <Icon
+                    raised
+                    name='share'
+                    type='ionicon'
+                    size={17}
+                    type='font-awesome'
+                    color="rgb(244, 2, 87)"
+                    onPress={'share me'}
+                    />
+                </View>
+
             </Card>
           </TouchableWithoutFeedback>
 
@@ -373,20 +415,34 @@ class MySpots extends Component {
                     {bookmark.description}
                   </Text>
 
-                  <Button
-                    raised
-                    icon={<Icon name="directions"/>}
-                    buttonStyle={styles.directionsButton}
-                    onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${bookmark.latitude},${bookmark.longitude}`)}
-                    title='Directions'
-                  />
-
-                  <Button
-                    raised
-                    buttonStyle={styles.unBookmarkButton}
-                    title='Unbookmark'
-                    onPress={() => this.unBookmarkAlertMsg(bookmark.id)}
-                    />
+                  <View style={{flexDirection:'row'}}>
+                      <Icon
+                        raised
+                        name='directions'
+                        size={17}
+                        type='material-community'
+                        color="black"
+                        onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
+                        />
+                      <Icon
+                        raised
+                        name='bookmark'
+                        type='font-awesome'
+                        size={17}
+                        type='font-awesome'
+                        color="rgb(244, 2, 87)"
+                        onPress={() => this.unBookmarkAlertMsg(bookmark.id)}
+                        />
+                      <Icon
+                        raised
+                        name='share'
+                        type='ionicon'
+                        size={17}
+                        type='font-awesome'
+                        color="rgb(244, 2, 87)"
+                        onPress={'share me'}
+                        />
+                    </View>
 
 
                 </Card>
