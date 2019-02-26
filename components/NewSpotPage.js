@@ -25,7 +25,7 @@ import { fetchKeyForSkateSpots } from '../action.js'
 import deviceStorage from '../deviceStorage.js'
 import {widthPercentageToDP as wp,
         heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const styles = StyleSheet.create({
   container: {
@@ -64,6 +64,9 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     marginTop: 0,
   },
+  spinnerTextStyle: {
+    color: '#FFF'
+  },
 })
 
 
@@ -78,6 +81,7 @@ class NewSpotPage extends Component {
     spotContains: [],
     selectedLat: null,
     selectedLng: null,
+    spotSubmitted: false
   }
 
   updateStreetSpotType = (streetSpotType) => {
@@ -142,11 +146,11 @@ class NewSpotPage extends Component {
     }
 
     onSubmit = () =>{
+      this.setState({spotSubmitted:true})
       deviceStorage.loadJWT('jwt')
       .then(val => fetchToPostSpot(val))
 
       const fetchToPostSpot = (val) =>{
-        debugger
         let data = [
               { name : 'name', data : this.state.name},
               { name : 'country', data: 'n/a'},
@@ -160,7 +164,6 @@ class NewSpotPage extends Component {
             ]
 
         for (i of this.state.photo){
-          // debugger
         	data.push({
         		name : 'avatars[]',
             filename : `${i.name}`,
@@ -176,9 +179,8 @@ class NewSpotPage extends Component {
             data
           ).then((resp) => {
             console.log('RESPONSE FROM SERVER', resp.data)
-            // let a = true
-            // debugger
             let index = this.props.user.skate_spots.length + 1
+            this.setState({spotSubmitted:false})
             this.props.navigation.navigate('Map', {index:index})
 
           })
@@ -197,6 +199,12 @@ class NewSpotPage extends Component {
 
     return(
       <View>
+        <Spinner
+         visible={this.state.spotSubmitted}
+         textContent={'Creating Spot...'}
+         textStyle={styles.spinnerTextStyle}
+         />
+
         <Header
           leftComponent={{ icon: 'arrow-left', type:'font-awesome', color: 'black', onPress: () => this.props.navigation.goBack()}}
           centerComponent={{ fontFamily:'Lobster', text: 'Create New Spot', style: { color: 'black', fontSize: 25 } }}
@@ -314,18 +322,23 @@ class NewSpotPage extends Component {
             />
 
 
-            {this.state.name && this.state.description && this.state.photo && this.state.selectedLat && this.state.selectedLng
-            ? <Button
-              title='Submit'
-              buttonStyle={styles.submitButton}
-              onPress={this.onSubmit}
-            />
-            : <Button
-              title='Submit'
-              disabled='true'
-              buttonStyle={styles.submitButton}
+            <View>
+
+              {this.state.name && this.state.description && this.state.photo && this.state.selectedLat && this.state.selectedLng && !this.state.spotSubmitted
+              ? <Button
+                title='Submit'
+                buttonStyle={styles.submitButton}
+                onPress={this.onSubmit}
               />
-            }
+              : <Button
+                title='Submit'
+                disabled='true'
+                buttonStyle={styles.submitButton}
+                />
+              }
+            </View>
+
+
             </ScrollView>
         </View>
     </View>

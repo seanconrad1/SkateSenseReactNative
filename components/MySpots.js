@@ -9,8 +9,9 @@ import { View,
          TextInput,
          YellowBox,
          Alert,
-         RefreshControl} from 'react-native'
-import { Header, Icon,  Card, ListItem, Button } from 'react-native-elements'
+         RefreshControl,
+         Share} from 'react-native'
+import { Header, Icon,  Card, ListItem, Button, Divider } from 'react-native-elements'
 import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
 import MySpotsButtonGroup from '../childComponents/MySpotsButtonGroup.js'
@@ -48,9 +49,10 @@ const styles = StyleSheet.create({
     paddingRight: 0
   },
   unBookmarkButton:{
-    backgroundColor:"#f40257",
+    backgroundColor:'white',
     borderRadius: 20,
-    width: '50%',
+    height:hp('5.5'),
+    width: wp('30%'),
     marginLeft: 0,
     marginRight: 0,
     marginBottom: 0,
@@ -137,6 +139,30 @@ class MySpots extends Component {
       whichTab: e
     })
   }
+
+   onShare = async (spot) => {
+    try {
+      const result = await Share.share({
+        message:
+          `${spot.name}`,
+        url:
+          `https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`
+      })
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
 
   deleteSpot = (id) =>{
     deviceStorage.loadJWT('jwt')
@@ -241,10 +267,13 @@ class MySpots extends Component {
                 >
 
               <Text style={{marginBottom: 10}}>
-              { spot.description}
+                <Text style={{fontWeight:'bold'}}>About: </Text>
+                { spot.description}
               </Text>
 
-              <View style={{flexDirection:'row'}}>
+              <Divider style={styles.divider} />
+
+              <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
                   <Icon
                     raised
                     name='directions'
@@ -253,7 +282,6 @@ class MySpots extends Component {
                     color="black"
                     onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
                     />
-
                   <Icon
                     raised
                     name='trash'
@@ -263,15 +291,15 @@ class MySpots extends Component {
                     color="rgb(244, 2, 87)"
                     onPress={() => this.deleteAlertMsg(spot.id)}
                     />
-                    <Icon
-                      raised
-                      name='share'
-                      type='ionicon'
-                      size={17}
-                      type='font-awesome'
-                      color="rgb(244, 2, 87)"
-                      onPress={'share me'}
-                      />
+                  <Icon
+                    raised
+                    name='share'
+                    type='ionicon'
+                    size={17}
+                    type='font-awesome'
+                    color="rgb(244, 2, 87)"
+                    onPress={() => this.onShare(spot)}
+                    />
                 </View>
 
               </Card>
@@ -293,10 +321,13 @@ class MySpots extends Component {
               containerStyle={styles.spot}>
 
               <Text style={{marginBottom: 10}}>
-                {spot.description}
+                <Text style={{fontWeight:'bold'}}>About: </Text>
+                { spot.description}
               </Text>
 
-              <View style={{flexDirection:'row'}}>
+              <Divider style={styles.divider} />
+
+              <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
                   <Icon
                     raised
                     name='directions'
@@ -321,7 +352,7 @@ class MySpots extends Component {
                     size={17}
                     type='font-awesome'
                     color="rgb(244, 2, 87)"
-                    onPress={'share me'}
+                    onPress={() => this.onShare(spot)}
                     />
                 </View>
           </Card>
@@ -343,39 +374,27 @@ class MySpots extends Component {
               containerStyle={styles.spot}>
 
               <Text style={{marginBottom: 10}}>
-                {bookmark.description}
+                <Text style={{fontWeight:'bold'}}>About: </Text>
+                { bookmark.description}
               </Text>
 
-              <Button
-                raised
-                icon={<Icon name="directions"/>}
-                buttonStyle={styles.directionsButton}
-                onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${bookmark.latitude},${bookmark.longitude}`)}
-                title='Directions' />
+              <Divider style={styles.divider} />
 
-              <Button
-                raised
-                buttonStyle={styles.unBookmarkButton}
-                title='Unbookmark'
-                onPress={() => this.unBookmarkAlertMsg(bookmark.id)}
-                />
 
-              <View style={{flexDirection:'row'}}>
-                  <Icon
+              <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
+                <Icon
+                  raised
+                  name='directions'
+                  size={17}
+                  type='material-community'
+                  color="black"
+                  onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${bookmark.latitude},${bookmark.longitude}`)}
+                  />
+                  <Button
                     raised
-                    name='directions'
-                    size={17}
-                    type='material-community'
-                    color="black"
-                    onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
-                    />
-                  <Icon
-                    raised
-                    name='bookmark'
-                    type='font-awesome'
-                    size={17}
-                    type='font-awesome'
-                    color="rgb(244, 2, 87)"
+                    buttonStyle={styles.unBookmarkButton}
+                    titleStyle={{fontSize:wp('3.5'), color:'rgb(244, 2, 87)'}}
+                    title='Unbookmark'
                     onPress={() => this.unBookmarkAlertMsg(bookmark.id)}
                     />
                   <Icon
@@ -385,7 +404,7 @@ class MySpots extends Component {
                     size={17}
                     type='font-awesome'
                     color="rgb(244, 2, 87)"
-                    onPress={'share me'}
+                    onPress={() => this.onShare(bookmark)}
                     />
                 </View>
 
@@ -412,37 +431,39 @@ class MySpots extends Component {
                   containerStyle={styles.spot}>
 
                   <Text style={{marginBottom: 10}}>
-                    {bookmark.description}
+                    <Text style={{fontWeight:'bold'}}>About: </Text>
+                    { bookmark.description}
                   </Text>
 
-                  <View style={{flexDirection:'row'}}>
+                  <Divider style={styles.divider} />
+
+                  <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
+
                       <Icon
                         raised
                         name='directions'
                         size={17}
                         type='material-community'
                         color="black"
-                        onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
+                        onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${bookmark.latitude},${bookmark.longitude}`)}
                         />
-                      <Icon
-                        raised
-                        name='bookmark'
-                        type='font-awesome'
-                        size={17}
-                        type='font-awesome'
-                        color="rgb(244, 2, 87)"
-                        onPress={() => this.unBookmarkAlertMsg(bookmark.id)}
-                        />
-                      <Icon
-                        raised
-                        name='share'
-                        type='ionicon'
-                        size={17}
-                        type='font-awesome'
-                        color="rgb(244, 2, 87)"
-                        onPress={'share me'}
-                        />
-                    </View>
+                        <Button
+                          raised
+                          buttonStyle={styles.unBookmarkButton}
+                          titleStyle={{fontSize:wp('3.5'), color:'rgb(244, 2, 87)'}}
+                          title='Unbookmark'
+                          onPress={() => this.unBookmarkAlertMsg(bookmark.id)}
+                          />
+                        <Icon
+                          raised
+                          name='share'
+                          type='ionicon'
+                          size={17}
+                          type='font-awesome'
+                          color="rgb(244, 2, 87)"
+                          onPress={() => this.onShare(bookmark)}
+                          />
+                 </View>
 
 
                 </Card>
@@ -472,18 +493,18 @@ class MySpots extends Component {
               onChangeText={(value) => this.onSearchChange(value)}
               />
 
-      <MySpotsButtonGroup onChangeTab={this.onChangeTab}/>
+        <MySpotsButtonGroup onChangeTab={this.onChangeTab}/>
 
-       <ScrollView
-         contentContainerStyle={{ paddingBottom: 200 }}
-         refreshControl={
-           <RefreshControl
-             refreshing={this.state.refreshing}
-             onRefresh={this._onRefresh}
-           />
-         }>
-          {this.renderSpots()}
-        </ScrollView>
+         <ScrollView
+           contentContainerStyle={{ paddingBottom: 200 }}
+           refreshControl={
+             <RefreshControl
+               refreshing={this.state.refreshing}
+               onRefresh={this._onRefresh}
+             />
+           }>
+            {this.renderSpots()}
+          </ScrollView>
 
       </View>
     )
