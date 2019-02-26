@@ -11,8 +11,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   TextInput,
-  TouchableHighlight
-} from "react-native";
+  TouchableHighlight} from "react-native";
 import MapView, {
       Callout,
       Overlay,
@@ -77,8 +76,11 @@ class LocationSelectorMap extends Component {
   }
 
   render(){
+
     return(
       <View style={{flex:1}}>
+
+
         <MapView
         style={styles.map}
         showsUserLocation
@@ -87,13 +89,17 @@ class LocationSelectorMap extends Component {
         />
 
         <View>
-          <Text style={{
+        <Image
+          source={require('../assets/markerIcon.png')}
+          style={{
             position:'absolute',
-            fontSize:50,
-            marginTop:hp('47%'),
-            marginLeft:wp('46%')}}>
-            X
-          </Text>
+            marginTop:hp('43%'),
+            marginLeft:wp('43%'),
+            width: 50,
+            height:50
+          }}
+
+        />
         </View>
 
         <View style={{position: 'absolute',

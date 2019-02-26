@@ -279,7 +279,7 @@ class Map extends Component {
               <Animated.View style={[styles.markerWrap, opacityStyle]}>
                 <Animated.View style={[styles.marker, scaleStyle]}>
                   <Image
-                    source={{ uri: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/134893/pin-red.svg' }}
+                    source={require('../assets/markerIcon.png')}
                     style={styles.marker}
                     />
                 </Animated.View>
@@ -326,7 +326,7 @@ class Map extends Component {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity onPress= {this.refreshMarkers} >
+            <TouchableOpacity onPress={this.refreshMarkers}>
                 <Icon
                   raised
                   name='refresh'
@@ -342,7 +342,7 @@ class Map extends Component {
                 />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress= {this.animateToUserLocation} >
+            <TouchableOpacity onPress={this.animateToUserLocation}>
                   <Icon
                     raised
                     name='location-arrow'
@@ -357,7 +357,6 @@ class Map extends Component {
                     color="rgb(244, 2, 87)"
                   />
               </TouchableOpacity>
-
 
             </View>
         </Callout>
