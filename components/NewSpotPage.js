@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
 
   spotLocationButton:{
     width: wp('80%'),
+    marginLeft: wp('2'),
     backgroundColor:"rgb(244, 2, 87)",
   },
   submitButton:{
@@ -255,6 +256,7 @@ class NewSpotPage extends Component {
                 buttonStyle={styles.spotLocationButton}
                 title='Spot Location'
                 onPress= {() => this.props.navigation.navigate('LocationSelectorMap')}
+                containerStyle={{marginBottom:10}}
               />
 
 
@@ -274,8 +276,9 @@ class NewSpotPage extends Component {
                 </View>
               : null}
 
+              <Text style={{color:'red', marginBottom:-10}}>*</Text>
               <Input
-                containerStyle={{marginTop:20}}
+                containerStyle={{marginTop:-10}}
                 placeholder='Spot Name'
                 clearButtonMode={'never'}
                 autoCorrect={false}
@@ -284,7 +287,9 @@ class NewSpotPage extends Component {
                 onChangeText={(name) => this.setState({name})}
                 />
 
+              <Text style={{color:'red', marginBottom:-10}}>*</Text>
               <Input
+                containerStyle={{marginTop:-10}}
                 placeholder='Description'
                 clearButtonMode={'never'}
                 autoCorrect={false}
@@ -294,14 +299,14 @@ class NewSpotPage extends Component {
                 />
 
                 <Text style={{alignSelf:'flex-start',
-                              marginLeft:wp('7.5%'),
+                              marginLeft:wp('1%'),
                               opacity:.5,
                               fontSize: 17,
                               marginTop: 10
                               }}>
                     Kickout meter
                   </Text>
-                <View style={{marginLeft:35, width:'100%'}}>
+                <View style={{marginLeft:wp('1%'), width:'100%'}}>
                   <Slider
                     thumbTintColor='rgb(244, 2, 87)'
                     style={{width:'90%'}}

@@ -4,7 +4,8 @@ import { Keyboard,
           View,
           YellowBox,
           StyleSheet,
-          KeyboardAvoidingView } from 'react-native'
+          KeyboardAvoidingView,
+          Animated } from 'react-native'
 import { Input, Button, ThemeProvider } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { withNavigation } from 'react-navigation'
@@ -17,17 +18,16 @@ import {widthPercentageToDP as wp,
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0,
-    marginTop: hp('25%'),
+    flex: 1,
+    // marginTop: hp('25%'),
     justifyContent:'center',
     alignItems:'center',
     backgroundColor: 'white'
   },
   header: {
     fontFamily: 'Lobster',
-    fontSize: hp('7%'),
     fontWeight: 'bold',
-    marginBottom: hp('10%'),
+    marginBottom: hp('5%'),
   },
   submitButton:{
     marginTop: hp('5%'),
@@ -49,11 +49,43 @@ const styles = StyleSheet.create({
   }
 })
 
+const FONT_SIZE_BIG = hp('10')
+const FONT_SIZE_SMALL = hp('8')
+
 class Login extends Component {
-  state = {
-    username: 'seanrad',
-    password: '123456789'
+  constructor(props){
+    super(props)
+    this.state = {
+      username: 'seanrad',
+      password: '123456789'
+    }
+    this.fontSizeBig = new Animated.Value(hp('10'))
   }
+
+  componentWillMount () {
+    this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
+    this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
+  }
+
+  componentWillUnmount() {
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
+  }
+
+  keyboardWillShow = (event) => {
+    Animated.timing(this.fontSizeBig, {
+      duration: event.duration,
+      toValue: FONT_SIZE_SMALL,
+    }).start();
+  };
+
+  keyboardWillHide = (event) => {
+    Animated.timing(this.fontSizeBig, {
+      duration: event.duration,
+      toValue: FONT_SIZE_BIG,
+    }).start();
+  };
+
 
 
   onSubmit = (e) => {
@@ -61,8 +93,6 @@ class Login extends Component {
   }
 
   render(){
-    console.log('keyboard shown? ', this.state.keyboardShown)
-
     return(
         this.props.loggedIn
         ? this.props.navigation.navigate('Map')
@@ -70,7 +100,8 @@ class Login extends Component {
             style={styles.container}
             behavior="padding"
             >
-            <Text style={styles.header}>SkateSense</Text>
+
+            <Animated.Text style={[styles.header, {fontSize:this.fontSizeBig}]}>SkateSense</Animated.Text>
 
             <View>
               <Text style={{color:'red'}}>
@@ -96,6 +127,8 @@ class Login extends Component {
               />
 
             <Input
+              returnKeyType='go'
+              onSubmitEditing={this.onSubmit}
               placeholder='Password'
               autoCapitalize={'none'}
               autoCorrect={false}

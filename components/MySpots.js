@@ -490,6 +490,7 @@ class MySpots extends Component {
 
        <TextInput style={styles.search}
               placeholder={"Search"}
+              returnKeyType='search'
               onChangeText={(value) => this.onSearchChange(value)}
               />
 

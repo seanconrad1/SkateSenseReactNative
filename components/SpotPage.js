@@ -8,7 +8,8 @@ import { View,
          TouchableWithoutFeedback,
          TextInput,
          Animated,
-         FlatList} from 'react-native'
+         FlatList,
+         KeyboardAvoidingView} from 'react-native'
 import { Header, Icon, Card, ListItem, Button, Divider } from 'react-native-elements'
 import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
@@ -24,6 +25,9 @@ const comments = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
 
 
 const styles = StyleSheet.create({
+  container:{
+    // flex: 1,
+  },
   scrollView:{
     height: hp('22%'),
   },
@@ -187,7 +191,10 @@ class SpotPageRemake extends Component {
 
   render(){
     return(
-      <View>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior="padding"
+        >
           <Header
             leftComponent={{ icon: 'menu' , color: 'black', onPress: () => this.props.navigation.openDrawer()}}
             centerComponent={{ fontFamily:'Lobster', text: `${this.state.skatespot.name}`, style: { color: 'black', fontSize: wp('6%') } }}
@@ -278,7 +285,7 @@ class SpotPageRemake extends Component {
                     />}
 
                 </View>
-          </View>
+          </KeyboardAvoidingView>
         )
   }
 
