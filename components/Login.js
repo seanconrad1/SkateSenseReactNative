@@ -67,6 +67,12 @@ class Login extends Component {
     this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
   }
 
+  componentWillReceiveProps(nextProps){
+    if (nextProps.loggedIn) {
+      this.setState({username:'', password:''})
+    }
+  }
+
   componentWillUnmount() {
     this.keyboardWillShowSub.remove();
     this.keyboardWillHideSub.remove();

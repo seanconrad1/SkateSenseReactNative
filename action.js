@@ -41,6 +41,7 @@ export const createUser = (username, password, first_name, last_name, email, pho
 }
 
 export const loginUser = (username, password) => {
+  debugger
   return (dispatch) => {
     dispatch({ type: 'AUTHENTICATING_USER'})
     fetch(`http://${environment['BASE_URL']}/api/v1/login`, {
@@ -65,7 +66,7 @@ export const loginUser = (username, password) => {
       })
       .then(JSONResponse => {
         console.log('jwt', JSONResponse.jwt),
-        
+
         deviceStorage.saveItem("jwt", JSONResponse.jwt)
         dispatch({ type: 'SET_CURRENT_USER', payload: JSONResponse.user })
       })

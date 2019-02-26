@@ -49,9 +49,10 @@ class SideMenu extends Component {
    }
 
    logOut = () =>{
+     // debugger
        deviceStorage.removeJWT('jwt')
-       this.props.logoutUser()
-       this.props.navigation.navigate('Login')
+       .then(() => this.props.logoutUser())
+       .then(() => this.props.navigation.navigate('Login'))
      }
 
     administration = () =>{
