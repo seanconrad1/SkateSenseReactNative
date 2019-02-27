@@ -280,8 +280,8 @@ class MySpots extends Component {
                     size={17}
                     type='material-community'
                     color="black"
-                    onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${spot.latitude},${spot.longitude}`)}
-                    />
+                    onPress={() => Linking.openURL(`http://maps.apple.com/?daddr=${spot.latitude},${spot.longitude}&dirflg=d&t=h`)}
+                    /> 
                   <Icon
                     raised
                     name='trash'

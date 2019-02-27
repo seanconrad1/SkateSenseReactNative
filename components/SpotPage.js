@@ -210,8 +210,10 @@ class SpotPageRemake extends Component {
              name='directions'
              iconStyle={{color:"rgb(244, 2, 87)"}}
              containerStyle={{position:'absolute',zIndex:1, marginLeft:wp('85%'), marginTop:('20%')}}
-             onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${this.state.skatespot.latitude},${this.state.skatespot.longitude}`)}
+             onPress={() => Linking.openURL(`http://maps.apple.com/?daddr=${this.state.skatespot.latitude},${this.state.skatespot.longitude}&dirflg=d&t=h`)}
              title='Directions' />
+
+
 
 
             <Animated.FlatList

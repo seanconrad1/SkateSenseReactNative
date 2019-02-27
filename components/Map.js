@@ -401,8 +401,8 @@ class Map extends Component {
               <TouchableWithoutFeedback onPress={() => this.goToSpotPage(item)} >
                 <View style={styles.card}>
                   <BookmarkButton spot={item} style={{position:'absolute', zIndex:1}}/>
-
-                  <TouchableOpacity onPress={() => Linking.openURL(`https://www.google.com/maps/dir//${item.latitude},${item.longitude}`)} style={{position:'absolute', zIndex:1}}>
+                                                              
+                  <TouchableOpacity onPress={() => Linking.openURL(`http://maps.apple.com/?daddr=${item.latitude},${item.longitude}&dirflg=d&t=h`)} style={{position:'absolute', zIndex:1}}>
                     <Icon
                     raised
                     containerStyle={{position:'relative', zIndex:1, marginLeft:10, marginTop:10}}
