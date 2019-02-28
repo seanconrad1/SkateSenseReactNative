@@ -1,23 +1,88 @@
 SkateSense React-Native Roadmap
 
+FrontEnd
+  - when a spot is created, scroll to that spot
+  - Add ads
+  - form validation
+  - update CSS of 'SpotPage'
+  - remove initial spot
+  - load data on initial entering app
+  - remove header animation on login and signup pages
 
-- place a marker
-	- move screen to marker
-	-
-- Marker info-box window
-- Search Bar functionality
-	- search for markers in area
-		- grab current location, search by title or description, sort by distance from
-		  current location
+Backend Stuff
+  - cleanup backend api
 
-- Authentication
-- Comments
-- MySpots
-- Settings
+Fix
+  - "scrollToIndex should be used in conjunction with getItemLayout or onScrollToIndexFailed, otherwise there is no way to know the location of offscreen indices or handle failures."
+  - Make 'add new spot' button disabled until spots have loaded.
+  - Bookmarks on the map aren't getting updated correctly
+  - fix when input box is focused on, show above keyboard
+  - current location doesn't get new location. So if I move, clicking the 'getLocation'button
+  	goes to the starting location
+  - VirtualizedList: You have a large list that is slow to update - make sure your renderItem function renders components that follow React performance best practices like PureComponent, shouldComponentUpdate, etc.
+
+suggestions
+  - move photos down to see whole map. Add a little lever
+  - add an overlay to what the buttons do.
+
+X url is not defined when going to myspot page...
+X Fixed issue where you could login w/o username and pass after logging
+ out because info was stuck in state
+X newspotpage - - fix when keyboard appears to keep showing input form
+X login page - fix when keyboard appears to keep showing input form
+X change refresh icon to 'search this area'
+X change spotpage X to a pin. change marker to pink color
+X after submitting a spot, disable the button and show loading
+X update CSS of 'My Spots'
+X all comments are showing up as the current user's name, rather than those
+  	who posted the comment
+X add back button to newspotpage
+X Fix how markers look
+X Fixed a bug where moving to a new location wasn't updating properly
+X Refreshing screen disables the animation of moving to the spot on the map
+X resize photos
+X Fixed bug in bookmarkbutton that would not receive new props
+X Limited to uploaded 4 photos
+X Disconnect refresh button from moving screen to current location
+X Render only spots in the area when clicking refresh
+X filter spots only in your are when app loads
+X select from camera roll
+X Allow for multiple photos
+X When you click on a marker, it goes to it's position in the
+	horizontal scroller
+X Admin page
+  X Get list of users, click on a user, view posts, comments.
+X Map
+  X Fix how the buttons are arranged on the map
+  X Fix how the horizontal bar reacts when it is scrolled
+X New Marker Form
+	X get photo upload working
+	X Select spot on map
+	X Clean up css
+X Markers
+  X Bookmark spot
+X Place a marker
+X MySpots
+	X Combine Bookmarks and Submitted spots to one page
+	X Add a refresher
+	X Make it so you can see the last bookmark at the bottom
+	X Fixed bug on deleting search box on the bookmarks area
+X Comments
+	X Delete your comment
+	X Show username next to comment
+X Unbookmark spot
+X Implement redux
+	X Migrate tasks to redux calls
+	X Get current user from redux
+X Authentication
+X SignUp user
+X Logout
+	X This requires a custom DrawerNavigation
 X Hamburger Menu
 X Upon opening the app, get location and move map to that location
 X Bookmark page
 X Bookmark page search functionality
+X Delete a spot
 
 
 -- How to get reverse geo location
@@ -27,21 +92,25 @@ https://developer.mapquest.com/documentation/geocoding-api/reverse/get/
 http://www.mapquestapi.com/geocoding/v1/reverse?key=KEY&location=30.333472,-81.470448&includeRoadMetadata=true&includeNearestIntersection=true
 
 -- Or this
-
 https://developers.google.com/maps/documentation/javascript/examples/geocoding-reverse
 
 
 react-native init SkateSenseReactNative
 npm install
 npm i react-native-maps --save
-npm i  react-native-elements@beta --save
+npm i react-native-elements@beta --save
 npm i react-native-action-button --save
 npm i react-native-maps --save
 npm i react-native-vector-icons --save
 npm i react-navigation --save
 npm i react-native-gesture-handler --save
+npm i react-native-image-picker --save
+npm i react-redux --save
+npm i redux-devtools-extension --save
+npm i react-native-loading-spinner-overlay --save
 
-place this in package.json:
+
+place this in package.json for custom fonts:
 
   "rnpm": {
     "assets": [
@@ -49,13 +118,32 @@ place this in package.json:
     ]
   },
 
+change info.plist to have all of these
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>$(PRODUCT_NAME) would like access to your photo gallery</string>
+  <key>NSCameraUsageDescription</key>
+  <string>$(PRODUCT_NAME) would like to use your camera</string>
+  <key>NSPhotoLibraryAddUsageDescription</key>
+  <string>$(PRODUCT_NAME) would like to save photos to your photo gallery</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>$(PRODUCT_NAME) would like to your microphone (for videos)</string>
+
+also do the change in Xcode
+
 react-native link
 react-native link react-native-gesture-handler
 
 
+Feb 27, 2019 at 1:22 PM
+From Apple
+1. 5 Safety: Developer Information
+4. Design: Preamble
+5. 1.1 Legal: Privacy - Data Collection and Storage
+Guideline 1.5 - Safety - Developer Information
 
 
+The support URL specified in your app’s metadata, https://seanconrad.me, does not properly navigate to the intended destination.
 
+Next Steps
 
-
-
+To resolve this issue, please revise your app’s support URL to ensure it directs users to a webpage with support information.

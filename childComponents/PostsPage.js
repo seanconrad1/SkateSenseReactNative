@@ -14,6 +14,8 @@ import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
 import deviceStorage from '../deviceStorage.js'
 import Swipeout from 'react-native-swipeout';
+import {widthPercentageToDP as wp,
+        heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
 const styles = StyleSheet.create({
@@ -114,6 +116,7 @@ class PostsPage extends Component {
                          title={spot.name}
                          onPress={() => this.props.navigation.navigate('SpotPage', {skatespot: spot })}
                          onLongPress={() => this.deleteAlert(spot)}
+                         leftAvatar={{ source: { uri: `http://${environment['BASE_URL']}${spot.avatars[0].url}` } }}
                        />
                     </View>
                ))

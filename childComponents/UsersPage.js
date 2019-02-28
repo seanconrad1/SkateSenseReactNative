@@ -6,7 +6,8 @@ import { View,
          ScrollView,
          Linking,
          TouchableWithoutFeedback,
-         Switch} from 'react-native'
+         Switch,
+         Alert} from 'react-native'
 import { Header, Icon, Card, ListItem, Button } from 'react-native-elements'
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import environment from '../environment.js'

@@ -33,8 +33,11 @@ class CommentsPage extends Component {
     super(props)
     this.state={
       isOn: false,
-      comments: null
     }
+  }
+
+  componentDidMount(){
+    this.setState({comments: this.props.navigation.getParam('user').comments})
   }
 
   deleteAlert = (comment) =>{
@@ -69,6 +72,7 @@ class CommentsPage extends Component {
       }).then(r=>r.json()).then(data=>console.log(data))
     }
 
+    // debugger
     this.setState({comments: this.state.comments.filter(oneComment => {
       return oneComment.id !== comment.id
     })})
@@ -88,8 +92,8 @@ class CommentsPage extends Component {
            }}/>
 
           <ScrollView>
-            {this.props.navigation.getParam('user')
-               ?this.props.navigation.getParam('user').comments.map((comment, i) => (
+            {this.state.comments
+               ?this.state.comments.map((comment, i) => (
                    <View>
                        <ListItem
                          title={comment.content}
