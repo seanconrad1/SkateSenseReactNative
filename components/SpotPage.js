@@ -9,7 +9,8 @@ import { View,
          TextInput,
          Animated,
          FlatList,
-         KeyboardAvoidingView} from 'react-native'
+         KeyboardAvoidingView,
+         Alert} from 'react-native'
 import { Header, Icon, Card, ListItem, Button, Divider } from 'react-native-elements'
 import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
@@ -187,6 +188,26 @@ class SpotPageRemake extends Component {
     }
   }
 
+  reportButtonHandler = () =>{
+      Alert.alert(
+        'Reporting',
+        "Are you sure you want to report this spot?",
+        [
+          {text: 'Yes', onPress: () =>{
+            Alert.alert(
+              'Spot reported'
+            )
+          }},
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+        ],
+        {cancelable: false},
+      )
+    }
+
   _renderItem = ({item, index}) => {
         return (
             <View>
@@ -197,8 +218,6 @@ class SpotPageRemake extends Component {
             </View>
         );
     }
-
-
 
   render(){
     return(
@@ -216,13 +235,13 @@ class SpotPageRemake extends Component {
              }}/>
 
              <Icon
-             raised
-             size={hp('2.8')}
-             name='directions'
-             iconStyle={{color:"rgb(244, 2, 87)"}}
-             containerStyle={{position:'absolute',zIndex:1, marginLeft:wp('85%'), marginTop:('20%')}}
-             onPress={() => Linking.openURL(`http://maps.apple.com/?daddr=${this.state.skatespot.latitude},${this.state.skatespot.longitude}&dirflg=d&t=h`)}
-             title='Directions' />
+               raised
+               size={hp('2.8')}
+               name='directions'
+               iconStyle={{color:"rgb(244, 2, 87)"}}
+               containerStyle={{position:'absolute',zIndex:1, marginLeft:wp('85%'), marginTop:('20%')}}
+               onPress={() => Linking.openURL(`http://maps.apple.com/?daddr=${this.state.skatespot.latitude},${this.state.skatespot.longitude}&dirflg=d&t=h`)}
+             />
 
             <Animated.FlatList
                 horizontal
@@ -248,6 +267,15 @@ class SpotPageRemake extends Component {
                 ?this.returnBookmarkStatus()
                 :null
               }
+
+              <Icon
+                raised
+                size={hp('2.8')}
+                name='warning'
+                iconStyle={{color:"rgb(244, 2, 87)"}}
+                containerStyle={{position:'absolute',zIndex:0, marginLeft:wp('85%'), marginTop:hp('62%')}}
+                onPress={this.reportButtonHandler}
+               />
 
               <Divider style={styles.divider} />
 
