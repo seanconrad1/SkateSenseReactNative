@@ -24,6 +24,7 @@ import AdminConsole from './components/AdminConsole'
 import CommentsPage from './childComponents/CommentsPage.js'
 import UsersPage from './childComponents/UsersPage.js'
 import PostsPage from './childComponents/PostsPage.js'
+import Approvals from './childComponents/Approvals.js'
 
 
 console.disableYellowBox = true;
@@ -53,7 +54,8 @@ const Drawer = createStackNavigator(
     NewSpotPage: {screen: NewSpotPage},
     LocationSelectorMap: {screen: LocationSelectorMap},
     AdminConsole:{screen: AdminConsole},
-    PostsPage:{screen: PostsPage}
+    PostsPage:{screen: PostsPage},
+    Approvals:{screen: Approvals},
   },
   {
     headerMode: 'none',

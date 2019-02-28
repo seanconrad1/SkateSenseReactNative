@@ -55,6 +55,18 @@ class SideMenu extends Component {
        .then(() => this.props.navigation.navigate('Login'))
      }
 
+    approvals = () => {
+      if(this.props.user.user.username === 'seanrad'){
+        return <ListItem
+          title='Approvals'
+          leftIcon={{name:'check', type: 'font-awesome'}}
+          onPress={() => this.props.navigation.navigate('Approvals')}
+          />
+      }else {
+        null
+      }
+    }
+
     administration = () =>{
       if(this.props.user.user.username === 'seanrad'){
         return <ListItem
@@ -101,9 +113,16 @@ class SideMenu extends Component {
                           leftIcon={{name:'sign-out', type: 'font-awesome'}}
                           onPress={this.logOut}
                           />
+
+                      {this.props.user.user !== null
+                      ? this.approvals()
+                      : null}
+
                       {this.props.user.user !== null
                       ? this.administration()
                       : null}
+
+
 
 
                    </View>
