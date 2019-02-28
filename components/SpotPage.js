@@ -177,6 +177,16 @@ class SpotPageRemake extends Component {
     }
   }
 
+  returnBookmarkStatus = () => {
+    if (this.state.skatespot.bookmarks.length === 1) {
+      return <Text style={{marginLeft: wp('2%')}}>1 bookmark</Text>
+    }else if (this.state.skatespot.bookmarks.length === 0) {
+      return <Text style={{marginLeft: wp('2%')}}>Spot has not been bookmarked yet </Text>
+    }else {
+      return <Text style={{marginLeft: wp('2%')}}>{this.state.skatespot.bookmarks.length} bookmarks</Text>
+    }
+  }
+
   _renderItem = ({item, index}) => {
         return (
             <View>
@@ -187,6 +197,7 @@ class SpotPageRemake extends Component {
             </View>
         );
     }
+
 
 
   render(){
@@ -213,9 +224,6 @@ class SpotPageRemake extends Component {
              onPress={() => Linking.openURL(`http://maps.apple.com/?daddr=${this.state.skatespot.latitude},${this.state.skatespot.longitude}&dirflg=d&t=h`)}
              title='Directions' />
 
-
-
-
             <Animated.FlatList
                 horizontal
                 data={this.state.images}
@@ -227,8 +235,6 @@ class SpotPageRemake extends Component {
                 snapToInterval={wp('100%')}
               />
 
-
-
               <Text style={{marginBottom: 10, position:'relative', marginTop: 10, marginLeft: wp('2%')}}>
                 {this.state.skatespot.url}
                 {this.state.skatespot.description}{"\n"}
@@ -237,6 +243,11 @@ class SpotPageRemake extends Component {
                             :null
                           }
               </Text>
+
+              {this.state.skatespot.bookmarks
+                ?this.returnBookmarkStatus()
+                :null
+              }
 
               <Divider style={styles.divider} />
 
