@@ -21,6 +21,28 @@ class SignUp extends Component {
     error:''
   }
 
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      failed_login_error_password: nextProps.failed_login_error_password,
+      failed_login_error_username: nextProps.failed_login_error_username
+      })
+    }
+
+  updateUsername = (username) =>{
+    this.setState({
+      username:username,
+      failed_login_error_password: '',
+      failed_login_error_username: ''
+    })
+  }
+
+  updatePassword = (password) =>{
+    this.setState({
+      password:password,
+      failed_login_error_password: '',
+      failed_login_error_username: ''
+    })
+  }
 
   onSubmit = () =>{
     if(this.state.password === this.state.validatePassword){
@@ -36,16 +58,6 @@ class SignUp extends Component {
     }
   }
 
-  returnError = () => {
-    // if (this.props.failed_login_error_password){
-    //   this.props.failed_login_error_password.map(error => {
-    //     return <Text> error </Text>
-    //   })
-    // }
-    if (this.props.failed_login_error_username){
-      return <Text> Username {this.props.failed_login_error_username[0]}</Text>
-    }
-  }
 
   render(){
     const styles = StyleSheet.create({
@@ -72,7 +84,13 @@ class SignUp extends Component {
           </View>
 
           <Text style={{color:'red'}}>
-            {this.returnError()}
+            {this.state.failed_login_error_password}
+          </Text>
+          <Text style={{color:'red'}}>
+             {this.state.failed_login_error_username
+             ? `Username ${this.state.failed_login_error_username}`
+             : null
+            }
           </Text>
 
           <View>
@@ -95,7 +113,7 @@ class SignUp extends Component {
             autoCorrect={false}
             autoFocus={true}
             keyboardType="default"
-            onChangeText={(username) => this.setState({username})}
+            onChangeText={(username) => this.updateUsername(username)}
             />
 
             <Input

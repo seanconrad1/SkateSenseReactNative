@@ -162,7 +162,7 @@ class Login extends Component {
               }
               title='Submit'
               buttonStyle={styles.submitButton}
-              onPress={this.onSubmit()}
+              onPress={this.onSubmit}
             />
 
             <Button
