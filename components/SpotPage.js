@@ -19,7 +19,6 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import {widthPercentageToDP as wp,
         heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import Carousel from 'react-native-snap-carousel';
 
 
 const comments = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
@@ -27,7 +26,7 @@ const comments = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth']
 
 const styles = StyleSheet.create({
   container:{
-    // flex: 1,
+    flex: 1,
   },
   scrollView:{
     height: hp('22%'),
@@ -54,7 +53,7 @@ const styles = StyleSheet.create({
   commentInputandButtonContainer:{
     flexDirection: 'row',
     position: 'relative',
-    // marginTop: hp('15%'),
+    marginTop: hp('-5%'),
   },
   commentInput:{
     borderRadius: 20,
@@ -188,14 +187,15 @@ class SpotPageRemake extends Component {
     }
   }
 
+
   reportButtonHandler = () =>{
       Alert.alert(
-        'Reporting',
+        'Reporting spot',
         "Are you sure you want to report this spot?",
         [
           {text: 'Yes', onPress: () =>{
             Alert.alert(
-              'Spot reported'
+              'Spot reported!'
             )
           }},
           {
@@ -273,7 +273,7 @@ class SpotPageRemake extends Component {
                 size={hp('2.8')}
                 name='warning'
                 iconStyle={{color:"rgb(244, 2, 87)"}}
-                containerStyle={{position:'absolute',zIndex:0, marginLeft:wp('85%'), marginTop:hp('62%')}}
+                containerStyle={{position:'relative',zIndex:1, marginLeft:wp('85%'), marginTop:hp('-7%')}}
                 onPress={this.reportButtonHandler}
                />
 

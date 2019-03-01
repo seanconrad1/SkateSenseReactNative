@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Text,
          View,
          YellowBox,
-         SafeAreaView,
-          } from 'react-native'
+         StyleSheet} from 'react-native'
 import Login from './components/Login'
 import Map from './components/Map'
 import SignUp from './components/SignUp'
@@ -13,7 +12,7 @@ import Settings from './components/Settings'
 import { createStackNavigator,
          createAppContainer,
          createDrawerNavigator,
-         DrawerItems } from 'react-navigation'; // Version can be specified in package.json
+         DrawerItems,} from 'react-navigation'; // Version can be specified in package.json
 import { Provider } from 'react-redux';
 import store from './store'
 import { Button } from 'react-native-elements'
@@ -101,7 +100,7 @@ class App extends Component {
   render(){
     return (
       <Provider store={ store }>
-        <AppContainer/>
+          <AppContainer/>
       </Provider>
      )
   }
