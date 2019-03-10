@@ -56,7 +56,9 @@ export default function reducer(state = initialState, action) {
 
     // case 'GET_USERS':
     //   return {...state, users: action.payload}
-
+    case 'NEW_SPOT_TO_APPROVALS':
+      return{...state, needToBeApproved: action.payload}
+      
     case 'GET_SKATE_SPOTS':
       return {...state, skate_spots: action.payload}
     case 'POST_SKATE_SPOT':

@@ -13,6 +13,9 @@ import { Header, Icon, Card, ListItem, Button } from 'react-native-elements'
 import environment from '../environment.js'
 import { withNavigation } from 'react-navigation'
 import deviceStorage from '../deviceStorage.js'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { sendNewSpotToApprovals } from '../action.js'
 
 
 const styles = StyleSheet.create({
@@ -37,10 +40,16 @@ class Approvals extends Component {
   }
 
   componentDidMount(){
+    // this.setState({approvals: newProps.spotsToBeApproved})
+  }
+
+  componentWillReceiveProps(newProps){
+    console.log('whatisthis', newProps);
   }
 
 
   render(){
+    console.log(this.state.approvals)
     return(
       <View style={styles.container}>
         <Header
@@ -76,6 +85,13 @@ class Approvals extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    spotsToBeApproved: state.needToBeApproved,
+  }
+}
 
 
-export default withNavigation(Approvals)
+const connectMap = connect(mapStateToProps)
+
+export default withNavigation(compose(connectMap)(Approvals))

@@ -171,6 +171,21 @@ export function getGeolocation() {
   }
 }
 
+export function sendNewSpotToApprovals(data){
+  return (dispatch) =>{
+    dispatch({type: 'NEW_SPOT_TO_APPROVALS', payload:data})
+  }
+}
+
+
+
+
+
+
+
+
+
+
 export function logSearchTerm(e) {
   return (dispatch) =>{
     dispatch({type: 'LOG_SEARCH_TERM', payload:e.target.value})
