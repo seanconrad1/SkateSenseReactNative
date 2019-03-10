@@ -32,6 +32,7 @@ import BookmarkButton from '../childComponents/BookmarkButton'
 import {widthPercentageToDP as wp,
         heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Image from 'react-native-remote-svg'
+import Arrow from '../childComponents/Arrow.js'
 
 
 const { width, height } = Dimensions.get("window");
@@ -67,11 +68,13 @@ class Map extends Component {
   componentWillMount() {
     this.index = 0
     this.animation = new Animated.Value(0)
+    this.refreshMarkers()
   }
 
   componentDidMount() {
     this.getUserLocationHandler()
     this.props.getSkateSpots()
+    this.refreshMarkers()
   }
 
   componentWillReceiveProps(nextProps){
@@ -358,7 +361,6 @@ class Map extends Component {
               />
 
 
-
             <TouchableOpacity onPress={this.animateToUserLocation}>
                   <Icon
                     raised
@@ -400,8 +402,9 @@ class Map extends Component {
           renderItem={({item, separators}) => (
               <TouchableWithoutFeedback onPress={() => this.goToSpotPage(item)} >
                 <View style={styles.card}>
+                  <Arrow/>
                   <BookmarkButton spot={item} style={{position:'absolute', zIndex:1}}/>
-                                                              
+
                   <TouchableOpacity onPress={() => Linking.openURL(`http://maps.apple.com/?daddr=${item.latitude},${item.longitude}&dirflg=d&t=h`)} style={{position:'absolute', zIndex:1}}>
                     <Icon
                     raised

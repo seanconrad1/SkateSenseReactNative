@@ -57,7 +57,7 @@ class Login extends Component {
     super(props)
     this.state = {
       username: 'seanrad',
-      password: '123456789'
+      password: '123'
     }
     this.fontSizeBig = new Animated.Value(hp('8'))
   }
