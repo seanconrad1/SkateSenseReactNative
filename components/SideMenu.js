@@ -56,7 +56,7 @@ class SideMenu extends Component {
      }
 
     approvals = () => {
-      if(this.props.user.user.username === 'seanrad'){
+      if(this.props.user.user.username === 'seanrad' || this.props.user.user.username === 'zackrosebrugh' ){
         return <ListItem
           title='Approvals'
           leftIcon={{name:'check', type: 'font-awesome'}}

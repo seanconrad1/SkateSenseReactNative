@@ -6,7 +6,9 @@ import { Keyboard,
         CameraRoll,
         TouchableOpacity,
         ScrollView,
-        Image} from 'react-native'
+        Image,
+        Alert,
+        ActivityIndicator} from 'react-native'
 import { Header } from 'react-native-elements'
 import { Icon,
         Input,
@@ -25,7 +27,6 @@ import { fetchKeyForSkateSpots } from '../action.js'
 import deviceStorage from '../deviceStorage.js'
 import {widthPercentageToDP as wp,
         heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import Spinner from 'react-native-loading-spinner-overlay';
 
 const styles = StyleSheet.create({
   container: {
@@ -64,9 +65,6 @@ const styles = StyleSheet.create({
     height: 100,
     marginBottom: 0,
     marginTop: 0,
-  },
-  spinnerTextStyle: {
-    color: '#FFF'
   },
 })
 
@@ -146,6 +144,16 @@ class NewSpotPage extends Component {
       })
     }
 
+    approvalAlert = () =>{
+
+      Alert.alert(
+        'Thanks for submitting a spot!',
+        "Your spot needs to go through approval before being posted. It should be approved within a day.",
+        {cancelable: false},
+      )
+      this.props.navigation.goBack()
+    }
+
     onSubmit = () =>{
       this.setState({spotSubmitted:true})
       deviceStorage.loadJWT('jwt')
@@ -181,9 +189,8 @@ class NewSpotPage extends Component {
           ).then((resp) => {
             console.log('RESPONSE FROM SERVER', resp.data)
             let index = this.props.user.skate_spots.length + 1
-            this.setState({spotSubmitted:false})
-            this.props.navigation.navigate('Map', {index:index})
-
+            this.setState({ spotSubmitted:false })
+            this.approvalAlert()
           })
           .catch((err) => {
             console.log('Error creating new marker: ', err)
@@ -200,11 +207,6 @@ class NewSpotPage extends Component {
 
     return(
       <View>
-        <Spinner
-         visible={this.state.spotSubmitted}
-         textContent={'Creating Spot...'}
-         textStyle={styles.spinnerTextStyle}
-         />
 
         <Header
           leftComponent={{ icon: 'arrow-left', type:'font-awesome', color: 'black', onPress: () => this.props.navigation.goBack()}}
@@ -328,18 +330,28 @@ class NewSpotPage extends Component {
 
 
             <View>
-
-              {this.state.name && this.state.description && this.state.photo && this.state.selectedLat && this.state.selectedLng && !this.state.spotSubmitted
-              ? <Button
-                title='Submit'
-                buttonStyle={styles.submitButton}
-                onPress={this.onSubmit}
-              />
-              : <Button
+              {this.state.spotSubmitted
+              ?<Button
                 title='Submit'
                 disabled='true'
                 buttonStyle={styles.submitButton}
+                loading={true}
                 />
+              : [
+                  (
+                  this.state.name && this.state.description && this.state.photo && this.state.selectedLat && this.state.selectedLng && !this.state.spotSubmitted
+                  ? <Button
+                    title='Submit'
+                    buttonStyle={styles.submitButton}
+                    onPress={this.onSubmit}
+                  />
+                  : <Button
+                    title='Submit'
+                    disabled='true'
+                    buttonStyle={styles.submitButton}
+                    />
+                  )
+                ]
               }
             </View>
 

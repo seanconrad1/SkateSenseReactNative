@@ -90,10 +90,9 @@ class Map extends Component {
       this.setState({skatespots: nextProps.user.skate_spots})
       // filter to show only spots near initial starting point
       if (this.state.updateCounter <= 0) {
-        console.log('GOT TO LINE 90');
         let area = .5
         if (this.state.initialRegion && this.state.initialRegion.latitude > 0){
-          let filteredSpots = nextProps.user.skate_spots.filter( spot => spot.latitude < (this.state.initialRegion.latitude + area) && spot.latitude > (this.state.initialRegion.latitude - area) && spot.longitude < (this.state.initialRegion.longitude + area) && spot.longitude > (this.state.initialRegion.longitude - area))
+          let filteredSpots = nextProps.user.skate_spots.filter( spot => spot.latitude < (this.state.initialRegion.latitude + area) && spot.latitude > (this.state.initialRegion.latitude - area) && spot.longitude < (this.state.initialRegion.longitude + area) && spot.longitude > (this.state.initialRegion.longitude - area) && spot.approved === true)
           this.setState({filteredSpots: filteredSpots})
         }
         //Animate to spot
@@ -111,7 +110,7 @@ class Map extends Component {
     let area = .5
     if (this.state.currentRegion && this.state.currentRegion.latitude > 0 && this.props.user.skate_spots !== undefined){
       console.log(this.state.currentRegion.latitude, this.state.currentRegion.longitude);
-      let filteredSpots = this.props.user.skate_spots.filter(spot => spot.latitude < (this.state.currentRegion.latitude + area) && spot.latitude > (this.state.currentRegion.latitude - area) && spot.longitude < (this.state.currentRegion.longitude + area) && spot.longitude > (this.state.currentRegion.longitude - area))
+      let filteredSpots = this.props.user.skate_spots.filter(spot => spot.latitude < (this.state.currentRegion.latitude + area) && spot.latitude > (this.state.currentRegion.latitude - area) && spot.longitude < (this.state.currentRegion.longitude + area) && spot.longitude > (this.state.currentRegion.longitude - area) && spot.approved === true)
       // this.setState({filteredSpots: filteredSpots})
       this.setState({filteredSpots: filteredSpots}, () => {
           setAnimatorListener()
@@ -222,7 +221,7 @@ class Map extends Component {
   }
 
   render() {
-
+    console.log('map filtered spots --------', this.state.filteredSpots)
     const interpolations =
     this.state.filteredSpots
     ?( this.state.filteredSpots.map((marker, index) => {

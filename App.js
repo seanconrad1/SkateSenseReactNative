@@ -24,6 +24,8 @@ import CommentsPage from './childComponents/CommentsPage.js'
 import UsersPage from './childComponents/UsersPage.js'
 import PostsPage from './childComponents/PostsPage.js'
 import Approvals from './childComponents/Approvals.js'
+import ApprovalSpotPage from './childComponents/ApprovalSpotPage.js'
+
 
 
 console.disableYellowBox = true;
@@ -55,6 +57,8 @@ const Drawer = createStackNavigator(
     AdminConsole:{screen: AdminConsole},
     PostsPage:{screen: PostsPage},
     Approvals:{screen: Approvals},
+    ApprovalSpotPage:{screen: ApprovalSpotPage},
+
   },
   {
     headerMode: 'none',

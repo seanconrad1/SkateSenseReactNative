@@ -1,6 +1,6 @@
 var _Environments = {
-    // development: {BASE_URL: '142.93.6.224'},
-    development: {BASE_URL: 'localhost:3000'},
+    development: {BASE_URL: '142.93.6.224'},
+    // development: {BASE_URL: 'localhost:3000'},
 
 }
 

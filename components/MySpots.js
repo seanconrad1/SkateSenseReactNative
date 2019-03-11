@@ -94,7 +94,7 @@ class MySpots extends Component {
     this.props.getSkateSpots()
     if (this.props.user.user.skate_spots){
       let bookmarks = this.props.user.user.skate_spots.reverse()
-      let submitted = this.props.user.skate_spots.filter(spot => spot.user_id === this.props.user.user.id)
+      let submitted = this.props.user.skate_spots.filter(spot => spot.user_id === this.props.user.user.id && spot.approved)
       submitted = submitted.reverse()
 
       this.setState(
@@ -281,7 +281,7 @@ class MySpots extends Component {
                     type='material-community'
                     color="black"
                     onPress={() => Linking.openURL(`http://maps.apple.com/?daddr=${spot.latitude},${spot.longitude}&dirflg=d&t=h`)}
-                    /> 
+                    />
                   <Icon
                     raised
                     name='trash'
@@ -506,7 +506,6 @@ class MySpots extends Component {
            }>
             {this.renderSpots()}
           </ScrollView>
-
       </View>
     )
   }
@@ -525,7 +524,6 @@ function mapDispatchToProps(dispatch) {
     return {
       getSkateSpots: () => dispatch(fetchKeyForSkateSpots()),
       fetchUserData: (id) => dispatch(fetchKeyForUserData(id))
-
     }
 }
 

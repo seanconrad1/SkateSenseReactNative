@@ -7,7 +7,8 @@ import { View,
          Linking,
          TouchableWithoutFeedback,
          Switch,
-         Alert} from 'react-native'
+         Alert,
+         RefreshControl} from 'react-native'
 import { Header, Icon, Card, ListItem, Button } from 'react-native-elements'
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import environment from '../environment.js'
@@ -15,7 +16,7 @@ import { withNavigation } from 'react-navigation'
 import deviceStorage from '../deviceStorage.js'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { sendNewSpotToApprovals } from '../action.js'
+import { fetchKeyForSkateSpots } from '../action.js'
 
 
 const styles = StyleSheet.create({
@@ -35,21 +36,43 @@ class Approvals extends Component {
       approvals: [{
         name: 'test'
       }
-      ]
+    ],
+    refreshing: false
     }
   }
 
   componentDidMount(){
-    // this.setState({approvals: newProps.spotsToBeApproved})
+    this.setState({approvals: this.props.spotsToBeApproved})
   }
 
   componentWillReceiveProps(newProps){
-    console.log('whatisthis', newProps);
+
   }
 
+  filterForApprovals = () =>{
+    if (this.props.skate_spots){
+    let yetToBeApprovedSpots = this.props.skate_spots.filter(spot => spot.approved === false)
+
+    return yetToBeApprovedSpots.map((spot, i) => (
+        <View>
+            <ListItem
+              title={spot.name}
+              onPress={()=> this.props.navigation.navigate('ApprovalSpotPage', {skatespot: spot })}
+            />
+         </View>
+      ))
+    }
+  }
+
+  _onRefresh = () => {
+    console.log('REFRESHING')
+    this.setState({refreshing: true});
+    this.props.getSkateSpots()
+    // this.props.fetchUserData(this.props.user.user.id)
+    this.setState({refreshing: false});
+  }
 
   render(){
-    console.log(this.state.approvals)
     return(
       <View style={styles.container}>
         <Header
@@ -67,31 +90,34 @@ class Approvals extends Component {
              justifyContent: 'space-around',
            }}/>
 
-        <ScrollView>
-          {this.state.approvals
-             ?this.state.approvals.map((spot, i) => (
-               <View>
-                   <ListItem
-                     title={spot.name}
-                     rightIcon={{name: 'check', color:'green'}}
-                   />
-                </View>
-             ))
-             :null
-           }
+        <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh}
+          />}>
+          {this.filterForApprovals()}
         </ScrollView>
         </View>
     )
   }
 }
 
+
 const mapStateToProps = state => {
   return {
-    spotsToBeApproved: state.needToBeApproved,
+    skate_spots: state.user.skate_spots,
   }
 }
 
+function mapDispatchToProps(dispatch) {
+    return {
+      getSkateSpots: () => dispatch(fetchKeyForSkateSpots()),
+    }
+}
 
-const connectMap = connect(mapStateToProps)
+
+
+const connectMap = connect(mapStateToProps, mapDispatchToProps)
 
 export default withNavigation(compose(connectMap)(Approvals))
