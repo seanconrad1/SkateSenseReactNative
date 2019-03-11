@@ -173,7 +173,11 @@ class SpotPageRemake extends Component {
         })
       })
       .then(r=>r.json())
-      .then((data)=>this.setState({comments: [...this.state.comments, data]}))
+      .then((data)=>this.setState({
+        comments: [...this.state.comments, data],
+        commentContent: ''
+       }
+      ))
     }
   }
 
@@ -310,6 +314,7 @@ class SpotPageRemake extends Component {
                 <TextInput
                   style={styles.commentInput}
                   placeholder='Comment'
+                  value={this.state.commentContent}
                   onChangeText={(value) => this.onCommentChange(value)}
                   />
 

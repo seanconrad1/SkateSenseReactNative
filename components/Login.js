@@ -56,8 +56,8 @@ class Login extends Component {
   constructor(props){
     super(props)
     this.state = {
-      username: 'seanrad',
-      password: '123'
+      username: '',
+      password: ''
     }
     this.fontSizeBig = new Animated.Value(hp('8'))
   }
@@ -162,7 +162,7 @@ class Login extends Component {
               }
               title='Submit'
               buttonStyle={styles.submitButton}
-              onPress={this.onSubmit()}
+              onPress={this.onSubmit}
             />
 
             <Button
