@@ -123,7 +123,7 @@ class ApprovalSpotPage extends Component {
     deviceStorage.loadJWT('jwt')
     .then(val => fetchToDeleteSpot(val))
 
-    function fetchToDeleteSpot(key){
+    const fetchToDeleteSpot = (key) =>{
       fetch(`http://${environment['BASE_URL']}/api/v1/skate_spots/${this.state.skatespot.id}`, {
       method: 'DELETE',
       headers: {
