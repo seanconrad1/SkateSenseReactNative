@@ -161,12 +161,17 @@ class ApprovalSpotPage extends Component {
                onPress={() => Linking.openURL(`http://maps.apple.com/?daddr=${this.state.skatespot.latitude},${this.state.skatespot.longitude}&dirflg=d&t=h`)}
              />
 
-            <Animated.FlatList
-                horizontal
-                data={this.state.images}
-                renderItem={this._renderItem}
-                ref={c => (this.myRef = c)}
-              />
+
+              <Animated.FlatList
+                  horizontal
+                  data={this.state.images}
+                  renderItem={this._renderItem}
+                  sliderWidth={wp('50%')}
+                  itemWidth={wp('50%')}
+                  ref={c => (this.myRef = c)}
+                  scrollEventThrottle={1}
+                  snapToInterval={wp('100%')}
+                />
 
               <Text style={{marginBottom: 10, position:'relative', marginTop: 10, marginLeft: wp('2%')}}>
                 {this.state.skatespot.url}
