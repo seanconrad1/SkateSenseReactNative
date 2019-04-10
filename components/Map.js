@@ -91,7 +91,7 @@ class Map extends Component {
       // filter to show only spots near initial starting point
       if (this.state.updateCounter <= 0) {
         let area = .5
-        if (this.state.initialRegion && this.state.initialRegion.latitude > 0){
+        if (this.state.initialRegion && this.state.initialRegion.latitude > 0.1){
           let filteredSpots = nextProps.user.skate_spots.filter( spot => spot.latitude < (this.state.initialRegion.latitude + area) && spot.latitude > (this.state.initialRegion.latitude - area) && spot.longitude < (this.state.initialRegion.longitude + area) && spot.longitude > (this.state.initialRegion.longitude - area) && spot.approved === true)
           this.setState({filteredSpots: filteredSpots})
         }
@@ -108,7 +108,7 @@ class Map extends Component {
     this.props.getSkateSpots()
 
     let area = .5
-    if (this.state.currentRegion && this.state.currentRegion.latitude > 0 && this.props.user.skate_spots !== undefined){
+    if (this.state.currentRegion && this.state.currentRegion.latitude > 0.1 && this.props.user.skate_spots !== undefined){
       console.log(this.state.currentRegion.latitude, this.state.currentRegion.longitude);
       let filteredSpots = this.props.user.skate_spots.filter(spot => spot.latitude < (this.state.currentRegion.latitude + area) && spot.latitude > (this.state.currentRegion.latitude - area) && spot.longitude < (this.state.currentRegion.longitude + area) && spot.longitude > (this.state.currentRegion.longitude - area) && spot.approved === true)
       // this.setState({filteredSpots: filteredSpots})
@@ -249,6 +249,7 @@ class Map extends Component {
 
         <MapView
           showsUserLocation
+          onMapReady={()=>console.log('ready!')}
           ref={map => this.map = map}
           initialRegion={this.state.initialRegion}
           style={{flex: 1}}
