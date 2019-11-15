@@ -1,36 +1,33 @@
 import React, { Component } from 'react';
-import { Keyboard, Text, View , StyleSheet } from 'react-native'
-import { Input, Button, ThemeProvider, ButtonGroup } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { withNavigation } from 'react-navigation'
-import environment from '../environment.js'
+import { StyleSheet } from 'react-native';
+import { ButtonGroup } from 'react-native-elements';
 
 const styles = StyleSheet.create({
   buttonGroupContainer: {
     height: 30,
   },
-  selectedButtonStyle:{
-    backgroundColor: "rgb(244, 2, 87)"
-  }
-})
+  selectedButtonStyle: {
+    backgroundColor: 'rgb(244, 2, 87)',
+  },
+});
 
 export default class MySpotsButtonGroup extends Component {
-  constructor () {
-    super()
+  constructor() {
+    super();
     this.state = {
-      selectedIndex: 0
-    }
-    this.updateIndex = this.updateIndex.bind(this)
+      selectedIndex: 0,
+    };
+    this.updateIndex = this.updateIndex.bind(this);
   }
 
-  updateIndex (selectedIndex) {
-    this.setState({selectedIndex})
-    this.props.onChangeTab(selectedIndex)
+  updateIndex(selectedIndex) {
+    this.setState({ selectedIndex });
+    this.props.onChangeTab(selectedIndex);
   }
 
-  render () {
-    const buttons = ['Submitted', 'Bookmarked']
-    const { selectedIndex } = this.state
+  render() {
+    const buttons = ['Submitted', 'Bookmarked'];
+    const { selectedIndex } = this.state;
 
     return (
       <ButtonGroup
@@ -40,6 +37,6 @@ export default class MySpotsButtonGroup extends Component {
         containerStyle={styles.buttonGroupContainer}
         selectedButtonStyle={styles.selectedButtonStyle}
       />
-    )
+    );
   }
 }
